@@ -16,15 +16,26 @@ def BaseClass():
     status: Mapped[str] = mapped_column(String(10), nullable=False, default="inactive")
 
 
-    def all(self):
+    def all(self: object) -> list:
+        """ Returns all instances of current class"""
         pass
+
     def create(self, **args):
+        """ Creates instance of current class using passed kwargs"""
         pass
+
     def destroy(self):
+        """ Deletes current instance of object from storage"""
         pass
+
     def save(self):
+        """ Saves current instance of object to storage"""
         pass
+
     def to_dict(self):
+        """Returns a dictionary representation of current object instance"""
         pass
-    def update(self, *args):
+
+    def update(self, **args):
+        """Updates values of current instance with passed kwargs"""
         pass
