@@ -94,6 +94,8 @@ class BaseClass():
         obj_copy["__class__"] = self.__class__.__name__
         obj_copy["created_at"] = self.created_at.isoformat()
         obj_copy["updated_at"] = self.updated_at.isoformat()
+        if "_sa_instance_state" in obj_copy.keys():
+             del obj_copy["_sa_instance_state"]
         return obj_copy
 
     def update(self, **args):
