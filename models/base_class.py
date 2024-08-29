@@ -7,6 +7,8 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from uuid import uuid4
 from datetime import datetime
 from models import storage_is_live
+import hashlib
+import secrets
 
 format = "%Y-%m-%dT%H:%M:%S.%f"
 
@@ -72,6 +74,25 @@ class BaseClass():
             for key, value in kwargs.items():
                 setattr(self, key, value)
 
+    @classmethod
+    def generate_hash(cls, salt=None, text=None, chars=128):
+        """Creates and returns a hash from a string"""
+        if any([not text, not salt]):
+            return None
+        return hashlib.sha512(salt.encode("utf-8") +
+                              text.encode("utf-8")).hexdigest()[:chars]
+
+    @classmethod
+    def generate_salt(cls, chars=16):
+        """Creates a returns a random salt """
+        return secrets.token_hex(chars//2)
+
+    @classmethod
+    def random_string(cls, chars=32):
+        """generates a new hash from"""
+        bytes = secrets.token_bytes(chars)
+        return hashlib.sha512(bytes).hexdigest()[:chars]
+
     def __str__(self):
         """ Defines a string representation of class"""
         return f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}"
@@ -90,12 +111,16 @@ class BaseClass():
 
     def to_dict(self):
         """Returns a dictionary representation of current object instance"""
+        to_remove = ["_sa_instance_state", "salt", "security_key", "passwd_hash",
+                     "serial"]
         obj_copy = self.__dict__.copy()
         obj_copy["__class__"] = self.__class__.__name__
         obj_copy["created_at"] = self.created_at.isoformat()
         obj_copy["updated_at"] = self.updated_at.isoformat()
-        if "_sa_instance_state" in obj_copy.keys():
-             del obj_copy["_sa_instance_state"]
+        # remove internal values
+        for item in to_remove:
+            if obj_copy.get(item):
+                del obj_copy[item]
         return obj_copy
 
     def update(self, **args):
