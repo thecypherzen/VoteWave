@@ -11,7 +11,7 @@ from models import storage_is_live
 format = "%Y-%m-%dT%H:%M:%S.%f"
 
 
-def Base(DeclarativeBase):
+class Base(DeclarativeBase):
     pass
 
 
@@ -78,10 +78,6 @@ class BaseClass():
 
     def all(self: object) -> list:
         """ Returns all instances of current class"""
-        pass
-
-    def create(self, **args):
-        """ Creates instance of current class using passed kwargs"""
         pass
 
     def destroy(self):
