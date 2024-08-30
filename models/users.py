@@ -7,7 +7,7 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from uuid import uuid4
 from datetime import date, datetime
 from flask_login import UserMixin
-from models.base_class import Base, BaseClass
+from models.base_class import BaseClass
 
 
 class User(UserMixin, BaseClass, Base):
@@ -37,16 +37,15 @@ default="")
     reviews = relationship()
     metadata = relationship()
     blacklist = relationship()
+    inbox = relationship()
     """
 
     def __init__(self, *args, **kwargs):
         """Initialize user class"""
         self.serial = User.__instances + 1
         if salt := kwargs.get("salt"):
-            self.salt = salt
             del kwargs["salt"]
-        else:
-            self.salt = User.generate_salt()
+        self.salt = User.generate_salt()
         if username := kwargs.get("username"):
             self.username = username
             del kwargs["username"]
@@ -65,3 +64,10 @@ default="")
         super().__init__(*args, **kwargs)
 
         User.__instances += 1
+
+    def send_message(self, content, receiver_id, receiver_type="user"):
+        """sends a message to a receiver.
+
+        Receivers could be anyone at all.
+        """
+        pass
