@@ -43,110 +43,32 @@ class Election(BaseActivity):
 
 
     @property
-    def admins(self):
-        """Returns the list of admins of child activity"""
+    def candidates(self):
+        """A getter that returns an election's candidates """
         pass
 
-    @property
-    def blacklist(self):
-        """A getter that returns a list users blacklisted from child activty"""
-        pass
+    def close(self):
+        """Closes down an election from participation
+         Also closes down all children of election
+         Return: True on success, False otherwise
+        """
+        self.status = "closed"
+        # close chatroom
+        # close waitlist
 
-    @property
-    def redflags(self):
-        """A getter that returns a list users blacklisted from child activty"""
-        pass
-
-    @property
-    def reviews(self):
-        """A getter that returns a list of reviews for child activty"""
-        pass
-
-    @property
-    def voters(self):
-        """A getter that returns a list of voters in a child activty"""
-        pass
-
-    @property
-    def waitlist(self):
-        """A getter that returns a list of users on the waitlist of a child activty"""
-        pass
-
-    def create_invite(self):
-        """Generates an invitation link for a newly created activity or its children"""
-        pass
-
-    def duration(self):
-        """Claculates and returns the duration which an activity lasted
+    def create_candidate(self, info):
+        """Creates a new candidate from given information
+        Returns: id of creted candidate
         """
         pass
 
-    def generate_report(self):
-         """Creates reports of an activity based on activity's results
+    def update_candidate(self, candidate, delete=False):
+        """Updates an election candidate's information.
 
-            Return: dictionary of report
-         """
-         pass
-
-    def share_with(self, link, users=[]):
-        """sends an invitation link of the current event with another user
-        Return: True on success, False on error
-        """
-        pass
-
-    def update_blacklist(self, *blacklist_ids, add=True):
-        """Updates an activity's blacklist.
-
-        If add is True, items with the passed blacklist_ids are added,
-            else, they are removed
-
-        Returns: True on success or False on failure of any or all
-        """
-        pass
-
-    def update_flags(self, *flag_ids, treated=True):
-        """Updates an activity's red flags, by updating their treated
-        status to either True or false, based on the value of treated.
-
-        Returns: True on success or False on failure of any or all
-        """
-        pass
-
-    def update_metadata(self, *meta_ids, add=True):
-        """Updates an activity's list of metadata.
-
-        If add is True, metadata with the passed ids are added,
-            else, they are removed
-
-        Returns: True on success or False on failure of any or all
-            """
-        pass
-
-    def update_reviews(self, *review_ids, add=True):
-        """Updates an activity's list of reviews.
-
-        If add is True, reviews with ppthe passed ids are added,
-            else, they are removed
-
-        Returns: True on success or False on failure of any or all
-        """
-        pass
-
-    def update_voters(self, *voter_ids, add=True):
-        """Updates an activity's list of voters.
-
-        If add is True, voters with the passed user_ids are added,
-            else, they are removed
-
-        Returns: True on success or False on failure of any or all
-        """
-        pass
-
-    def update_waitlist(self, *wait_ids, add=True):
-        """Updates an activity's wait list.
-
-        If add is True, wait list items with the passed ids are added,
-            else, they are removed
+        If delete is True, the candidate is deleted.
+         +`candidate` is expected to be a candidate's id. Else, the candidate's
+         + information is updted, and `candidate` is expected in the format:
+         + `{"id": "<candidate_id>", "values": {"key": "<value>"}}`
 
         Returns: True on success or False on failure of any or all
         """
