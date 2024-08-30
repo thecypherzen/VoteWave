@@ -97,6 +97,21 @@ class BaseClass():
         """ Defines a string representation of class"""
         return f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}"
 
+    def add_metadata(self, values=[]):
+        """Adds new entries to an instance's metadata
+
+          `values` is a list of data to use in creating each metadata item and
+            each item is expected in the format:
+            {"<owner>_id": "<owner_id>", "for","<purpose>", "name": "<name>",
+             "use_as": "<purpose>", "mime_type": "<mime_type"
+            }
+            <owner> could be any of "election", "poll", "red_flag", "chatroom",
+              + "user", or "candidate"
+
+        Returns: True on success or False on failure of any or all
+            """
+        pass
+
     def all(self: object) -> list:
         """ Returns all instances of current class"""
         pass
@@ -125,4 +140,15 @@ class BaseClass():
 
     def update(self, **args):
         """Updates values of current instance with passed kwargs"""
+        pass
+
+    def update_metadata(self, value, delete=True):
+        """updates an instance's metadata
+           If `delete` is True, the instance with `value` is deleted, else
+           If the instance's metadata is updted based on `value`, which is
+            expected in the format:
+            {"metadata_id": "value":"<new_value>"}}
+
+        Returns: True on success or False on failure of any or all
+            """
         pass

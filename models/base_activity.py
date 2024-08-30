@@ -99,6 +99,7 @@ class BaseActivity(BaseClass):
         """A getter that returns a list of users on the waitlist of a child activty"""
         pass
 
+
     def create_invite(self):
         """Generates an invitation link for a newly created activity or its children"""
         pass
@@ -131,22 +132,12 @@ class BaseActivity(BaseClass):
         """
         pass
 
-    def update_flags(self, *flag_ids, treated=True):
+    def update_flags(self, *flag_ids, resolved=True):
         """Updates an activity's red flags, by updating their treated
         status to either True or false, based on the value of treated.
 
         Returns: True on success or False on failure of any or all
         """
-        pass
-
-    def update_metadata(self, *meta_ids, add=True):
-        """Updates an activity's list of metadata.
-
-        If add is True, metadata with the passed ids are added,
-            else, they are removed
-
-        Returns: True on success or False on failure of any or all
-            """
         pass
 
     def update_reviews(self, *review_ids, add=True):
