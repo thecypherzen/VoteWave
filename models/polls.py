@@ -15,11 +15,14 @@ class Poll(BaseActivity, Base):
     """
     __count = 0
     __tablename__ = "polls"
-    serial: Mapped[int] = mapped_column(Integer, nullable=False, autoincrement=True)
+    serial: Mapped[int] = \
+        mapped_column(Integer, nullable=False, autoincrement=True)
     location: Mapped[str] = mapped_column(String(255), nullable=False)
     title: Mapped[str] = mapped_column(String(128), nullable=False)
-    allows_anonymous: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
-    allow_multi_votes: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
+    allows_anonymous: Mapped[bool] = \
+        mapped_column(Boolean, nullable=False, default=True)
+    allow_multi_votes: Mapped[bool] = \
+        mapped_column(Boolean, nullable=False, default=True)
     """
     admins = relationship()
     questions = relationship()
@@ -34,8 +37,10 @@ class Poll(BaseActivity, Base):
 
     def __init__(self, *args, **kwargs):
         """Initialize user class"""
-        if all([kwargs.get("starts_at"), kwargs.get("ends_at"), kwargs.get("security_key")]):
-            to_delete = ["location", "title", "allows_anonymous", "allows_multi_votes"]
+        if all([kwargs.get("starts_at"), kwargs.get("ends_at"),
+                kwargs.get("security_key")]):
+            to_delete = ["location", "title", "allows_anonymous",
+                         "allows_multi_votes"]
             if (title := kwargs.get("title")):
                 self.title = title
                 del kwargs["title"]
@@ -48,7 +53,6 @@ class Poll(BaseActivity, Base):
                 if kwargs.get(item):
                     del kwargs[item]
             super().__init__(*args, **kwargs)
-
 
     @property
     def questions(self):

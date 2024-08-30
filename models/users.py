@@ -18,7 +18,8 @@ class User(UserMixin, BaseClass, Base):
     serial: Mapped[int] = mapped_column(Integer, nullable=False,
                                         autoincrement=True)
     first_name: Mapped[str] = mapped_column(String(50), nullable=False)
-    last_name: Mapped[str] = mapped_column(String(50), nullable=False, default="")
+    last_name: Mapped[str] = \
+        mapped_column(String(50), nullable=False, default="")
     email: Mapped[str] = mapped_column(String(50), nullable=False)
     security_key: Mapped[str] = mapped_column(String(128), nullable=False)
     passwd_hash: Mapped[str] = mapped_column(String(128), nullable=False)
@@ -29,7 +30,8 @@ class User(UserMixin, BaseClass, Base):
                                         default="")
     location: Mapped[str] = mapped_column(String(255), nullable=False)
     dob: Mapped[date] = mapped_column(Date, nullable=False, default="")
-    address: Mapped[str] = mapped_column(String(255), nullable=False, default="")
+    address: Mapped[str] = \
+        mapped_column(String(255), nullable=False, default="")
     """
     elections = relationship()
     polls = relationship()
@@ -44,7 +46,8 @@ class User(UserMixin, BaseClass, Base):
         """Initialize user class"""
         if all([kwargs.get("first_name"), kwargs.get("password"),
                 kwargs.get("security_key"), kwargs.get("email")]):
-            to_delete = ["first_name", "security_key", "email", "username", "password"]
+            to_delete = ["first_name", "security_key", "email",
+                         "username", "password"]
             self.serial = User.__count + 1
             self.salt = User.generate_salt()
             self.username = kwargs.get("username") or kwargs["email"]

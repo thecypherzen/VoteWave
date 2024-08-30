@@ -127,8 +127,8 @@ class BaseClass():
 
     def to_dict(self):
         """Returns a dictionary representation of current object instance"""
-        to_remove = ["_sa_instance_state", "salt", "security_key", "passwd_hash",
-                     "serial"]
+        to_remove = ["_sa_instance_state", "salt", "security_key",
+                     "passwd_hash", "serial"]
         obj_copy = self.__dict__.copy()
         obj_copy["__class__"] = self.__class__.__name__
         obj_copy["created_at"] = self.created_at.isoformat()

@@ -12,25 +12,29 @@ from models.base_class import BaseClass
 
 format = "%Y-%m-%dT%H:%M:%S.%f"
 
+
 class BaseActivity(BaseClass):
     """Defines a user class"""
     starts_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
     ends_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
     status: Mapped[str] = mapped_column(String(10), nullable=False)
     salt: Mapped[str] = mapped_column(String(16), nullable=False)
-    security_key: Mapped[str] = mapped_column(String(128), nullable=False)
-    description: Mapped[str] = mapped_column(String(255), nullable=False, default="")
+    security_key: Mapped[str] = mapped_column(String(128),
+                                              nullable=False)
+    description: Mapped[str] = mapped_column(String(255),
+                                             nullable=False, default="")
     guidelines: Mapped[str] = mapped_column(TEXT, nullable=False, default="")
-    is_public: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
+    is_public: Mapped[bool] = mapped_column(Boolean, nullable=False,
+                                            default=True)
     owner_id: Mapped[str] = mapped_column(String(32), nullable=False)
     chatroom_id: Mapped[str] = mapped_column(String(32), nullable=False)
     retults: Mapped[str] = mapped_column(String(255), default="")
 
     def __init__(self, *args, **kwargs):
         """Initialize user class"""
-        to_delete = ["starts_at", "ends_at", "salt", "description", "guidelines",
-                     "is_public", "owner_id", "chatroom_id", "results", "security_key",
-                     "status"]
+        to_delete = ["starts_at", "ends_at", "salt", "description",
+                     "guidelines", "is_public", "owner_id", "chatroom_id",
+                     "results", "security_key", "status"]
         if kwargs:
             if (stime := kwargs.get("starts_at")).__class__.__name__ == "str":
                 self.starts_at = datetime.strptime(stime, format)
@@ -42,20 +46,20 @@ class BaseActivity(BaseClass):
                 self.ends_at = etime
             self.status = kwargs.get("status") or "pending"
             self.salt = BaseActivity.generate_salt()
-            self.security_key = BaseActivity.generate_hash(text=kwargs.get("security_key"),
-                                                           salt=self.salt)
+            self.security_key = \
+                BaseActivity.generate_hash(text=kwargs.get("security_key"),
+                                           salt=self.salt)
             self.description = kwargs.get("description") or ""
             self.guidelines = kwargs.get("guidelines") or ""
             self.is_public = kwargs.get("is_public") or True
             self.owner_id = kwargs.get("owner_id")
             self.chatroom_id = kwargs.get("chatroom_id") or \
-                BaseActivity.new_chatroom() #.id
+                BaseActivity.new_chatroom()  # .id
             self.results = kwargs.get("results") or ""
             for key in to_delete:
                 if kwargs.get(key):
                     del kwargs[key]
         super().__init__(*args, **kwargs)
-
 
     @classmethod
     def new_chatroom(cls):
@@ -96,12 +100,15 @@ class BaseActivity(BaseClass):
 
     @property
     def waitlist(self):
-        """A getter that returns a list of users on the waitlist of a child activty"""
+        """A getter that returns a list of users on the waitlist
+        of a child activty
+        """
         pass
 
-
     def create_invite(self):
-        """Generates an invitation link for a newly created activity or its children"""
+        """Generates an invitation link for a newly created
+        activity or its children
+        """
         pass
 
     def duration(self):
@@ -110,11 +117,11 @@ class BaseActivity(BaseClass):
         pass
 
     def generate_report(self):
-         """Creates reports of an activity based on activity's results
+        """Creates reports of an activity based on activity's results
 
             Return: dictionary of report
          """
-         pass
+        pass
 
     def share_with(self, link, users=[]):
         """sends an invitation link of the current event with another user

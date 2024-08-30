@@ -15,7 +15,8 @@ class Election(BaseActivity, Base):
     """
     __count = 0
     __tablename__ = "elections"
-    serial: Mapped[int] = mapped_column(Integer, nullable=False, autoincrement=True)
+    serial: Mapped[int] = mapped_column(Integer, nullable=False,
+                                        autoincrement=True)
     location: Mapped[str] = mapped_column(String(255), nullable=False)
     title: Mapped[str] = mapped_column(String(128), nullable=False)
     """
@@ -32,7 +33,8 @@ class Election(BaseActivity, Base):
 
     def __init__(self, *args, **kwargs):
         """Initialize user class"""
-        if all([kwargs.get("starts_at"), kwargs.get("ends_at"), kwargs.get("security_key")]):
+        if all([kwargs.get("starts_at"), kwargs.get("ends_at"),
+                kwargs.get("security_key")]):
             if (title := kwargs.get("title")):
                 self.title = title
                 del kwargs["title"]
@@ -41,7 +43,6 @@ class Election(BaseActivity, Base):
             self.location = "votewave/user_id/elections/election_id"
 
             super().__init__(*args, **kwargs)
-
 
     @property
     def candidates(self):

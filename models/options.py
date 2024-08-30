@@ -1,10 +1,11 @@
- #!/usr/bin/python3
+#!/usr/bin/python3
 """defines the user class"""
 
 
 from sqlalchemy import Integer, String
 from sqlalchemy.orm import Mapped, mapped_column
 from models.base_class import Base, BaseClass
+
 
 class Option(BaseClass, Base):
     __count = 0
