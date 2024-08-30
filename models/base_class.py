@@ -95,7 +95,8 @@ class BaseClass():
 
     def __str__(self):
         """ Defines a string representation of class"""
-        return f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}"
+        return f"{self.__class__.__name__}] ({self.id}) {self.__dict__}" \
+            if self.id else "None"
 
     def add_metadata(self, values=[]):
         """Adds new entries to an instance's metadata
