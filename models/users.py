@@ -11,7 +11,7 @@ from models.base_class import BaseClass
 
 
 class User(UserMixin, BaseClass, Base):
-    __instances = 0
+    __count = 0
 
     """Defines a user class"""
     __tablename__ = "users"
@@ -42,7 +42,7 @@ default="")
 
     def __init__(self, *args, **kwargs):
         """Initialize user class"""
-        self.serial = User.__instances + 1
+        self.serial = User.__count + 1
         if salt := kwargs.get("salt"):
             del kwargs["salt"]
         self.salt = User.generate_salt()
@@ -63,7 +63,7 @@ default="")
 
         super().__init__(*args, **kwargs)
 
-        User.__instances += 1
+        User.__count += 1
 
     def send_message(self, content, receiver_id, receiver_type="user"):
         """sends a message to a receiver.
