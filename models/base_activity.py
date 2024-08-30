@@ -16,6 +16,7 @@ class BaseActivity(BaseClass):
     """Defines a user class"""
     starts_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
     ends_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+    status: Mapped[str] = mapped_column(String(10), nullable=False, default="closed")
     salt: Mapped[str] = mapped_column(String(16), nullable=False)
     security_key: Mapped[str] = mapped_column(String(128), nullable=False)
     description: Mapped[str] = mapped_column(String(255), nullable=False, default="")
@@ -28,7 +29,8 @@ class BaseActivity(BaseClass):
     def __init__(self, *args, **kwargs):
         """Initialize user class"""
         to_delete = ["starts_at", "ends_at", "salt", "description", "guidelines",
-                     "is_public", "owner_id", "chatroom_id", "results", "security_key"]
+                     "is_public", "owner_id", "chatroom_id", "results", "security_key",
+                     "status"]
         if kwargs:
             if (stime := kwargs.get("starts_at")).__class__.__name__ == "str":
                 self.starts_at = datetime.strptime(stime, format)
@@ -38,6 +40,7 @@ class BaseActivity(BaseClass):
                 self.ends_at = datetime.strptime(etime, format)
             elif etime == "datetime":
                 self.ends_at = etime
+            self.status = kwargs.get("status") or "closed"
             self.salt = BaseActivity.generate_salt()
             self.security_key = BaseActivity.generate_hash(text=kwargs.get("security_key"),
                                                            salt=self.salt)
