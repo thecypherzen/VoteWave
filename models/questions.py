@@ -4,10 +4,10 @@
 
 from sqlalchemy import Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from models.base_class import BaseClass
+from models.base_class import Base, BaseClass
 
 
-class Question(BaseClass):
+class Question(BaseClass, Base):
     __count = 0
 
     """Defines a user class"""
@@ -26,12 +26,12 @@ class Question(BaseClass):
     def __init__(self, *args, **kwargs):
         """Initialize user class"""
         to_delete = ["poll_id", "location", "serial", "title", "runner_text"]
-        if kwargs:
+        if all([kwargs.get("poll_id"), kwargs.get("title")]):
             self.serial = Question.__count + 1
             self.poll_id = kwargs.get("poll_id")
-            self.title = kwargs.get("poll_id")
-            self.runner_text = kwargs.get("runner_text")
-            self.location = "/votewave/user/polls/poll_id/questions/question_id"
+            self.title = kwargs.get("title")
+            self.runner_text = kwargs.get("runner_text") or ""
+            self.location = kwargs.get("location") or ""
             for item in to_delete:
                 if kwargs.get(item):
                     del kwargs[item]

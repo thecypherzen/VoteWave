@@ -16,7 +16,7 @@ class BaseActivity(BaseClass):
     """Defines a user class"""
     starts_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
     ends_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
-    status: Mapped[str] = mapped_column(String(10), nullable=False, default="closed")
+    status: Mapped[str] = mapped_column(String(10), nullable=False)
     salt: Mapped[str] = mapped_column(String(16), nullable=False)
     security_key: Mapped[str] = mapped_column(String(128), nullable=False)
     description: Mapped[str] = mapped_column(String(255), nullable=False, default="")
@@ -40,7 +40,7 @@ class BaseActivity(BaseClass):
                 self.ends_at = datetime.strptime(etime, format)
             elif etime == "datetime":
                 self.ends_at = etime
-            self.status = kwargs.get("status") or "closed"
+            self.status = kwargs.get("status") or "pending"
             self.salt = BaseActivity.generate_salt()
             self.security_key = BaseActivity.generate_hash(text=kwargs.get("security_key"),
                                                            salt=self.salt)

@@ -7,7 +7,7 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from uuid import uuid4
 from datetime import date, datetime
 from flask_login import UserMixin
-from models.base_class import BaseClass
+from models.base_class import Base, BaseClass
 
 
 class User(UserMixin, BaseClass, Base):
@@ -19,6 +19,7 @@ class User(UserMixin, BaseClass, Base):
                                         autoincrement=True)
     first_name: Mapped[str] = mapped_column(String(50), nullable=False)
     last_name: Mapped[str] = mapped_column(String(50), nullable=False, default="")
+    email: Mapped[str] = mapped_column(String(50), nullable=False)
     security_key: Mapped[str] = mapped_column(String(128), nullable=False)
     passwd_hash: Mapped[str] = mapped_column(String(128), nullable=False)
     salt: Mapped[str] = mapped_column(String(16), nullable=False)
@@ -28,8 +29,7 @@ class User(UserMixin, BaseClass, Base):
                                         default="")
     location: Mapped[str] = mapped_column(String(255), nullable=False)
     dob: Mapped[date] = mapped_column(Date, nullable=False, default="")
-    address: Mapped[str] = mapped_column(String(255), nullable=False,
-default="")
+    address: Mapped[str] = mapped_column(String(255), nullable=False, default="")
     """
     elections = relationship()
     polls = relationship()
@@ -42,28 +42,22 @@ default="")
 
     def __init__(self, *args, **kwargs):
         """Initialize user class"""
-        self.serial = User.__count + 1
-        if salt := kwargs.get("salt"):
-            del kwargs["salt"]
-        self.salt = User.generate_salt()
-        if username := kwargs.get("username"):
-            self.username = username
-            del kwargs["username"]
-        else:
-            self.username = f"User-{self.serial}"
-        self.passwd_hash = User.generate_hash(text=kwargs.get("password"),
-                                              salt=self.salt)
-        self.security_key = User.generate_hash(text=kwargs.get("security_key"),
-                                               salt=self.salt)
-        self.location = "/votewave/user/location"
-        if kwargs.get("location"):
-            del kwargs["location"]
-        del kwargs["password"]
-        del kwargs["security_key"]
-
-        super().__init__(*args, **kwargs)
-
-        User.__count += 1
+        if all([kwargs.get("first_name"), kwargs.get("password"),
+                kwargs.get("security_key"), kwargs.get("email")]):
+            to_delete = ["first_name", "security_key", "email", "username", "password"]
+            self.serial = User.__count + 1
+            self.salt = User.generate_salt()
+            self.username = kwargs.get("username") or kwargs["email"]
+            self.passwd_hash = User.generate_hash(text=kwargs["password"],
+                                                  salt=self.salt)
+            self.security_key = User.generate_hash(text=kwargs["security_key"],
+                                                   salt=self.salt)
+            self.location = kwargs.get("location") or ""
+            for item in to_delete:
+                if kwargs.get(item):
+                    del kwargs[item]
+            super().__init__(*args, **kwargs)
+            User.__count += 1
 
     def send_message(self, content, receiver_id, receiver_type="user"):
         """sends a message to a receiver.

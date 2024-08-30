@@ -5,10 +5,11 @@
 
 from sqlalchemy import Boolean, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column
+from models.base_class import Base
 from models.base_activity import BaseActivity
 
 
-class Poll(BaseActivity):
+class Poll(BaseActivity, Base):
     """Defines a user class
 
     """
@@ -34,13 +35,18 @@ class Poll(BaseActivity):
     def __init__(self, *args, **kwargs):
         """Initialize user class"""
         if all([kwargs.get("starts_at"), kwargs.get("ends_at"), kwargs.get("security_key")]):
+            to_delete = ["location", "title", "allows_anonymous", "allows_multi_votes"]
             if (title := kwargs.get("title")):
                 self.title = title
                 del kwargs["title"]
             else:
-                self.title = f"Poll-{Election.__count + 1}"
+                self.title = f"Poll-{Poll.__count + 1}"
             self.location = "votewave/user_id/polls/poll_id"
-
+            self.allows_anonymous = kwargs.get("allows_anonymous") or True
+            self.allows_multi_votes = kwargs.get('allows_multi_votes') or True
+            for item in to_delete:
+                if kwargs.get(item):
+                    del kwargs[item]
             super().__init__(*args, **kwargs)
 
 

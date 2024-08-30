@@ -5,10 +5,11 @@
 
 from sqlalchemy import Integer, String
 from sqlalchemy.orm import Mapped, mapped_column
+from models.base_class import Base
 from models.base_activity import BaseActivity
 
 
-class Election(BaseActivity):
+class Election(BaseActivity, Base):
     """Defines a user class
 
     """

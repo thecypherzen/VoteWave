@@ -4,9 +4,9 @@
 
 from sqlalchemy import Integer, String
 from sqlalchemy.orm import Mapped, mapped_column
-from models.base_class import BaseClass
+from models.base_class import Base, BaseClass
 
-class Option(BaseClass):
+class Option(BaseClass, Base):
     __count = 0
 
     """Defines a user class"""
@@ -15,16 +15,16 @@ class Option(BaseClass):
                                         autoincrement=True)
     question_id: Mapped[str] = mapped_column(String(32), nullable=False)
     value: Mapped[str] = mapped_column(String(255), nullable=False)
-    votes: Mapped[str] = mapped_column(Integer(128), nullable=False, default=0)
+    votes: Mapped[str] = mapped_column(Integer, nullable=False, default=0)
 
     def __init__(self, *args, **kwargs):
         """Initialize user class"""
-        if kwargs:
+        if all([kwargs.get('question_id'), kwargs.get("value")]):
             to_delete = ["question_id", "votes", "serial", "value"]
             self.serial = Option.__count + 1
             self.question_id = kwargs.get("question_id")
-            self.value = kwargs("value")
-            self.votes = kwargs("votes") or 0
+            self.value = kwargs.get("value")
+            self.votes = kwargs.get("votes") or 0
             for item in to_delete:
                 if kwargs.get(item):
                     del kwargs[item]
