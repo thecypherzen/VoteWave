@@ -13,6 +13,7 @@ class Election(BaseActivity):
 
     """
     __count = 0
+    __tablename__ = "elections"
     serial: Mapped[int] = mapped_column(Integer, nullable=False, autoincrement=True)
     location: Mapped[str] = mapped_column(String(255), nullable=False)
     title: Mapped[str] = mapped_column(String(128), nullable=False)
