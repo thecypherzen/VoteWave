@@ -25,7 +25,7 @@ class Option(BaseClass, Base):
             self.serial = Option.__count + 1
             self.question_id = kwargs.get("question_id")
             self.value = kwargs.get("value")
-            self.votes = kwargs.get("votes") or 0
+            self.votes = 0
             for item in to_delete:
                 if kwargs.get(item):
                     del kwargs[item]
