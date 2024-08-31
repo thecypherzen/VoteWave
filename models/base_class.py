@@ -139,10 +139,14 @@ class BaseClass():
         """Returns a dictionary representation of current object instance"""
         to_remove = ["_sa_instance_state", "salt", "security_key",
                      "passwd_hash", "serial"]
+        dates = ["starts_at", "ends_at", "dob"]
         obj_copy = self.__dict__.copy()
         obj_copy["__class__"] = self.__class__.__name__
         obj_copy["created_at"] = self.created_at.isoformat()
         obj_copy["updated_at"] = self.updated_at.isoformat()
+        for date in dates:
+            if obj_copy.get(date):
+                obj_copy[date] = obj_copy[date].isoformat()
         # remove internal values
         for item in to_remove:
             if obj_copy.get(item):
