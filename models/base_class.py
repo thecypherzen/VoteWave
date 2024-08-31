@@ -6,8 +6,8 @@ from sqlalchemy import DateTime, String
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from uuid import uuid4
 from datetime import datetime
-from models import storage_is_live
 import hashlib
+import models
 import secrets
 import string
 
@@ -87,6 +87,14 @@ class BaseClass():
     def generate_salt(cls, chars=16):
         """Creates a returns a random salt """
         return secrets.token_hex(chars//2)
+
+    @classmethod
+    def get_serial(cls, instance, count):
+        """Gets the next serial for an instance"""
+        cls_name = instance.__class__.__name__
+        if not (last_obj := models.storage.get_last_of(cls_name)):
+            return count
+        return last_obj.serial + 1
 
     @classmethod
     def random_string(cls, chars=32):
