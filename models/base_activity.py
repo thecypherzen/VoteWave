@@ -33,18 +33,18 @@ class BaseActivity(BaseClass):
     def __init__(self, *args, **kwargs):
         """Initialize user class"""
         to_delete = ["starts_at", "ends_at", "salt", "description",
-                     "guidelines", "is_public", "owner_id", "chatroom_id",
+                     "guidelines", "is_public", "user _id", "chatroom_id",
                      "results", "security_key", "status"]
         if kwargs:
             if (stime := kwargs.get("starts_at")).__class__.__name__ == "str":
                 self.starts_at = datetime.strptime(stime, format)
-            elif stime == "datetime":
+            elif stime.__class__.__name__ == "datetime":
                 self.starts_at = stime
             if (etime := kwargs.get("ends_at ")).__class__.__name__ == "str":
                 self.ends_at = datetime.strptime(etime, format)
-            elif etime == "datetime":
+            elif etime.__class__.__name__ == "datetime":
                 self.ends_at = etime
-            self.status = kwargs.get("status") or "pending"
+            self.status = "pending"
             self.salt = BaseActivity.generate_salt()
             self.security_key = \
                 BaseActivity.generate_hash(text=kwargs.get("security_key"),
@@ -52,7 +52,7 @@ class BaseActivity(BaseClass):
             self.description = kwargs.get("description") or ""
             self.guidelines = kwargs.get("guidelines") or ""
             self.is_public = kwargs.get("is_public") or True
-            self.owner_id = kwargs.get("owner_id")
+            self.owner_id = kwargs.get("user_id")
             self.chatroom_id = kwargs.get("chatroom_id") or \
                 BaseActivity.new_chatroom()  # .id
             self.results = kwargs.get("results") or ""
