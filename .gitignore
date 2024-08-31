@@ -4,3 +4,5 @@ mytest.py
 res.txt
 *__pycache__*
 venv
+stdout.txt
+v-venv
