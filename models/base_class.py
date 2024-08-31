@@ -29,6 +29,9 @@ class BaseClass():
         mapped_column(String(10), nullable=False, default="inactive")
 
     def __init__(self, *args, **kwargs):
+        # set serial
+        self.serial = self.get_serial(self, self.count)
+
         # handle empty kwargs
         if not kwargs:
             self.id = str(uuid4()).replace("-", "")
@@ -71,6 +74,7 @@ class BaseClass():
 
             if temp := kwargs.get("__class__"):
                 del kwargs["__class__"]
+
             # set rest
             for key, value in kwargs.items():
                 setattr(self, key, value)
