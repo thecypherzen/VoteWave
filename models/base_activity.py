@@ -28,19 +28,19 @@ class BaseActivity(BaseClass):
                                             default=True)
     owner_id: Mapped[str] = mapped_column(String(32), nullable=False)
     chatroom_id: Mapped[str] = mapped_column(String(32), nullable=False)
-    retults: Mapped[str] = mapped_column(String(255), default="")
+    results: Mapped[str] = mapped_column(String(255), default="")
 
     def __init__(self, *args, **kwargs):
         """Initialize user class"""
         to_delete = ["starts_at", "ends_at", "salt", "description",
-                     "guidelines", "is_public", "user _id", "chatroom_id",
+                     "guidelines", "is_public", "user_id", "chatroom_id",
                      "results", "security_key", "status"]
         if kwargs:
             if (stime := kwargs.get("starts_at")).__class__.__name__ == "str":
                 self.starts_at = datetime.strptime(stime, format)
             elif stime.__class__.__name__ == "datetime":
                 self.starts_at = stime
-            if (etime := kwargs.get("ends_at ")).__class__.__name__ == "str":
+            if (etime := kwargs.get("ends_at")).__class__.__name__ == "str":
                 self.ends_at = datetime.strptime(etime, format)
             elif etime.__class__.__name__ == "datetime":
                 self.ends_at = etime
