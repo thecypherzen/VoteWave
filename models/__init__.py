@@ -1,3 +1,4 @@
 """inits global values"""
+from models.engine.storage import Storage
 
-storage_is_live = False
+storage = Storage()
