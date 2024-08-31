@@ -21,13 +21,9 @@ class Option(BaseClass, Base):
     def __init__(self, *args, **kwargs):
         """Initialize user class"""
         if all([kwargs.get('question_id'), kwargs.get("value")]):
-            to_delete = ["question_id", "votes", "serial", "value"]
             self.serial = Option.__count + 1
             self.question_id = kwargs.get("question_id")
             self.value = kwargs.get("value")
             self.votes = 0
-            for item in to_delete:
-                if kwargs.get(item):
-                    del kwargs[item]
-            super().__init__(*args, **kwargs)
+            super().__init__()
             Option.__count += 1
