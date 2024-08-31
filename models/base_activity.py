@@ -53,20 +53,13 @@ class BaseActivity(BaseClass):
             self.guidelines = kwargs.get("guidelines") or ""
             self.is_public = kwargs.get("is_public") or True
             self.owner_id = kwargs.get("user_id")
-            self.chatroom_id = kwargs.get("chatroom_id") or \
-                BaseActivity.new_chatroom()  # .id
+            self.chatroom_id = kwargs.get("chatroom_id") or ""
             self.results = kwargs.get("results") or ""
             for key in to_delete:
                 if kwargs.get(key):
                     del kwargs[key]
         super().__init__(*args, **kwargs)
 
-    @classmethod
-    def new_chatroom(cls):
-        """Creates a new chatroom instance
-        Returns: id of new chatroom
-        """
-        return "983refpk"
 
     @property
     def admins(self):
