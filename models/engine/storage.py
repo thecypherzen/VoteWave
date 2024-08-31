@@ -19,7 +19,7 @@ from models.users import User
 from models.voters import Voter
 from models.waitlists import Waitlist
 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, desc
 from sqlalchemy.orm import sessionmaker, scoped_session
 from os import getenv
 
@@ -70,7 +70,7 @@ class Storage():
         if isinstance(objs, list):
             self.__session.add_all(objs)
         else:
-            self.__session.add(obj)
+            self.__session.add(objs)
 
     def close(self):
         """closes the current session"""
@@ -86,7 +86,14 @@ class Storage():
                 return item
         return None
 
-
+    def get_last_of(self, clsname):
+        """returns the last object of classname in storage if
+        exists or None if not exists
+        """
+        if not (obj := self.resolve_model(clsname)):
+            return None
+        last_of = self.__session.query(obj).order_by(desc(obj.serial)).first()
+        return last_of or None
 
     def resolve_model(self, toget):
         """resolves a model's name or object if it exists or None"""
