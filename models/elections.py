@@ -40,8 +40,7 @@ class Election(BaseActivity, Base):
                 del kwargs["title"]
             else:
                 self.title = f"Election-{Election.__count + 1}"
-            self.location = "votewave/user_id/elections/election_id"
-
+            self.location = ""
             super().__init__(*args, **kwargs)
 
     @property
