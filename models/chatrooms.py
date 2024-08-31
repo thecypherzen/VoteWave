@@ -9,7 +9,7 @@ from models.base_class import Base, BaseClass
 
 
 class Chatroom(BaseClass, Base):
-    __count = 0
+    count = 0
 
     """Defines a user class"""
     __tablename__ = "chatrooms"
@@ -32,4 +32,3 @@ class Chatroom(BaseClass, Base):
                 if kwargs.get(item):
                     del kwargs[item]
             super().__init__(*args, **kwargs)
-            Chatroom.__count += 1

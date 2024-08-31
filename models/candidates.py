@@ -7,7 +7,7 @@ from models.base_class import Base, BaseClass
 
 class Candidate(BaseClass, Base):
     """Defines a Candidate class"""
-    __count = 0
+    count = 0
     __tablename__ = "candidates"
     serial: Mapped[str] = \
         mapped_column(Integer, nullable=False, autoincrement=True)
@@ -33,7 +33,6 @@ class Candidate(BaseClass, Base):
                 f"Unamed Party-{self.__count + 1}"
             self.party_initials = kwargs.get("party_initials") or ""
             super().__init__()
-            Candidate.__count += 1
 
     def raise_redflag(self, message, metadata=None):
         """raises a redflag about an election

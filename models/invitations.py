@@ -8,7 +8,7 @@ from models.base_class import Base, BaseClass
 
 
 class Invitation(BaseClass, Base):
-    __count = 0
+    count = 0
 
     """Defines a user class"""
     __tablename__ = "invitations"
@@ -27,4 +27,3 @@ class Invitation(BaseClass, Base):
             self.user_to = user_to
             self.link = link
             super().__init__()
-            Invitation.__count += 1

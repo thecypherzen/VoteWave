@@ -13,7 +13,7 @@ class Election(BaseActivity, Base):
     """Defines a user class
 
     """
-    __count = 0
+    count = 0
     __tablename__ = "elections"
     serial: Mapped[int] = mapped_column(Integer, nullable=False,
                                         autoincrement=True)
@@ -34,12 +34,9 @@ class Election(BaseActivity, Base):
     def __init__(self, *args, **kwargs):
         """Initialize user class"""
         if all([kwargs.get("starts_at"), kwargs.get("ends_at"),
-                kwargs.get("security_key")]):
-            if (title := kwargs.get("title")):
-                self.title = title
-                del kwargs["title"]
-            else:
-                self.title = f"Election-{Election.__count + 1}"
+                kwargs.get("security_key"), kwargs.get("user_id"),
+                kwargs.get("title")]):
+            self.title = title
             self.location = ""
             super().__init__(*args, **kwargs)
 

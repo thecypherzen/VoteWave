@@ -7,7 +7,7 @@ from models.base_class import Base, BaseClass
 
 class Review(BaseClass, Base):
     """Defines a waitlist class"""
-    __count = 0
+    count = 0
     __tablename__ = "reviews"
     serial: Mapped[str] = \
         mapped_column(Integer, nullable=False, autoincrement=True)
@@ -30,6 +30,4 @@ class Review(BaseClass, Base):
            any([kwargs.get("user_id"), kwargs.get("voter_id"),
                 kwargs.get("candidate_id")]) and \
                 any(kwargs.get("poll_id"), kwargs.get("election_id")):
-            self.serial = Review.__count + 1
             super().__init__(*args, **kwargs)
-            Review.__count += 1

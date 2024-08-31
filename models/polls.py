@@ -13,7 +13,7 @@ class Poll(BaseActivity, Base):
     """Defines a user class
 
     """
-    __count = 0
+    count = 0
     __tablename__ = "polls"
     serial: Mapped[int] = \
         mapped_column(Integer, nullable=False, autoincrement=True)
@@ -38,14 +38,10 @@ class Poll(BaseActivity, Base):
     def __init__(self, *args, **kwargs):
         """Initialize user class"""
         if all([kwargs.get("starts_at"), kwargs.get("ends_at"),
-                kwargs.get("security_key")]):
+                kwargs.get("security_key"), kwargs.get("title")]):
             to_delete = ["location", "title", "allows_anonymous",
                          "allows_multi_votes"]
-            if (title := kwargs.get("title")):
-                self.title = title
-                del kwargs["title"]
-            else:
-                self.title = f"Poll-{Poll.__count + 1}"
+            self.title = title
             self.location = "votewave/user_id/polls/poll_id"
             self.allows_anonymous = kwargs.get("allows_anonymous") or True
             self.allows_multi_votes = kwargs.get('allows_multi_votes') or True

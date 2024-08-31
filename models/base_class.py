@@ -30,6 +30,7 @@ class BaseClass():
 
     def __init__(self, *args, **kwargs):
         # set serial
+        self.count += 1
         self.serial = self.get_serial(self, self.count)
 
         # handle empty kwargs

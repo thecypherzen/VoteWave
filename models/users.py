@@ -16,7 +16,7 @@ format = "%Y-%m-%dT%H:%M:%S.%f"
 
 class User(UserMixin, BaseClass, Base):
     """Defines a user class"""
-    __count = 0
+    count = 0
     __tablename__ = "users"
     serial: Mapped[int] = mapped_column(Integer, nullable=False,
                                         autoincrement=True)
@@ -50,10 +50,8 @@ class User(UserMixin, BaseClass, Base):
         if all([kwargs.get("first_name"), kwargs.get("password"),
                 kwargs.get("security_key"), kwargs.get("email"),
                 kwargs.get("dob")]):
-            User.__count += 1
 
             to_delete = ["security_key", "username", "password", "dob"]
-            self.serial = User.get_serial(self, User.__count)
             self.salt = User.generate_salt()
             self.username = kwargs.get("username") or f"User-{self.serial}"
             self.passwd_hash = User.generate_hash(text=kwargs["password"],

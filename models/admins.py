@@ -7,7 +7,7 @@ from models.base_class import Base, BaseClass
 
 class Admin(BaseClass, Base):
     """Defines an admin class"""
-    __count = 0
+    count = 0
     __tablename__ = "admins"
     serial: Mapped[str] = \
         mapped_column(Integer, nullable=False, autoincrement=True)
@@ -28,7 +28,6 @@ class Admin(BaseClass, Base):
             self.election_id = kwargs.get("election_id")
             self.poll_id = kwargs.get("poll_id")
             super().__init__()
-            Admin.__count += 1
 
     def send_message(self, message=None):
         """sends a message to activity participants only.

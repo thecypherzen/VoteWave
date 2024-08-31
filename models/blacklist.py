@@ -7,7 +7,7 @@ from models.base_class import Base, BaseClass
 
 class Blacklist(BaseClass, Base):
     """Defines a blacklist class"""
-    __count = 0
+    count = 0
     __tablename__ = "blacklists"
     serial: Mapped[str] = \
         mapped_column(Integer, nullable=False, autoincrement=True)
@@ -32,4 +32,3 @@ class Blacklist(BaseClass, Base):
             self.poll_id = kwargs.get("poll_id")
             self.reason = kwargs.get("reason")
             super().__init__()
-            Waitlist.__count += 1
