@@ -9,6 +9,7 @@ from datetime import datetime
 from models import storage_is_live
 import hashlib
 import secrets
+import string
 
 format = "%Y-%m-%dT%H:%M:%S.%f"
 
@@ -90,8 +91,9 @@ class BaseClass():
     @classmethod
     def random_string(cls, chars=32):
         """generates a new hash from"""
+        charset = string.ascii_letters + string.digits
         bytes = secrets.token_bytes(chars)
-        return hashlib.sha512(bytes).hexdigest()[:chars]
+        return "".join(secrets.choice(charset) for _ in range(chars))
 
     def __str__(self):
         """ Defines a string representation of class"""
