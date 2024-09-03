@@ -28,7 +28,7 @@ class User(UserMixin, BaseClass, Base):
     passwd_hash: Mapped[str] = mapped_column(String(128), nullable=False)
     salt: Mapped[str] = mapped_column(String(16), nullable=False)
     username: Mapped[str] = mapped_column(String(30), nullable=False)
-    phone: Mapped[str] = mapped_column(String(15), nullable=False, default="")
+    phone: Mapped[str] = mapped_column(String(30), nullable=False, default="")
     prefix: Mapped[str] = mapped_column(String(10), nullable=True,
                                         default="")
     location: Mapped[str] = mapped_column(String(255), nullable=False)
