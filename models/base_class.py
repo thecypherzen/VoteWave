@@ -30,6 +30,8 @@ class BaseClass():
 
     def __init__(self, *args, **kwargs):
         # handle empty kwargs
+        self.__class__.count += 1
+        self.serial = self.get_serial(self, self.count)
         if not kwargs:
             self.id = str(uuid4()).replace("-", "")
             self.created_at = datetime.utcnow()
