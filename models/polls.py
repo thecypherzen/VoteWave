@@ -38,7 +38,7 @@ class Poll(BaseActivity, Base):
     def __init__(self, *args, **kwargs):
         """Initialize user class"""
         if all([kwargs.get("starts_at"), kwargs.get("ends_at"),
-                kwargs.get("security_key"), kwargs.get("title")]):
+                kwargs.get("security_key"), title := kwargs.get("title")]):
             to_delete = ["location", "title", "allows_anonymous",
                          "allows_multi_votes"]
             self.title = title
