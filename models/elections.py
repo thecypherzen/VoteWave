@@ -35,7 +35,7 @@ class Election(BaseActivity, Base):
         """Initialize user class"""
         if all([kwargs.get("starts_at"), kwargs.get("ends_at"),
                 kwargs.get("security_key"), kwargs.get("user_id"),
-                kwargs.get("title")]):
+                title := kwargs.get("title")]):
             self.title = title
             self.location = ""
             super().__init__(*args, **kwargs)
