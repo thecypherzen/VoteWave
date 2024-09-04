@@ -3,7 +3,7 @@
     elections will inherit
 """
 
-from sqlalchemy import Boolean, DateTime, String
+from sqlalchemy import Boolean, DateTime, String, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.dialects.mysql import TEXT
 from datetime import date, datetime
@@ -26,8 +26,7 @@ class BaseActivity(BaseClass):
     guidelines: Mapped[str] = mapped_column(TEXT, nullable=False, default="")
     is_public: Mapped[bool] = mapped_column(Boolean, nullable=False,
                                             default=True)
-    owner_id: Mapped[str] = mapped_column(String(32), nullable=False)
-    chatroom_id: Mapped[str] = mapped_column(String(32), nullable=False)
+    owner_id: Mapped[str] = mapped_column(ForeignKey("users.id"))
     results: Mapped[str] = mapped_column(String(255), default="")
 
     def __init__(self, *args, **kwargs):
@@ -53,7 +52,6 @@ class BaseActivity(BaseClass):
             self.guidelines = kwargs.get("guidelines") or ""
             self.is_public = kwargs.get("is_public") or True
             self.owner_id = kwargs.get("user_id")
-            self.chatroom_id = kwargs.get("chatroom_id") or ""
             self.results = kwargs.get("results") or ""
             for key in to_delete:
                 if kwargs.get(key):

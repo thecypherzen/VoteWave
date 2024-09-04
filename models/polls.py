@@ -4,10 +4,10 @@
 """
 
 from sqlalchemy import Boolean, Integer, String
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from models.base_class import Base
 from models.base_activity import BaseActivity
-
+from typing import List
 
 class Poll(BaseActivity, Base):
     """Defines a user class
@@ -23,6 +23,10 @@ class Poll(BaseActivity, Base):
         mapped_column(Boolean, nullable=False, default=True)
     allow_multi_votes: Mapped[bool] = \
         mapped_column(Boolean, nullable=False, default=True)
+    owner: Mapped["User"] = \
+        relationship(back_populates="polls")
+    chatroom: Mapped["Chatroom"] = relationship(back_populates="poll")
+    admins: Mapped[List["Admin"]] = relationship(back_populates="polls")
     """
     admins = relationship()
     questions = relationship()

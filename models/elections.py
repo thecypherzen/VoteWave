@@ -3,10 +3,11 @@
     elections will inherit
 """
 
-from sqlalchemy import Integer, String
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import ForeignKey, Integer, String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from models.base_class import Base
 from models.base_activity import BaseActivity
+from typing import List
 
 
 class Election(BaseActivity, Base):
@@ -19,6 +20,10 @@ class Election(BaseActivity, Base):
                                         autoincrement=True)
     location: Mapped[str] = mapped_column(String(255), nullable=False)
     title: Mapped[str] = mapped_column(String(128), nullable=False)
+    owner: Mapped["User"] = \
+        relationship(back_populates="elections")
+    chatroom: Mapped["Chatroom"] = relationship(back_populates="election")
+    admins: Mapped[List["Admin"]] = relationship(back_populates="elections")
     """
     admins = relationship()
     candidates = relationship()
