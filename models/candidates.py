@@ -1,8 +1,9 @@
 #!/usr/bin/python3
 
-from sqlalchemy import DateTime, Integer, String
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import DateTime, ForeignKey, Integer, String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from models.base_class import Base, BaseClass
+
 
 
 class Candidate(BaseClass, Base):
@@ -11,11 +12,15 @@ class Candidate(BaseClass, Base):
     __tablename__ = "candidates"
     serial: Mapped[str] = \
         mapped_column(Integer, nullable=False, autoincrement=True)
-    election_id: Mapped[str] = mapped_column(String(32), nullable=False)
-    user_id: Mapped[str] = mapped_column(String(32), nullable=False)
+    election_id: Mapped[str] = \
+        mapped_column(ForeignKey("elections.id"), nullable=False)
+    user_id: Mapped[str] = \
+        mapped_column(ForeignKey("users.id"), nullable=False)
     party_name: Mapped[str] = mapped_column(String(128), nullable=False)
     party_initials: Mapped[str] = mapped_column(String(10), nullable=False)
     votes: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    election: Mapped["Election"] = \
+        relationship(back_populates="candidates")
 
     """
     reviews = relationship()
@@ -30,7 +35,7 @@ class Candidate(BaseClass, Base):
             self.election_id = kwargs["election_id"]
             self.user_id = kwargs["user_id"]
             self.party_name = kwargs.get("party_name") or \
-                f"Unamed Party-{self.__count + 1}"
+                f"Unamed Party-{self.random_string(24)}"
             self.party_initials = kwargs.get("party_initials") or ""
             super().__init__()
 

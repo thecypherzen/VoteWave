@@ -27,8 +27,9 @@ class Election(BaseActivity, Base):
     admins: Mapped[List["Admin"]] = \
         relationship(secondary="admin_polls_elections",
                      overlaps="admins")
+    candidates: Mapped[List["Candidate"]] = \
+        relationship(back_populates="election", cascade="all, delete-orphan")
     """
-    admins = relationship()
     candidates = relationship()
     voters = relationship()
     reviews = relationship()
@@ -47,11 +48,6 @@ class Election(BaseActivity, Base):
             self.title = title
             self.location = ""
             super().__init__(*args, **kwargs)
-
-    @property
-    def candidates(self):
-        """A getter that returns an election's candidates """
-        pass
 
     def close(self):
         """Closes down an election from participation
