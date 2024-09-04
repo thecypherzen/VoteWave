@@ -7,10 +7,11 @@ from sqlalchemy import Boolean, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from models.base_class import Base
 from models.base_activity import BaseActivity
+from models.admin_polls_elections import admin_polls_elections as ape
 from typing import List
 
 class Poll(BaseActivity, Base):
-    """Defines a user class
+    """Defines a poll class
 
     """
     count = 0
@@ -26,7 +27,8 @@ class Poll(BaseActivity, Base):
     owner: Mapped["User"] = \
         relationship(back_populates="polls")
     chatroom: Mapped["Chatroom"] = relationship(back_populates="poll")
-    admins: Mapped[List["Admin"]] = relationship(back_populates="polls")
+    admins: Mapped[List["Admin"]] = \
+        relationship(secondary=ape, overlaps="admins")
     """
     admins = relationship()
     questions = relationship()
@@ -40,7 +42,7 @@ class Poll(BaseActivity, Base):
     """
 
     def __init__(self, *args, **kwargs):
-        """Initialize user class"""
+        """Initializes a poll instance """
         if all([kwargs.get("starts_at"), kwargs.get("ends_at"),
                 kwargs.get("security_key"), title := kwargs.get("title")]):
             to_delete = ["location", "title", "allows_anonymous",
