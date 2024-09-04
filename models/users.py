@@ -62,7 +62,7 @@ class User(UserMixin, BaseClass, Base):
             to_delete = ["security_key", "username", "password", "dob"]
             self.salt = User.generate_salt()
             self.username = kwargs.get("username") or \
-                f"User-{self.get_serial(self, self.count + 1)}"
+                f"User-{self.random_string(24)}"
             self.passwd_hash = User.generate_hash(text=kwargs["password"],
                                                   salt=self.salt)
             self.security_key = User.generate_hash(text=kwargs["security_key"],

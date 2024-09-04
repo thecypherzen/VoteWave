@@ -26,7 +26,7 @@ class Election(BaseActivity, Base):
     chatroom: Mapped["Chatroom"] = relationship(back_populates="election")
     admins: Mapped[List["Admin"]] = \
         relationship(secondary="admin_polls_elections",
-                     overlap="admins")
+                     overlaps="admins")
     """
     admins = relationship()
     candidates = relationship()
