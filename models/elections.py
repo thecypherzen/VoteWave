@@ -7,6 +7,7 @@ from sqlalchemy import ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from models.base_class import Base
 from models.base_activity import BaseActivity
+from models.admin_polls_elections import admin_polls_elections as ape
 from typing import List
 
 
@@ -23,7 +24,9 @@ class Election(BaseActivity, Base):
     owner: Mapped["User"] = \
         relationship(back_populates="elections")
     chatroom: Mapped["Chatroom"] = relationship(back_populates="election")
-    admins: Mapped[List["Admin"]] = relationship(back_populates="elections")
+    admins: Mapped[List["Admin"]] = \
+        relationship(secondary="admin_polls_elections",
+                     overlap="admins")
     """
     admins = relationship()
     candidates = relationship()
@@ -37,7 +40,7 @@ class Election(BaseActivity, Base):
     """
 
     def __init__(self, *args, **kwargs):
-        """Initialize user class"""
+        """Initializes and election instance"""
         if all([kwargs.get("starts_at"), kwargs.get("ends_at"),
                 kwargs.get("security_key"), kwargs.get("user_id"),
                 title := kwargs.get("title")]):
