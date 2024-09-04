@@ -12,7 +12,7 @@ from typing import List
 
 
 class Election(BaseActivity, Base):
-    """Defines a user class
+    """Defines an election class
 
     """
     count = 0
