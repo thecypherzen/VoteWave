@@ -7,8 +7,8 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from uuid import uuid4
 from datetime import date, datetime
 from flask_login import UserMixin
-from typing import List
 import models
+from typing import List
 
 Base = models.base_class.Base
 BaseClass = models.base_class.BaseClass
@@ -36,12 +36,16 @@ class User(UserMixin, BaseClass, Base):
     dob: Mapped[date] = mapped_column(Date, nullable=False)
     address: Mapped[str] = \
         mapped_column(String(255), nullable=False, default="")
-    elections :Mapped[List["Election"]] = \
+
+    # relationships
+    elections :Mapped[list["Election"]] = \
         relationship(back_populates="owner", cascade="all, delete-orphan")
-    polls: Mapped[List["Poll"]] = \
+    polls: Mapped[list["Poll"]] = \
         relationship(back_populates="owner", cascade="all, delete-orphan")
+    admin_info: Mapped["Admin"] = \
+        relationship(back_populates="user", cascade="all, delete-orphan")
+
     """
-    polls = relationship()
     invitations = relationship()
     reviews = relationship()
     metadata = relationship()
