@@ -29,9 +29,9 @@ class Election(BaseActivity, Base):
                      overlaps="admins")
     candidates: Mapped[List["Candidate"]] = \
         relationship(back_populates="election", cascade="all, delete-orphan")
+    voters: Mapped[List["Voter"]] = \
+        relationship(back_populates="election", cascade="all, delete-orphan")
     """
-    candidates = relationship()
-    voters = relationship()
     reviews = relationship()
     waitlist = relatiohship()
     redflags = relationship()

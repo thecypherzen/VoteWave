@@ -29,6 +29,8 @@ class Poll(BaseActivity, Base):
     chatroom: Mapped["Chatroom"] = relationship(back_populates="poll")
     admins: Mapped[List["Admin"]] = \
         relationship(secondary=ape, overlaps="admins")
+    voters: Mapped[List["Voter"]] = \
+        relationship(back_populates="poll", cascade="all, delete-orphan")
     """
     admins = relationship()
     questions = relationship()

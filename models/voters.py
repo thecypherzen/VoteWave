@@ -1,21 +1,27 @@
 #!/usr/bin/python3
 
-from sqlalchemy import Boolean, Integer, String
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import Boolean, ForeignKey, Integer, String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from models.base_class import Base, BaseClass
+from typing import List
 
 
 class Voter(BaseClass, Base):
-    """Defines an admin class"""
+    """Defines a voter class"""
     count = 0
     __tablename__ = "voters"
     serial: Mapped[str] = \
         mapped_column(Integer, nullable=False, autoincrement=True)
-    user_id: Mapped[str] = mapped_column(String(32), nullable=False)
-    election_id: Mapped[str] = mapped_column(String(32), nullable=True)
-    poll_id: Mapped[str] = mapped_column(String(32), nullable=True)
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), nullable=False)
+    election_id: Mapped[str] = \
+        mapped_column(ForeignKey("elections.id"), nullable=True)
+    poll_id: Mapped[str] = mapped_column(ForeignKey("polls.id"), nullable=True)
     has_voted: Mapped[bool] = \
         mapped_column(Boolean, nullable=False, default=False)
+
+    # relationships
+    election: Mapped["Election"] = relationship(back_populates="voters")
+    poll: Mapped["Poll"] = relationship(back_populates="voters")
     """
     elections = relationship()
     polls = relationship()
@@ -24,7 +30,7 @@ class Voter(BaseClass, Base):
     """
 
     def __init__(self, *args, **kwargs):
-        """Initialises a the candidate class"""
+        """Initialises a voter instance """
         if kwargs and kwargs.get("user_id") and \
            any([kwargs.get("election_id"), kwargs.get("poll_id")]):
             self.user_id = kwargs.get("user_id")
