@@ -56,9 +56,7 @@ class Storage():
         """gets all instanes of a class type from storag"""
         found_models = []
         if not obj:
-            print("getting all.....")
             for model in self.__models.values():
-                print("    ", model.__class__.__name__)
                 found_models += self.__session.query(model).all()
             return found_models
         elif not (toget := self.resolve_model(obj)):
