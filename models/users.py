@@ -38,25 +38,28 @@ class User(UserMixin, BaseClass, Base):
         mapped_column(String(255), nullable=False, default="")
 
     # relationships
-    elections :Mapped[list["Election"]] = \
-        relationship(back_populates="owner", cascade="all, delete-orphan")
-    polls: Mapped[list["Poll"]] = \
-        relationship(back_populates="owner", cascade="all, delete-orphan")
-    admin_info: Mapped["Admin"] = \
-        relationship(back_populates="user", cascade="all, delete-orphan")
-    reviews: Mapped[List["Review"]] = \
-        relationship(back_populates="user", cascade="all, delete-orphan")
-    ivs_sent: Mapped[List["Invitation"]] = \
-        relationship(back_populates="sender",
-                     foreign_keys="Invitation.user_to",
-                     overlaps="receiver")
-    ivs_received: Mapped[List["Invitation"]] = \
-        relationship(back_populates="sender",
-                     foreign_keys="Invitation.user_from")
+    admin_info: Mapped["Admin"] = relationship(
+        back_populates="user", cascade="all, delete-orphan")
+    elections :Mapped[list["Election"]] = relationship(
+        back_populates="owner", cascade="all, delete-orphan")
+    inbox: Mapped["Inbox"] = relationship(
+        back_populates="user", cascade="all, delete-orphan",
+        primaryjoin="and_(Inbox.owner_id == User.id, \
+        Inbox.owner_type == 'user')", foreign_keys="Inbox.owner_id",
+        overlaps="inbox, inbox")
+    ivs_sent: Mapped[List["Invitation"]] = relationship(
+        back_populates="sender", foreign_keys="Invitation.user_from",
+        overlaps="receiver")
+    ivs_received: Mapped[List["Invitation"]] = relationship(
+        back_populates="sender",
+        foreign_keys="Invitation.user_to")
+    polls: Mapped[list["Poll"]] = relationship(
+        back_populates="owner", cascade="all, delete-orphan")
+    reviews: Mapped[List["Review"]] = relationship(
+        back_populates="user", cascade="all, delete-orphan")
     """
     metadata = relationship()
     blacklist = relationship()
-    inbox = relationship()
     """
 
     def __init__(self, *args, **kwargs):
