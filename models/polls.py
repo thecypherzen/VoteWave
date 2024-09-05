@@ -28,6 +28,8 @@ class Poll(BaseActivity, Base):
     # relationships
     admins: Mapped[List["Admin"]] = relationship(
         secondary=ape, overlaps="admins")
+    blacklist_entries: Mapped[List["Blacklist"]] = relationship(
+        back_populates="polls", foreign_keys="Blacklist.poll_id")
     chatroom: Mapped["Chatroom"] = relationship(
         back_populates="poll")
     inbox: Mapped["Inbox"] = relationship(
@@ -48,7 +50,6 @@ class Poll(BaseActivity, Base):
     redflags = relationship()
     metadata = relationship()
     notices = relationship()
-    inbox = relationship()
     """
 
     def __init__(self, *args, **kwargs):

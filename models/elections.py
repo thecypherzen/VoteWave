@@ -25,6 +25,9 @@ class Election(BaseActivity, Base):
     # relatinships
     admins: Mapped[List["Admin"]] = relationship(
         secondary="admin_polls_elections", overlaps="admins")
+    blacklist_entries: Mapped[List["Blacklist"]] = relationship(
+        back_populates="elections",
+        foreign_keys="Blacklist.election_id")
     candidates: Mapped[List["Candidate"]] = relationship(
         back_populates="election", cascade="all, delete-orphan")
     chatroom: Mapped["Chatroom"] = relationship(back_populates="election")
@@ -45,7 +48,6 @@ class Election(BaseActivity, Base):
     redflags = relationship()
     metadata = relationship()
     notices = relationship()
-    inbox = relationship()
     """
 
     def __init__(self, *args, **kwargs):
