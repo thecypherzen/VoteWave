@@ -8,7 +8,7 @@ from models.base_class import Base, BaseClass
 
 
 class Option(BaseClass, Base):
-    __count = 0
+    count = 0
 
     """Defines a user class"""
     __tablename__ = "options"
@@ -21,9 +21,7 @@ class Option(BaseClass, Base):
     def __init__(self, *args, **kwargs):
         """Initialize user class"""
         if all([kwargs.get('question_id'), kwargs.get("value")]):
-            self.serial = Option.__count + 1
             self.question_id = kwargs.get("question_id")
             self.value = kwargs.get("value")
             self.votes = 0
             super().__init__()
-            Option.__count += 1

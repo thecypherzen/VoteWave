@@ -8,7 +8,7 @@ from models.base_class import Base, BaseClass
 
 class Redflag(BaseClass, Base):
     """Defines a waitlist class"""
-    __count = 0
+    count = 0
     __tablename__ = "redflags"
     serial: Mapped[str] = \
         mapped_column(Integer, nullable=False, autoincrement=True)
@@ -27,6 +27,4 @@ class Redflag(BaseClass, Base):
         """Initialises a the candidate class"""
         if kwargs and all([kwargs.get("raised_by"), kwargs.get("message")]) \
            and any([kwargs.get("poll_id"), kwargs.get("election_id")]):
-            self.serial = Redflag.__count + 1
             super().__init__(*args, **kwargs)
-            Redflag.__count += 1

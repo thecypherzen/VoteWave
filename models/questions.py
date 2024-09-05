@@ -8,7 +8,7 @@ from models.base_class import Base, BaseClass
 
 
 class Question(BaseClass, Base):
-    __count = 0
+    count = 0
 
     """Defines a user class"""
     __tablename__ = "questions"
@@ -27,7 +27,6 @@ class Question(BaseClass, Base):
         """Initialize user class"""
         to_delete = ["poll_id", "location", "serial", "title", "runner_text"]
         if all([kwargs.get("poll_id"), kwargs.get("title")]):
-            self.serial = Question.__count + 1
             self.poll_id = kwargs.get("poll_id")
             self.title = kwargs.get("title")
             self.runner_text = kwargs.get("runner_text") or ""
@@ -36,4 +35,3 @@ class Question(BaseClass, Base):
                 if kwargs.get(item):
                     del kwargs[item]
             super().__init__(*args, **kwargs)
-            Question.__count += 1

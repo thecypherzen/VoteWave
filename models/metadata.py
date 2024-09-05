@@ -7,7 +7,7 @@ from models.base_class import Base, BaseClass
 
 class Metadata(BaseClass, Base):
     """Defines a blacklist class"""
-    __count = 0
+    count = 0
     __tablename__ = "metadata"
     serial: Mapped[str] = \
         mapped_column(Integer, nullable=False, autoincrement=True)
@@ -35,4 +35,3 @@ class Metadata(BaseClass, Base):
                 mime_type := kwargs.get("mime_type")]) and \
                 any(key in items for key in kwargs.keys()):
             super().__init__(*args, **kwargs)
-            Metadata.__count += 1

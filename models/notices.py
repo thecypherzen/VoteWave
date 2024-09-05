@@ -8,7 +8,7 @@ from models.base_class import Base, BaseClass
 
 class Notice(BaseClass, Base):
     """Defines a blacklist class"""
-    __count = 0
+    count = 0
     __tablename__ = "notices"
     serial: Mapped[str] = \
         mapped_column(Integer, nullable=False, autoincrement=True)
@@ -27,4 +27,3 @@ class Notice(BaseClass, Base):
             if kwargs.get("expires"):
                 del kwargs["expires"]
             super().__init__(*args, **kwargs)
-            Notice.__count += 1

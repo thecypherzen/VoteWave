@@ -4,16 +4,17 @@
 """
 
 from sqlalchemy import Boolean, Integer, String
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from models.base_class import Base
 from models.base_activity import BaseActivity
-
+from models.admin_polls_elections import admin_polls_elections as ape
+from typing import List
 
 class Poll(BaseActivity, Base):
-    """Defines a user class
+    """Defines a poll class
 
     """
-    __count = 0
+    count = 0
     __tablename__ = "polls"
     serial: Mapped[int] = \
         mapped_column(Integer, nullable=False, autoincrement=True)
@@ -23,29 +24,42 @@ class Poll(BaseActivity, Base):
         mapped_column(Boolean, nullable=False, default=True)
     allow_multi_votes: Mapped[bool] = \
         mapped_column(Boolean, nullable=False, default=True)
+
+    # relationships
+    admins: Mapped[List["Admin"]] = relationship(
+        secondary=ape, overlaps="admins")
+    blacklist_entries: Mapped[List["Blacklist"]] = relationship(
+        back_populates="poll", foreign_keys="Blacklist.poll_id",
+        cascade="all, delete-orphan")
+    chatroom: Mapped["Chatroom"] = relationship(
+        back_populates="poll")
+    inbox: Mapped["Inbox"] = relationship(
+        back_populates="poll", cascade="all, delete-orphan",
+        primaryjoin="and_(Inbox.owner_id == Poll.id, \
+        Inbox.owner_type == 'poll')", foreign_keys="Inbox.owner_id",
+        overlaps="inbox, inbox")
+    invitations: Mapped[List["Invitation"]] = relationship(
+        back_populates="poll", cascade="all, delete-orphan")
+    owner: Mapped["User"] = relationship(back_populates="polls")
+    reviews: Mapped[List["Review"]] = relationship(
+        back_populates="poll", cascade="all, delete-orphan")
+    voters: Mapped[List["Voter"]] = relationship(
+        back_populates="poll", cascade="all, delete-orphan")
     """
-    admins = relationship()
     questions = relationship()
-    voters = relationship()
-    reviews = relationship()
     waitlist = relatiohship()
     redflags = relationship()
     metadata = relationship()
     notices = relationship()
-    inbox = relationship()
     """
 
     def __init__(self, *args, **kwargs):
-        """Initialize user class"""
+        """Initializes a poll instance """
         if all([kwargs.get("starts_at"), kwargs.get("ends_at"),
-                kwargs.get("security_key")]):
+                kwargs.get("security_key"), title := kwargs.get("title")]):
             to_delete = ["location", "title", "allows_anonymous",
                          "allows_multi_votes"]
-            if (title := kwargs.get("title")):
-                self.title = title
-                del kwargs["title"]
-            else:
-                self.title = f"Poll-{Poll.__count + 1}"
+            self.title = title
             self.location = "votewave/user_id/polls/poll_id"
             self.allows_anonymous = kwargs.get("allows_anonymous") or True
             self.allows_multi_votes = kwargs.get('allows_multi_votes') or True

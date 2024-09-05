@@ -3,50 +3,61 @@
     elections will inherit
 """
 
-from sqlalchemy import Integer, String
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import ForeignKey, Integer, String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from models.base_class import Base
 from models.base_activity import BaseActivity
+from models.admin_polls_elections import admin_polls_elections as ape
+from typing import List
 
 
 class Election(BaseActivity, Base):
-    """Defines a user class
+    """Defines an election class
 
     """
-    __count = 0
+    count = 0
     __tablename__ = "elections"
     serial: Mapped[int] = mapped_column(Integer, nullable=False,
                                         autoincrement=True)
     location: Mapped[str] = mapped_column(String(255), nullable=False)
     title: Mapped[str] = mapped_column(String(128), nullable=False)
+
+    # relatinships
+    admins: Mapped[List["Admin"]] = relationship(
+        secondary="admin_polls_elections", overlaps="admins")
+    blacklist_entries: Mapped[List["Blacklist"]] = relationship(
+        back_populates="election", cascade="all, delete-orphan",
+        foreign_keys="Blacklist.election_id",)
+    candidates: Mapped[List["Candidate"]] = relationship(
+        back_populates="election", cascade="all, delete-orphan")
+    chatroom: Mapped["Chatroom"] = relationship(back_populates="election")
+    inbox: Mapped["Inbox"] = relationship(
+        back_populates="election", cascade="all, delete-orphan",
+        primaryjoin="and_(Inbox.owner_id == Election.id, \
+        Inbox.owner_type == 'election')", foreign_keys="Inbox.owner_id",
+        overlaps="inbox, inbox")
+    invitations: Mapped[List["Invitation"]] = relationship(
+        back_populates="election", cascade="all, delete-orphan")
+    owner: Mapped["User"] = relationship(back_populates="elections")
+    voters: Mapped[List["Voter"]] = relationship(
+        back_populates="election", cascade="all, delete-orphan")
+    reviews: Mapped[List["Review"]] = relationship(
+        back_populates="election", cascade="all, delete-orphan")
     """
-    admins = relationship()
-    candidates = relationship()
-    voters = relationship()
-    reviews = relationship()
     waitlist = relatiohship()
     redflags = relationship()
     metadata = relationship()
     notices = relationship()
-    inbox = relationship()
     """
 
     def __init__(self, *args, **kwargs):
-        """Initialize user class"""
+        """Initializes and election instance"""
         if all([kwargs.get("starts_at"), kwargs.get("ends_at"),
-                kwargs.get("security_key")]):
-            if (title := kwargs.get("title")):
-                self.title = title
-                del kwargs["title"]
-            else:
-                self.title = f"Election-{Election.__count + 1}"
+                kwargs.get("security_key"), kwargs.get("user_id"),
+                title := kwargs.get("title")]):
+            self.title = title
             self.location = ""
             super().__init__(*args, **kwargs)
-
-    @property
-    def candidates(self):
-        """A getter that returns an election's candidates """
-        pass
 
     def close(self):
         """Closes down an election from participation

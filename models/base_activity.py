@@ -3,7 +3,7 @@
     elections will inherit
 """
 
-from sqlalchemy import Boolean, DateTime, String
+from sqlalchemy import Boolean, DateTime, String, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.dialects.mysql import TEXT
 from datetime import date, datetime
@@ -26,25 +26,24 @@ class BaseActivity(BaseClass):
     guidelines: Mapped[str] = mapped_column(TEXT, nullable=False, default="")
     is_public: Mapped[bool] = mapped_column(Boolean, nullable=False,
                                             default=True)
-    owner_id: Mapped[str] = mapped_column(String(32), nullable=False)
-    chatroom_id: Mapped[str] = mapped_column(String(32), nullable=False)
-    retults: Mapped[str] = mapped_column(String(255), default="")
+    owner_id: Mapped[str] = mapped_column(ForeignKey("users.id"))
+    results: Mapped[str] = mapped_column(String(255), default="")
 
     def __init__(self, *args, **kwargs):
         """Initialize user class"""
         to_delete = ["starts_at", "ends_at", "salt", "description",
-                     "guidelines", "is_public", "owner_id", "chatroom_id",
+                     "guidelines", "is_public", "user_id", "chatroom_id",
                      "results", "security_key", "status"]
         if kwargs:
             if (stime := kwargs.get("starts_at")).__class__.__name__ == "str":
                 self.starts_at = datetime.strptime(stime, format)
-            elif stime == "datetime":
+            elif stime.__class__.__name__ == "datetime":
                 self.starts_at = stime
-            if (etime := kwargs.get("ends_at ")).__class__.__name__ == "str":
+            if (etime := kwargs.get("ends_at")).__class__.__name__ == "str":
                 self.ends_at = datetime.strptime(etime, format)
-            elif etime == "datetime":
+            elif etime.__class__.__name__ == "datetime":
                 self.ends_at = etime
-            self.status = kwargs.get("status") or "pending"
+            self.status = "pending"
             self.salt = BaseActivity.generate_salt()
             self.security_key = \
                 BaseActivity.generate_hash(text=kwargs.get("security_key"),
@@ -52,31 +51,19 @@ class BaseActivity(BaseClass):
             self.description = kwargs.get("description") or ""
             self.guidelines = kwargs.get("guidelines") or ""
             self.is_public = kwargs.get("is_public") or True
-            self.owner_id = kwargs.get("owner_id")
-            self.chatroom_id = kwargs.get("chatroom_id") or \
-                BaseActivity.new_chatroom()  # .id
+            self.owner_id = kwargs.get("user_id")
             self.results = kwargs.get("results") or ""
             for key in to_delete:
                 if kwargs.get(key):
                     del kwargs[key]
         super().__init__(*args, **kwargs)
 
-    @classmethod
-    def new_chatroom(cls):
-        """Creates a new chatroom instance
-        Returns: id of new chatroom
-        """
-        return "983refpk"
 
     @property
     def admins(self):
         """Returns the list of admins of child activity"""
         pass
 
-    @property
-    def blacklist(self):
-        """A getter that returns a list users blacklisted from child activty"""
-        pass
 
     @property
     def chatroom(self):

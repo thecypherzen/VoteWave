@@ -6,8 +6,8 @@ from sqlalchemy import DateTime, String
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from uuid import uuid4
 from datetime import datetime
-from models import storage_is_live
 import hashlib
+import models
 import secrets
 import string
 
@@ -30,6 +30,8 @@ class BaseClass():
 
     def __init__(self, *args, **kwargs):
         # handle empty kwargs
+        self.__class__.count += 1
+        self.serial = self.get_serial(self, self.count)
         if not kwargs:
             self.id = str(uuid4()).replace("-", "")
             self.created_at = datetime.utcnow()
@@ -71,6 +73,7 @@ class BaseClass():
 
             if temp := kwargs.get("__class__"):
                 del kwargs["__class__"]
+
             # set rest
             for key, value in kwargs.items():
                 setattr(self, key, value)
@@ -89,15 +92,34 @@ class BaseClass():
         return secrets.token_hex(chars//2)
 
     @classmethod
+    def get_serial(cls, instance, count):
+        """Gets the next serial for an instance"""
+        cls_name = instance.__class__.__name__
+        if not (last_obj := models.storage.get_last_of(cls_name)):
+            return count
+        return last_obj.serial + 1
+
+    @classmethod
     def random_string(cls, chars=32):
         """generates a new hash from"""
         charset = string.ascii_letters + string.digits
         bytes = secrets.token_bytes(chars)
         return "".join(secrets.choice(charset) for _ in range(chars))
 
+    @property
+    def blacklist(self):
+        """A getter that returns a list users blacklisted by
+        an activty instance"""
+        if (entries := self.blacklist_entries):
+            from models import storage
+            return [storage.get("User", entry.blocked_user_id)
+                    for entry in entries]
+        else:
+            return None
+
     def __str__(self):
         """ Defines a string representation of class"""
-        return f"{self.__class__.__name__}] ({self.id}) {self.__dict__}" \
+        return f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}" \
             if self.id else "None"
 
     def add_metadata(self, values=[]):
@@ -119,6 +141,7 @@ class BaseClass():
         """ Returns all instances of current class"""
         pass
 
+
     def destroy(self):
         """ Deletes current instance of object from storage"""
         pass
@@ -131,10 +154,14 @@ class BaseClass():
         """Returns a dictionary representation of current object instance"""
         to_remove = ["_sa_instance_state", "salt", "security_key",
                      "passwd_hash", "serial"]
+        dates = ["starts_at", "ends_at", "dob"]
         obj_copy = self.__dict__.copy()
         obj_copy["__class__"] = self.__class__.__name__
         obj_copy["created_at"] = self.created_at.isoformat()
         obj_copy["updated_at"] = self.updated_at.isoformat()
+        for date in dates:
+            if obj_copy.get(date):
+                obj_copy[date] = obj_copy[date].isoformat()
         # remove internal values
         for item in to_remove:
             if obj_copy.get(item):
