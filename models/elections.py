@@ -33,6 +33,8 @@ class Election(BaseActivity, Base):
         relationship(back_populates="election", cascade="all, delete-orphan")
     reviews: Mapped[List["Review"]] = \
         relationship(back_populates="election", cascade="all, delete-orphan")
+    invitations: Mapped[List["Invitation"]] = \
+        relationship(back_populates="election", cascade="all, delete-orphan")
     """
     waitlist = relatiohship()
     redflags = relationship()

@@ -25,7 +25,6 @@ class Voter(BaseClass, Base):
     reviews: Mapped[List["Review"]] = \
         relationship(back_populates="voter", cascade="all, delete-orphan")
     """
-    reviews = relationship()
     red_flags = relationship()
     """
 

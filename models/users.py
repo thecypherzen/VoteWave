@@ -46,9 +46,14 @@ class User(UserMixin, BaseClass, Base):
         relationship(back_populates="user", cascade="all, delete-orphan")
     reviews: Mapped[List["Review"]] = \
         relationship(back_populates="user", cascade="all, delete-orphan")
-
+    ivs_sent: Mapped[List["Invitation"]] = \
+        relationship(back_populates="sender",
+                     foreign_keys="Invitation.user_to",
+                     overlaps="receiver")
+    ivs_received: Mapped[List["Invitation"]] = \
+        relationship(back_populates="sender",
+                     foreign_keys="Invitation.user_from")
     """
-    invitations = relationship()
     metadata = relationship()
     blacklist = relationship()
     inbox = relationship()
