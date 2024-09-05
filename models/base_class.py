@@ -106,6 +106,17 @@ class BaseClass():
         bytes = secrets.token_bytes(chars)
         return "".join(secrets.choice(charset) for _ in range(chars))
 
+    @property
+    def blacklist(self):
+        """A getter that returns a list users blacklisted by
+        an activty instance"""
+        if (entries := self.blacklist_entries):
+            from models import storage
+            return [storage.get("User", entry.blocked_user_id)
+                    for entry in entries]
+        else:
+            return None
+
     def __str__(self):
         """ Defines a string representation of class"""
         return f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}" \
@@ -129,6 +140,7 @@ class BaseClass():
     def all(self: object) -> list:
         """ Returns all instances of current class"""
         pass
+
 
     def destroy(self):
         """ Deletes current instance of object from storage"""
