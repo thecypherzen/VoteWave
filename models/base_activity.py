@@ -64,10 +64,6 @@ class BaseActivity(BaseClass):
         """Returns the list of admins of child activity"""
         pass
 
-    @property
-    def blacklist(self):
-        """A getter that returns a list users blacklisted from child activty"""
-        pass
 
     @property
     def chatroom(self):
