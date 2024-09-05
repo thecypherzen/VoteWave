@@ -30,7 +30,6 @@ class Candidate(BaseClass, Base):
 
     """
     redflags = relationship()
-    messages = relationship()
     metadata = relationship()
     """
 

@@ -41,7 +41,8 @@ class User(UserMixin, BaseClass, Base):
     admin_info: Mapped["Admin"] = relationship(
         back_populates="user", cascade="all, delete-orphan")
     blacklist_entries: Mapped[List["Blacklist"]] = relationship(
-        back_populates="users", foreign_keys="Blacklist.user_id")
+        back_populates="user", foreign_keys="Blacklist.user_id",
+        cascade="all, delete-orphan")
     elections :Mapped[list["Election"]] = relationship(
         back_populates="owner", cascade="all, delete-orphan")
     inbox: Mapped["Inbox"] = relationship(

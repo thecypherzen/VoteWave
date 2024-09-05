@@ -29,7 +29,8 @@ class Poll(BaseActivity, Base):
     admins: Mapped[List["Admin"]] = relationship(
         secondary=ape, overlaps="admins")
     blacklist_entries: Mapped[List["Blacklist"]] = relationship(
-        back_populates="polls", foreign_keys="Blacklist.poll_id")
+        back_populates="poll", foreign_keys="Blacklist.poll_id",
+        cascade="all, delete-orphan")
     chatroom: Mapped["Chatroom"] = relationship(
         back_populates="poll")
     inbox: Mapped["Inbox"] = relationship(

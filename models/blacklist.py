@@ -4,7 +4,7 @@ from sqlalchemy import ForeignKey, Integer, \
     String, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from models.base_class import Base, BaseClass
-from typing import List
+
 
 class Blacklist(BaseClass, Base):
     """Defines a blacklist class"""
@@ -28,13 +28,13 @@ class Blacklist(BaseClass, Base):
     )
 
     # relationships
-    elections: Mapped[List["Election"]] = relationship(
+    election: Mapped["Election"] = relationship(
         back_populates="blacklist_entries",
         foreign_keys="Blacklist.election_id")
-    polls: Mapped[List["Poll"]] = relationship(
+    poll: Mapped["Poll"] = relationship(
         back_populates="blacklist_entries",
         foreign_keys="Blacklist.poll_id")
-    users: Mapped[List["User"]] = relationship(
+    user: Mapped["User"] = relationship(
         back_populates="blacklist_entries",
         foreign_keys="Blacklist.user_id")
 
