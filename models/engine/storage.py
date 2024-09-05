@@ -7,7 +7,9 @@ from models.blacklist import Blacklist
 from models.candidates import Candidate
 from models.chatrooms import Chatroom
 from models.elections import Election
+from models.inboxes import Inbox
 from models.invitations import Invitation
+from models.messages import Message
 from models.metadata import Metadata
 from models.notices import Notice
 from models.options import Option
@@ -29,10 +31,11 @@ class Storage():
     __session = None
     __mode = getenv("VW_ENV")
     __models = {"Admin":Admin, "Blacklist":Blacklist, "Candidate":Candidate,
-                 "Chatroom":Chatroom, "Election":Election, "Invitation":Invitation,
-                 "Metadata":Metadata, "Notice":Notice, "Option":Option,
-                 "Poll":Poll, "Question":Question, "Redflag":Redflag,
-                 "Review":Review, "User":User, "Voter":Voter, "Waitlist":Waitlist}
+                "Chatroom":Chatroom, "Election":Election, "Inbox": Inbox,
+                "Invitation":Invitation, "Message": Message, "Metadata":Metadata,
+                "Notice":Notice, "Option":Option, "Poll":Poll,
+                "Question":Question, "Redflag":Redflag, "Review":Review,
+                "User":User, "Voter":Voter, "Waitlist":Waitlist}
 
     if __mode == "test":
         DB_NAME = getenv("VW_TEST_DB")
@@ -63,12 +66,13 @@ class Storage():
             return found_models
         return self.__session.query(toget).all()
 
-    def add(self, objs):
+    def add(self, *objs):
         """adds a new object to storage session"""
-        if isinstance(objs, list):
-            self.__session.add_all(objs)
-        else:
-            self.__session.add(objs)
+        for obj in objs:
+            if isinstance(obj, list):
+                self.__session.add_all(obj)
+            else:
+                self.__session.add(objs)
 
     def close(self):
         """closes the current session"""
