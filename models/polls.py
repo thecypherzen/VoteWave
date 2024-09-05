@@ -31,11 +31,10 @@ class Poll(BaseActivity, Base):
         relationship(secondary=ape, overlaps="admins")
     voters: Mapped[List["Voter"]] = \
         relationship(back_populates="poll", cascade="all, delete-orphan")
+    reviews: Mapped[List["Review"]] = \
+        relationship(back_populates="poll", cascade="all, delete-orphan")
     """
-    admins = relationship()
     questions = relationship()
-    voters = relationship()
-    reviews = relationship()
     waitlist = relatiohship()
     redflags = relationship()
     metadata = relationship()

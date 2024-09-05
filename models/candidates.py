@@ -4,6 +4,7 @@ from sqlalchemy import DateTime, ForeignKey, Integer, String
 from sqlalchemy.dialects.mysql import LONGTEXT
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from models.base_class import Base, BaseClass
+from typing import List
 
 
 
@@ -23,9 +24,11 @@ class Candidate(BaseClass, Base):
     manifesto: Mapped[str] = mapped_column(LONGTEXT, nullable=False)
     election: Mapped["Election"] = \
         relationship(back_populates="candidates")
+    reviews: Mapped[List["Review"]] = \
+        relationship(back_populates="candidate",
+                     cascade="all, delete-orphan")
 
     """
-    reviews = relationship()
     redflags = relationship()
     messages = relationship()
     metadata = relationship()

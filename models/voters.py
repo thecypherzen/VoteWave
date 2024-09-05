@@ -22,9 +22,9 @@ class Voter(BaseClass, Base):
     # relationships
     election: Mapped["Election"] = relationship(back_populates="voters")
     poll: Mapped["Poll"] = relationship(back_populates="voters")
+    reviews: Mapped[List["Review"]] = \
+        relationship(back_populates="voter", cascade="all, delete-orphan")
     """
-    elections = relationship()
-    polls = relationship()
     reviews = relationship()
     red_flags = relationship()
     """

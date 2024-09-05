@@ -44,10 +44,11 @@ class User(UserMixin, BaseClass, Base):
         relationship(back_populates="owner", cascade="all, delete-orphan")
     admin_info: Mapped["Admin"] = \
         relationship(back_populates="user", cascade="all, delete-orphan")
+    reviews: Mapped[List["Review"]] = \
+        relationship(back_populates="user", cascade="all, delete-orphan")
 
     """
     invitations = relationship()
-    reviews = relationship()
     metadata = relationship()
     blacklist = relationship()
     inbox = relationship()
