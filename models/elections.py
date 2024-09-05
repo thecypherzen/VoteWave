@@ -21,20 +21,25 @@ class Election(BaseActivity, Base):
                                         autoincrement=True)
     location: Mapped[str] = mapped_column(String(255), nullable=False)
     title: Mapped[str] = mapped_column(String(128), nullable=False)
-    owner: Mapped["User"] = \
-        relationship(back_populates="elections")
+
+    # relatinships
+    admins: Mapped[List["Admin"]] = relationship(
+        secondary="admin_polls_elections", overlaps="admins")
+    candidates: Mapped[List["Candidate"]] = relationship(
+        back_populates="election", cascade="all, delete-orphan")
     chatroom: Mapped["Chatroom"] = relationship(back_populates="election")
-    admins: Mapped[List["Admin"]] = \
-        relationship(secondary="admin_polls_elections",
-                     overlaps="admins")
-    candidates: Mapped[List["Candidate"]] = \
-        relationship(back_populates="election", cascade="all, delete-orphan")
-    voters: Mapped[List["Voter"]] = \
-        relationship(back_populates="election", cascade="all, delete-orphan")
-    reviews: Mapped[List["Review"]] = \
-        relationship(back_populates="election", cascade="all, delete-orphan")
-    invitations: Mapped[List["Invitation"]] = \
-        relationship(back_populates="election", cascade="all, delete-orphan")
+    inbox: Mapped["Inbox"] = relationship(
+        back_populates="election", cascade="all, delete-orphan",
+        primaryjoin="and_(Inbox.owner_id == Election.id, \
+        Inbox.owner_type == 'election')", foreign_keys="Inbox.owner_id",
+        overlaps="inbox, inbox")
+    invitations: Mapped[List["Invitation"]] = relationship(
+        back_populates="election", cascade="all, delete-orphan")
+    owner: Mapped["User"] = relationship(back_populates="elections")
+    voters: Mapped[List["Voter"]] = relationship(
+        back_populates="election", cascade="all, delete-orphan")
+    reviews: Mapped[List["Review"]] = relationship(
+        back_populates="election", cascade="all, delete-orphan")
     """
     waitlist = relatiohship()
     redflags = relationship()

@@ -24,17 +24,24 @@ class Poll(BaseActivity, Base):
         mapped_column(Boolean, nullable=False, default=True)
     allow_multi_votes: Mapped[bool] = \
         mapped_column(Boolean, nullable=False, default=True)
-    owner: Mapped["User"] = \
-        relationship(back_populates="polls")
-    chatroom: Mapped["Chatroom"] = relationship(back_populates="poll")
-    admins: Mapped[List["Admin"]] = \
-        relationship(secondary=ape, overlaps="admins")
-    voters: Mapped[List["Voter"]] = \
-        relationship(back_populates="poll", cascade="all, delete-orphan")
-    reviews: Mapped[List["Review"]] = \
-        relationship(back_populates="poll", cascade="all, delete-orphan")
-    invitations: Mapped[List["Invitation"]] = \
-        relationship(back_populates="poll", cascade="all, delete-orphan")
+
+    # relationships
+    admins: Mapped[List["Admin"]] = relationship(
+        secondary=ape, overlaps="admins")
+    chatroom: Mapped["Chatroom"] = relationship(
+        back_populates="poll")
+    inbox: Mapped["Inbox"] = relationship(
+        back_populates="poll", cascade="all, delete-orphan",
+        primaryjoin="and_(Inbox.owner_id == Poll.id, \
+        Inbox.owner_type == 'poll')", foreign_keys="Inbox.owner_id",
+        overlaps="inbox, inbox")
+    invitations: Mapped[List["Invitation"]] = relationship(
+        back_populates="poll", cascade="all, delete-orphan")
+    owner: Mapped["User"] = relationship(back_populates="polls")
+    reviews: Mapped[List["Review"]] = relationship(
+        back_populates="poll", cascade="all, delete-orphan")
+    voters: Mapped[List["Voter"]] = relationship(
+        back_populates="poll", cascade="all, delete-orphan")
     """
     questions = relationship()
     waitlist = relatiohship()
