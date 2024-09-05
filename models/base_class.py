@@ -143,16 +143,10 @@ class BaseClass():
         to_remove = ["_sa_instance_state", "salt", "security_key",
                      "passwd_hash", "serial"]
         dates = ["starts_at", "ends_at", "dob"]
-        objs = ["user_from", "user_to"]
         obj_copy = self.__dict__.copy()
         obj_copy["__class__"] = self.__class__.__name__
         obj_copy["created_at"] = self.created_at.isoformat()
         obj_copy["updated_at"] = self.updated_at.isoformat()
-
-        for obj in objs:
-            if obj_copy.get(obj):
-                obj_copy[obj] = obj_copy[obj].to_dict()
-
         for date in dates:
             if obj_copy.get(date):
                 obj_copy[date] = obj_copy[date].isoformat()
