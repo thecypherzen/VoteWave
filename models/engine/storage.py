@@ -72,7 +72,7 @@ class Storage():
             if isinstance(obj, list):
                 self.__session.add_all(obj)
             else:
-                self.__session.add(objs)
+                self.__session.add(obj)
 
     def close(self):
         """closes the current session"""
