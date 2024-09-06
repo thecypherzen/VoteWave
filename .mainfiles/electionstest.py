@@ -29,10 +29,6 @@ election2 = Election(
     title="CompSc Dept Election 2024"
 )
 
-e1_admin1 = Admin( election_id=election1.id, user_id=user1.id )
-e1_admin2 = Admin( election_id=election1.id, user_id=user6.id )
-e2_admin1 = Admin( election_id=election2.id, user_id=user2.id )
-
 poll1 = Poll(
     user_id=user3.id,
     starts_at=datetime.now() + timedelta(days=1),
@@ -49,14 +45,24 @@ poll2 = Poll(
     title="Poll Demo 2"
 )
 
+storage.add([election1, election2, poll1, poll2])
+
+e1_admin1 = Admin(user_id=user1.id)
+e1_admin2 = Admin(user_id=user6.id)
+e2_admin1 = Admin(user_id=user2.id)
 p1_admin1 = Admin( poll_id=poll1.id, user_id=user3.id )
 p2_admin1 = Admin( poll_id=poll2.id, user_id=user5.id )
 p2_admin2 = Admin( poll_id=poll2.id, user_id=user6.id )
 p2_admin3 = Admin( poll_id=poll2.id, user_id=user4.id )
 
-storage.add([election1, election2, e1_admin1, e1_admin2, e2_admin1,
-             poll1, poll2, p1_admin1, p2_admin1, p2_admin2,
-             p2_admin3])
+storage.add([e1_admin1, e1_admin2, e2_admin1, p1_admin1,
+             p2_admin1, p2_admin2, p2_admin3])
+
+election1.admins.extend([e1_admin1, e1_admin2])
+election2.admins.extend([e2_admin1])
+poll1.admins.extend([p1_admin1])
+poll2.admins.extend([p2_admin1, p2_admin2, p2_admin3])
+
 storage.save()
 
 # querying and checking
@@ -71,15 +77,30 @@ qp1_admin1 = storage.get(Admin, p1_admin1.id)
 qp2_admin1 = storage.get(Admin, p2_admin1.id)
 qp2_admin2 = storage.get(Admin, p2_admin2.id)
 qp2_admin3 = storage.get(Admin, p2_admin3.id)
+print("created all..")
 
+"""
 print("poll1 id match => ", qpoll1.id == poll1.id)
 print("poll2 id match => ", qpoll2.id == poll2.id)
 print("election1 id match => ", qelection1.id == election1.id)
 print("election2 id match => ", qelection2.id == election2.id)
-print("e1_admin1 <=> e1:  ", qe1_admin1.election_id == qelection1.id)
-print("e1_admin2 <=> e1:  ", qe1_admin2.election_id == qelection1.id)
-print("e2_admin1 <=> e2:  ", qe2_admin1.election_id == qelection2.id)
-print("p1_admin1 <=> p1:  ", qp1_admin1.poll_id == qpoll1.id)
-print("p2_admin1 <=> p1:  ", qp2_admin1.poll_id == qpoll2.id)
-print("p2_admin2 <=> p1:  ", qp2_admin2.poll_id == qpoll2.id)
-print("p2_admin3 <=> p1:  ", qp2_admin3.poll_id == qpoll2.id)
+
+e1_admins = election1.admins
+e2_admins = election2.admins
+p1_admins = poll1.admins
+p2_admins = poll2.admins
+print(e1_admins)
+print("\n",e2_admins)
+print("\n",p1_admins)
+print("\n",p2_admins)
+
+admins = storage.all("Admin")
+for admin in admins:
+    print(f"{admin.user.id}: {admin.user.first_name}")
+    if (aes := admin.elections):
+        for ae in aes:
+            print(f"\telection:{ae.id}")
+    if (aps := admin.polls):
+        for ap in aps:
+            print(f"\33tpoll: {ap.id}")
+"""
