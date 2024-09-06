@@ -1,8 +1,10 @@
 #!/usr/bin/python3
 from sqlalchemy import Column, ForeignKey, Integer, String,\
     Table, UniqueConstraint
+from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from models.base_class import Base, BaseClass
+from models.messages import MessageInbox
 from typing import List
 
 
@@ -17,8 +19,9 @@ class Inbox(BaseClass, Base):
     __table_args__ = (UniqueConstraint("owner_id", "owner_type"),)
 
     # relationships
-    messages: Mapped[List["Message"]] = relationship(
+    message_items: Mapped[List["MessageInbox"]] = relationship(
         back_populates="inbox", cascade="all, delete-orphan")
+    messages = association_proxy("message_items", "message")
     user: Mapped["User"] = relationship(
         back_populates="inbox", foreign_keys="Inbox.owner_id",
         primaryjoin="and_(Inbox.owner_id == User.id, \
@@ -41,3 +44,16 @@ class Inbox(BaseClass, Base):
         if kwargs and all([kwargs.get("owner_id"),
                            kwargs.get("owner_type")]):
             super().__init__(*args, **kwargs)
+
+    def add_message(self, *messages):
+        """Adds messages to an inbox"""
+        for message in messages:
+            if isinstance(message, list):
+                for msg in message:
+                    self.message_items.append(
+                        MessageInbox(message=message, inbox=self)
+                    )
+            else:
+                self.message_items.append(
+                    MessageInbox(message=message, inbox=self)
+                )
