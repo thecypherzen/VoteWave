@@ -14,6 +14,7 @@ import string
 format = "%Y-%m-%dT%H:%M:%S.%f"
 
 
+
 class Base(DeclarativeBase):
     pass
 
@@ -74,9 +75,11 @@ class BaseClass():
             if temp := kwargs.get("__class__"):
                 del kwargs["__class__"]
 
+
             # set rest
             for key, value in kwargs.items():
                 setattr(self, key, value)
+
 
     @classmethod
     def generate_hash(cls, salt=None, text=None, chars=128):
@@ -122,24 +125,13 @@ class BaseClass():
         return f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}" \
             if self.id else "None"
 
-    def add_metadata(self, values=[]):
-        """Adds new entries to an instance's metadata
-
-          `values` is a list of data to use in creating each metadata item and
-            each item is expected in the format:
-            {"<owner>_id": "<owner_id>", "for","<purpose>", "name": "<name>",
-             "use_as": "<purpose>", "mime_type": "<mime_type"
-            }
-            <owner> could be any of "election", "poll", "red_flag", "chatroom",
-              + "user", or "candidate"
-
-        Returns: True on success or False on failure of any or all
-            """
-        pass
+    def add(self):
+        """Adds this instance to session"""
+        models.storage.add(self)
 
     def all(self: object) -> list:
         """ Returns all instances of current class"""
-        pass
+        return models.storage.all(self)
 
 
     def destroy(self):
@@ -148,7 +140,7 @@ class BaseClass():
 
     def save(self):
         """ Saves current instance of object to storage"""
-        pass
+        models.storage.save()
 
     def to_dict(self):
         """Returns a dictionary representation of current object instance"""
