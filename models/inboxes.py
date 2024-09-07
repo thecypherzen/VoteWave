@@ -19,9 +19,11 @@ class Inbox(BaseClass, Base):
     __table_args__ = (UniqueConstraint("owner_id", "owner_type"),)
 
     # relationships
-    message_items: Mapped[List["MessageInbox"]] = relationship(
+    message_items: Mapped[List[MessageInbox]] = relationship(
         back_populates="inbox", cascade="all, delete-orphan")
-    messages = association_proxy("message_items", "message")
+    messages = association_proxy(
+        "message_items", "message",
+        creator=lambda mesg: MessageInbox(message=mesg))
     user: Mapped["User"] = relationship(
         back_populates="inbox", foreign_keys="Inbox.owner_id",
         primaryjoin="and_(Inbox.owner_id == User.id, \
@@ -50,10 +52,20 @@ class Inbox(BaseClass, Base):
         for message in messages:
             if isinstance(message, list):
                 for msg in message:
-                    self.message_items.append(
-                        MessageInbox(message=message, inbox=self)
-                    )
+                    self.messages.append(msg)
             else:
-                self.message_items.append(
-                    MessageInbox(message=message, inbox=self)
-                )
+                self.messages.append(message)
+        self.save()
+
+
+    def remove_message(self, *messages):
+        """Removes a message from inbox instance"""
+        for message in messages:
+            if isinstance(message, list):
+                for msg in message:
+                    if msg in self.messages:
+                        self.messages.remove(msg)
+            else:
+                if message in self.messages:
+                    self.messages.remove(message)
+        self.save()
