@@ -38,6 +38,11 @@ class Election(BaseActivity, Base):
         overlaps="inbox, inbox")
     invitations: Mapped[List["Invitation"]] = relationship(
         back_populates="election", cascade="all, delete-orphan")
+    _metadata: Mapped[List["Metadata"]] = relationship(
+        back_populates="election", overlaps="_metadata",
+        primaryjoin="and_(Metadata.owner_id == Election.id, \
+        Metadata.owner_type == 'election')",
+        foreign_keys="Metadata.owner_id")
     owner: Mapped["User"] = relationship(back_populates="elections")
     voters: Mapped[List["Voter"]] = relationship(
         back_populates="election", cascade="all, delete-orphan")
@@ -46,7 +51,6 @@ class Election(BaseActivity, Base):
     """
     waitlist = relatiohship()
     redflags = relationship()
-    metadata = relationship()
     notices = relationship()
     """
 
