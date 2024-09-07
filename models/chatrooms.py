@@ -2,7 +2,8 @@
 """defines the user class"""
 
 
-from sqlalchemy import Boolean, Integer, String, ForeignKey
+from sqlalchemy import Boolean, ForeignKey, Integer, String,\
+    UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.dialects.mysql import LONGTEXT
 from models.base_class import Base, BaseClass
@@ -25,6 +26,8 @@ class Chatroom(BaseClass, Base):
     history: Mapped[str] = mapped_column(LONGTEXT, nullable=False)
     election: Mapped[Optional["Election"]] = relationship(back_populates="chatroom")
     poll: Mapped[Optional["Poll"]] = relationship(back_populates="chatroom")
+
+    __table_args__ = (UniqueConstraint("poll_id", "election_id", "id"),)
 
     def __init__(self, *args, **kwargs):
         """Initialize user class"""

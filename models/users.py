@@ -56,14 +56,16 @@ class User(UserMixin, BaseClass, Base):
     ivs_received: Mapped[List["Invitation"]] = relationship(
         back_populates="sender",
         foreign_keys="Invitation.user_to")
+    _metadata: Mapped[List["Metadata"]] = relationship(
+        back_populates="user", foreign_keys="Metadata.owner_id",
+        primaryjoin="and_(Metadata.owner_id == User.id, \
+        Metadata.owner_type == 'user')",
+        overlaps="_metadata")
     polls: Mapped[list["Poll"]] = relationship(
         back_populates="owner", cascade="all, delete-orphan")
     reviews: Mapped[List["Review"]] = relationship(
         back_populates="user", cascade="all, delete-orphan")
-    """
-    metadata = relationship()
-    blacklist = relationship()
-    """
+
 
     def __init__(self, *args, **kwargs):
         """Initialize user class"""

@@ -38,6 +38,10 @@ class Poll(BaseActivity, Base):
         primaryjoin="and_(Inbox.owner_id == Poll.id, \
         Inbox.owner_type == 'poll')", foreign_keys="Inbox.owner_id",
         overlaps="inbox, inbox")
+    _metadata: Mapped[List["Metadata"]] = relationship(
+        back_populates="poll", overlaps="_metadata, _metadata",
+        foreign_keys="Metadata.owner_id", primaryjoin="and_(Poll.id \
+        == Metadata.owner_id, Metadata.owner_type == 'poll')")
     invitations: Mapped[List["Invitation"]] = relationship(
         back_populates="poll", cascade="all, delete-orphan")
     owner: Mapped["User"] = relationship(back_populates="polls")
@@ -49,7 +53,6 @@ class Poll(BaseActivity, Base):
     questions = relationship()
     waitlist = relatiohship()
     redflags = relationship()
-    metadata = relationship()
     notices = relationship()
     """
 

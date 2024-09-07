@@ -7,30 +7,33 @@ from models.base_class import Base, BaseClass
 from typing import List
 
 
-
 class Candidate(BaseClass, Base):
     """Defines a Candidate class"""
     count = 0
     __tablename__ = "candidates"
-    serial: Mapped[str] = \
-        mapped_column(Integer, nullable=False, autoincrement=True)
-    election_id: Mapped[str] = \
-        mapped_column(ForeignKey("elections.id"), nullable=False)
-    user_id: Mapped[str] = \
-        mapped_column(ForeignKey("users.id"), nullable=False)
+    serial: Mapped[str] = mapped_column(
+        Integer, nullable=False, autoincrement=True)
+    election_id: Mapped[str] = mapped_column(
+        ForeignKey("elections.id"), nullable=False)
+    user_id: Mapped[str] = mapped_column(
+        ForeignKey("users.id"), nullable=False)
     party_name: Mapped[str] = mapped_column(String(128), nullable=False)
     party_initials: Mapped[str] = mapped_column(String(10), nullable=False)
     votes: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     manifesto: Mapped[str] = mapped_column(LONGTEXT, nullable=False)
-    election: Mapped["Election"] = \
-        relationship(back_populates="candidates")
-    reviews: Mapped[List["Review"]] = \
-        relationship(back_populates="candidate",
-                     cascade="all, delete-orphan")
+    election: Mapped["Election"] = relationship(back_populates="candidates")
+    reviews: Mapped[List["Review"]] = relationship(
+        back_populates="candidate", cascade="all, delete-orphan")
+
+    # relationships
+    _metadata: Mapped[List["Metadata"]] = relationship(
+        primaryjoin="and_(Metadata.owner_id == Candidate.id, \
+        Metadata.owner_type == 'candidate')",
+        foreign_keys="Metadata.owner_id",
+        overlaps="_metadata, _metadata, _metadata")
 
     """
     redflags = relationship()
-    metadata = relationship()
     """
 
     def __init__(self, *args, **kwargs):
