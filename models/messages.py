@@ -59,6 +59,14 @@ class Message(BaseClass, Base):
         String(32), nullable=False)
     sender_type: Mapped[str] = mapped_column(
         String(16), nullable=False)
+    receiver_id: Mapped[str] = mapped_column(
+        String(32), nullable=False)
+    receiver_type: Mapped[str] = mapped_column(
+        String(16), nullable=False)
+    sent_by: Mapped[str] = mapped_column(
+        String(16), nullable=False)
+    sent_by_id: Mapped[str]  = mapped_column(
+        String(32), nullable=False)
     content: Mapped[str] = mapped_column(LONGTEXT, nullable=False)
 
     # relationships
@@ -76,12 +84,27 @@ class Message(BaseClass, Base):
 
 
     @property
-    def sender(self):
+    def receiver(self):
+        """Returns the receiver of a message"""
         from models import storage
-        """Returns the sender of a message from MessageSender"""
+        obj_name = self.receiver_type.capitalize()
+        return storage.get(obj_name, receiver_id)
+
+    @property
+    def sender(self):
+        """Returns the sender of a message"""
+        from models import storage
         obj_name = self.sender_type.capitalize()
         return storage.get(obj_name, self.sender_id)
 
+    @property
+    def sent_by(self):
+        """Returns the object sending a message on behalf
+        of sender
+        """
+        from models import storage
+        obj_name = self.sent_by.capitalize()
+        return storage.get(obj_name, self.sent_by)
 
     def __init__(self, *args, **kwargs):
         """Initialises a message instance"""
