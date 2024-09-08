@@ -74,7 +74,7 @@ class User(UserMixin, BaseClass, Base):
 
 
     # mapper behaviour config
-    __mapper_args__ = { "polymorphic_identity": "user" }
+    # __mapper_args__ = { "polymorphic_identity": "user" }
 
 
     def __init__(self, *args, **kwargs):
