@@ -21,9 +21,6 @@ class Inbox(BaseClass, Base):
     # relationships
     message_items: Mapped[List[MessageInbox]] = relationship(
         back_populates="inbox", cascade="all, delete-orphan")
-    messages = association_proxy(
-        "message_items", "message",
-        creator=lambda mesg: MessageInbox(message=mesg))
     user: Mapped["User"] = relationship(
         back_populates="inbox", foreign_keys="Inbox.owner_id",
         primaryjoin="and_(Inbox.owner_id == User.id, \
@@ -40,6 +37,12 @@ class Inbox(BaseClass, Base):
         Inbox.owner_type == 'poll')", overlaps="inbox, user, election"
     )
 
+    # association proxies
+    messages = association_proxy(
+        "message_items", "message",
+        creator=lambda mesg: MessageInbox(message=mesg)
+    )
+
     def __init__(self, *args, **kwargs):
         """Initialises an inbox instance"""
         items = ["owner_id", "owner_type"]
@@ -50,12 +53,16 @@ class Inbox(BaseClass, Base):
     def add_message(self, *messages):
         """Adds messages to an inbox"""
         for message in messages:
-            if isinstance(message, list):
-                for msg in message:
-                    self.messages.append(msg)
-            else:
-                self.messages.append(message)
+            try:
+                if isinstance(message, list):
+                    for msg in message:
+                        self.messages.append(msg)
+                    else:
+                        self.messages.append(message)
+            except Exception:
+                return False
         self.save()
+        return True
 
 
     def remove_message(self, *messages):
