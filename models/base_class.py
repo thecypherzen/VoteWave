@@ -22,12 +22,12 @@ class Base(DeclarativeBase):
 class BaseClass():
     """The base clase for all models"""
     id: Mapped[str] = mapped_column(String(32), primary_key=True)
-    created_at: Mapped[datetime] = \
-        mapped_column(DateTime, default=datetime.utcnow())
-    updated_at: Mapped[datetime] = \
-        mapped_column(DateTime, default=datetime.utcnow())
-    status: Mapped[str] = \
-        mapped_column(String(10), nullable=False, default="inactive")
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime, default=datetime.utcnow())
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime, default=datetime.utcnow())
+    status: Mapped[str] = mapped_column(
+        String(10), nullable=False, default="inactive")
 
     def __init__(self, *args, **kwargs):
         # handle empty kwargs
@@ -108,6 +108,7 @@ class BaseClass():
         charset = string.ascii_letters + string.digits
         bytes = secrets.token_bytes(chars)
         return "".join(secrets.choice(charset) for _ in range(chars))
+
 
     @property
     def blacklist(self):
