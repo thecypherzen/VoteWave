@@ -10,6 +10,8 @@ from models.elections import Election
 from models.inboxes import Inbox
 from models.invitations import Invitation
 from models.messages import Message
+from models.messages import MessageInbox
+from models.messages import MessageMetadata
 from models.metadata import Metadata
 from models.notices import Notice
 from models.options import Option
