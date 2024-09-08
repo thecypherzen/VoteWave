@@ -120,6 +120,13 @@ class BaseClass():
         else:
             return None
 
+    @property
+    def received_messages(self):
+        """Returns an instances messages from their inbox"""
+        if not hasattr(self, "inbox"):
+            return None
+        return self.inbox.messages if self.inbox else None
+
     def __str__(self):
         """ Defines a string representation of class"""
         return f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}" \
@@ -141,6 +148,17 @@ class BaseClass():
     def save(self):
         """ Saves current instance of object to storage"""
         models.storage.save()
+
+    def send_message(self, message, inbox_id):
+        """Blindly sends a message to an inbox
+        It counts on the api to ensure that the inbox is
+        the right one
+        """
+        inbox = models.storage.get("Inbox", inbox_id)
+        if not inbox:
+            return False
+        return inbox.add_message(message)
+
 
     def to_dict(self):
         """Returns a dictionary representation of current object instance"""

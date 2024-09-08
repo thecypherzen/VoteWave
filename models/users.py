@@ -3,6 +3,8 @@
 
 
 from sqlalchemy import Date, DateTime, Integer, String
+from sqlalchemy.ext.associationproxy import AssociationProxy, \
+    association_proxy
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from uuid import uuid4
 from datetime import date, datetime
@@ -38,6 +40,10 @@ class User(UserMixin, BaseClass, Base):
         mapped_column(String(255), nullable=False, default="")
 
     # relationships
+    _metadata: Mapped[List["Metadata"]] = relationship(
+        back_populates="user", foreign_keys="Metadata.owner_id",
+        primaryjoin="and_(Metadata.owner_id == User.id, \
+        Metadata.owner_type == 'user')", overlaps="_metadata")
     admin_info: Mapped["Admin"] = relationship(
         back_populates="user", cascade="all, delete-orphan")
     blacklist_entries: Mapped[List["Blacklist"]] = relationship(
@@ -56,15 +62,19 @@ class User(UserMixin, BaseClass, Base):
     ivs_received: Mapped[List["Invitation"]] = relationship(
         back_populates="sender",
         foreign_keys="Invitation.user_to")
-    _metadata: Mapped[List["Metadata"]] = relationship(
-        back_populates="user", foreign_keys="Metadata.owner_id",
-        primaryjoin="and_(Metadata.owner_id == User.id, \
-        Metadata.owner_type == 'user')",
-        overlaps="_metadata")
     polls: Mapped[list["Poll"]] = relationship(
         back_populates="owner", cascade="all, delete-orphan")
     reviews: Mapped[List["Review"]] = relationship(
         back_populates="user", cascade="all, delete-orphan")
+    sent_messages: Mapped[List["Message"]] = relationship(
+        primaryjoin="and_(Message.sender_id == User.id, \
+        Message.sender_type == 'user')",
+        overlaps="sender_messages, sender_messages",
+        foreign_keys="Message.sender_id")
+
+
+    # mapper behaviour config
+    __mapper_args__ = { "polymorphic_identity": "user" }
 
 
     def __init__(self, *args, **kwargs):
@@ -88,9 +98,3 @@ class User(UserMixin, BaseClass, Base):
                     del kwargs[item]
             super().__init__(*args, **kwargs)
 
-    def send_message(self, content, receiver_id, receiver_type="user"):
-        """sends a message to a receiver.
-
-        Receivers could be anyone at all.
-        """
-        pass

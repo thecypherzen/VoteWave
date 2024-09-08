@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
-from sqlalchemy import Column, ForeignKey, Integer, String, Table
+from sqlalchemy import Column, CheckConstraint, ForeignKey, \
+    Integer, String, Table, UniqueConstraint
 from sqlalchemy.dialects.mysql import LONGTEXT
 from sqlalchemy.ext.associationproxy import association_proxy,\
     AssociationProxy
@@ -9,6 +10,7 @@ from models.base_class import Base, BaseClass
 from typing import List
 
 
+# message_inbox bridge table
 class MessageInbox(BaseClass, Base):
     """defines a message-inbox association table"""
     count = 0
@@ -26,7 +28,7 @@ class MessageInbox(BaseClass, Base):
     message: Mapped["Message"] = relationship(
         back_populates="inbox_items")
 
-
+# message_metadata bridge table
 class MessageMetadata(BaseClass, Base):
     """Defines a message-metadta association"""
     count = 0
@@ -44,13 +46,71 @@ class MessageMetadata(BaseClass, Base):
     mdata: Mapped["Metadata"] = relationship(
         back_populates="message_items")
 
+"""
+# message_sender bridge table
+class MessageSender(BaseClass, Base):
+    # Associates a message with a sender, which
+    # could be a user, poll or an election
+    #
+    __tablename__ = "message_sender"
+    count = 0
+    serial: Mapped[int] = mapped_column(
+        Integer, nullable=False, autoincrement=True)
+    user_id: Mapped[str] = mapped_column(
+        ForeignKey("users.id"), nullable=True)
+    poll_id: Mapped[str] = mapped_column(
+        ForeignKey("polls.id"), nullable=True)
+    election_id: Mapped[str] = mapped_column(
+        ForeignKey("elections.id"), nullable=True)
+    message_id: Mapped[str] = mapped_column(
+        ForeignKey("messages.id"), primary_key=True)
+    sender_type: Mapped[str] = mapped_column(
+        String(16), nullable=False)
 
+    # relationships
+    election: Mapped["Election"] = relationship(
+        back_populates="msg_sndr_items")
+    poll: Mapped["Poll"] = relationship(
+        back_populates="msg_sndr_items")
+    user: Mapped["User"] = relationship(
+        back_populates="msg_sndr_items")
+    message: Mapped[List["Message"]] = relationship(
+        back_populates="sent_message")
+
+    # mapper configuration
+    __table_args__ = (
+        CheckConstraint(
+            "user_id IS NOT NULL AND poll_id IS NULL AND \
+            election_id IS NULL OR " "user_id IS NULL AND \
+            poll_id IS NOT NULL AND election_id IS NULL OR "
+        "user_id IS NULL AND poll_id IS NULL AND election_id \
+        IS NOT NULL", name="only1sender_constt"),
+        UniqueConstraint("message_id", 'user_id', 'poll_id', \
+                         'election_id'))
+    __mapper_args__ = { "polymorphic_on": sender_type }
+
+    @property
+    def sender(self):
+        # Returns the sender of a message
+        if self.sender_type == "election":
+            return self.election
+        elif self.sender_type == "user":
+            return self.user
+        else:
+            return self.poll
+"""
+
+# message table itself
 class Message(BaseClass, Base):
     """Defines a message class"""
     count = 0
     __tablename__ = "messages"
     serial: Mapped[int] = mapped_column(
         Integer, nullable=False, autoincrement=True)
+    sender_id: Mapped[str] = mapped_column(
+        String(32), nullable=False)
+    sender_type: Mapped[str] = mapped_column(
+        String(16), nullable=False)
     content: Mapped[str] = mapped_column(LONGTEXT, nullable=False)
 
     # relationships
@@ -58,6 +118,9 @@ class Message(BaseClass, Base):
         back_populates="message", cascade="all, delete-orphan")
     mdata_items: Mapped[List[MessageMetadata]] = relationship(
         back_populates="message", cascade="all, delete-orphan",)
+
+
+    # association proxies
     inboxes: AssociationProxy[List["Inbox"]] = association_proxy(
         "inbox_items", "inbox")
     mdata: AssociationProxy[List["Metadata"]] = association_proxy(
@@ -65,10 +128,19 @@ class Message(BaseClass, Base):
         creator=lambda data:MessageMetadata(mdata=data))
 
 
+    @property
+    def sender(self):
+        from models import storage
+        """Returns the sender of a message from MessageSender"""
+        obj_name = self.sender_type.capitalize()
+        return storage.get(obj_name, self.sender_id)
+
 
     def __init__(self, *args, **kwargs):
         """Initialises a message instance"""
-        if kwargs and kwargs.get("content"):
+        if kwargs and \
+           all([kwargs.get("content"), kwargs.get("sender_id"),
+                kwargs.get("sender_type")]):
             super().__init__(*args, **kwargs)
 
     def add_metadata(self, *metadata):
@@ -92,6 +164,4 @@ class Message(BaseClass, Base):
                 if meta_item in self.mdata:
                     self.mdata.remove(meta_item)
         self.save()
-
-
 

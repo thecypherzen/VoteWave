@@ -4,6 +4,8 @@
 """
 
 from sqlalchemy import Boolean, Integer, String
+from sqlalchemy.ext.associationproxy import AssociationProxy, \
+    association_proxy
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from models.base_class import Base
 from models.base_activity import BaseActivity
@@ -26,6 +28,10 @@ class Poll(BaseActivity, Base):
         mapped_column(Boolean, nullable=False, default=True)
 
     # relationships
+    _metadata: Mapped[List["Metadata"]] = relationship(
+        back_populates="poll", overlaps="_metadata, _metadata",
+        foreign_keys="Metadata.owner_id", primaryjoin="and_(Poll.id \
+        == Metadata.owner_id, Metadata.owner_type == 'poll')")
     admins: Mapped[List["Admin"]] = relationship(
         secondary=ape, overlaps="admins")
     blacklist_entries: Mapped[List["Blacklist"]] = relationship(
@@ -38,17 +44,19 @@ class Poll(BaseActivity, Base):
         primaryjoin="and_(Inbox.owner_id == Poll.id, \
         Inbox.owner_type == 'poll')", foreign_keys="Inbox.owner_id",
         overlaps="inbox, inbox")
-    _metadata: Mapped[List["Metadata"]] = relationship(
-        back_populates="poll", overlaps="_metadata, _metadata",
-        foreign_keys="Metadata.owner_id", primaryjoin="and_(Poll.id \
-        == Metadata.owner_id, Metadata.owner_type == 'poll')")
     invitations: Mapped[List["Invitation"]] = relationship(
         back_populates="poll", cascade="all, delete-orphan")
     owner: Mapped["User"] = relationship(back_populates="polls")
     reviews: Mapped[List["Review"]] = relationship(
         back_populates="poll", cascade="all, delete-orphan")
+    sent_messages: Mapped[List["Message"]] = relationship(
+        primaryjoin="and_(Message.sender_id == Poll.id, \
+        Message.sender_type == 'poll')",
+        overlaps="sent_messages, sent_messages",
+        foreign_keys="Message.sender_id")
     voters: Mapped[List["Voter"]] = relationship(
         back_populates="poll", cascade="all, delete-orphan")
+
     """
     questions = relationship()
     waitlist = relatiohship()

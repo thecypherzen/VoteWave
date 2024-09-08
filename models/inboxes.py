@@ -53,16 +53,12 @@ class Inbox(BaseClass, Base):
     def add_message(self, *messages):
         """Adds messages to an inbox"""
         for message in messages:
-            try:
-                if isinstance(message, list):
-                    for msg in message:
-                        self.messages.append(msg)
-                    else:
-                        self.messages.append(message)
-            except Exception:
-                return False
+            if isinstance(message, list):
+                for msg in message:
+                    self.messages.append(msg)
+            else:
+                self.messages.append(message)
         self.save()
-        return True
 
 
     def remove_message(self, *messages):
