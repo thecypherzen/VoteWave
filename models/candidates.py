@@ -24,6 +24,11 @@ class Candidate(BaseClass, Base):
     election: Mapped["Election"] = relationship(back_populates="candidates")
     reviews: Mapped[List["Review"]] = relationship(
         back_populates="candidate", cascade="all, delete-orphan")
+    sent_messages: Mapped[List["Message"]] = relationship(
+        primaryjoin="and_(Message.sender_id == Candidate.id, \
+        Message.sender_type == 'candidate')",
+        foreign_keys="Message.sender_id",
+        overlaps="sent_messages, sent_messages, sent_messages")
 
     # relationships
     _metadata: Mapped[List["Metadata"]] = relationship(
