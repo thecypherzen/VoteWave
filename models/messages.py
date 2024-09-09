@@ -63,10 +63,8 @@ class Message(BaseClass, Base):
         String(32), nullable=False)
     receiver_type: Mapped[str] = mapped_column(
         String(16), nullable=False)
-    sent_by: Mapped[str] = mapped_column(
-        String(16), nullable=False)
-    sent_by_id: Mapped[str]  = mapped_column(
-        String(32), nullable=False)
+    admin_id: Mapped[str]  = mapped_column(
+        String(32), nullable=True)
     content: Mapped[str] = mapped_column(LONGTEXT, nullable=False)
 
     # relationships
