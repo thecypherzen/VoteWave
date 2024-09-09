@@ -47,12 +47,6 @@ poll2 = Poll(
 )
 
 
-# create chatrooms
-p1chat = Chatroom(poll_id=poll1.id, code=Chatroom.random_string(chars=4))
-p2chat = Chatroom(poll_id=poll2.id, code=Chatroom.random_string(chars=4))
-e2chat = Chatroom(election_id=election2.id, code=Chatroom.random_string(chars=4))
-e1chat = Chatroom(election_id=election1.id, code=Chatroom.random_string(chars=4))
-
 # create admins
 admin1 = Admin(user_id=user1.id)
 admin2 = Admin(user_id=user2.id)
@@ -66,8 +60,6 @@ poll1.admins.extend([admin1,admin2,admin3])
 poll2.admins.extend([admin1, admin5, admin4])
 
 storage.add([election1, election2, poll1, poll2])
-storage.save()
-storage.add([e1chat, e2chat, p1chat, p2chat])
 storage.save()
 
 print("election 1 admins:\n", election1.admins, end="\n\n")
