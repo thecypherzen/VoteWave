@@ -12,16 +12,17 @@ class Admin(BaseClass, Base):
     """Defines an admin class"""
     count = 0
     __tablename__ = "admins"
-    serial: Mapped[str] = \
-        mapped_column(Integer, nullable=False, autoincrement=True)
-    user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), nullable=False)
+    serial: Mapped[str] = mapped_column(
+        Integer, nullable=False, autoincrement=True)
+    user_id: Mapped[str] = mapped_column(
+        ForeignKey("users.id"), nullable=False)
     user: Mapped["User"] = relationship(back_populates="admin_info")
     elections: Mapped[List["Election"]] = \
         relationship(back_populates="admins", overlaps="polls",
                      secondary=ape, viewonly=True)
-    polls: Mapped[List["Poll"]] = \
-        relationship(back_populates="admins", overlaps="elections",
-                     secondary=ape, viewonly=True)
+    polls: Mapped[List["Poll"]] = relationship(
+        back_populates="admins", overlaps="elections",
+        secondary=ape, viewonly=True)
 
     def __init__(self, *args, **kwargs):
         """Initialises an admin instance """
