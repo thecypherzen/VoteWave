@@ -150,17 +150,6 @@ class BaseClass():
         """ Saves current instance of object to storage"""
         models.storage.save()
 
-    def send_message(self, message, inbox_id):
-        """Blindly sends a message to an inbox
-        It counts on the api to ensure that the inbox is
-        the right one
-        """
-        inbox = models.storage.get("Inbox", inbox_id)
-        if not inbox:
-            return False
-        return inbox.add_message(message)
-
-
     def to_dict(self):
         """Returns a dictionary representation of current object instance"""
         to_remove = ["_sa_instance_state", "salt", "security_key",
