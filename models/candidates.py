@@ -52,6 +52,13 @@ class Candidate(BaseClass, Base):
             self.manifesto = kwargs.get("manifesto") or ""
             super().__init__()
 
+    @property
+    def inbox(self):
+        """Returns the inbox associated with a candidate"""
+        from models import storage
+        obj = storage.get("User", self.user_id)
+        return obj.inbox
+
     def raise_redflag(self, message, metadata=None):
         """raises a redflag about an election
         Destination is election inbox
