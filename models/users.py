@@ -66,11 +66,6 @@ class User(UserMixin, BaseClass, Base):
         back_populates="owner", cascade="all, delete-orphan")
     reviews: Mapped[List["Review"]] = relationship(
         back_populates="user", cascade="all, delete-orphan")
-    sent_messages: Mapped[List["Message"]] = relationship(
-        primaryjoin="and_(Message.sender_id == User.id, \
-        Message.sender_type == 'user')",
-        overlaps="sender_messages, sender_messages",
-        foreign_keys="Message.sender_id")
 
 
     # mapper behaviour config
