@@ -134,6 +134,18 @@ class BaseClass():
             return None
         return self.inbox.messages if self.inbox else None
 
+    @property
+    def sent_messages(self):
+        """Returns messages sent by a user"""
+        from models import storage
+
+        if any([(name := self.__class__.__name__) == "Voter",
+                name == "Candidate", name == "Election",
+                name == "Poll"]):
+            return self.sent_messages
+        return None
+
+
     def __str__(self):
         """ Defines a string representation of class"""
         return f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}" \
