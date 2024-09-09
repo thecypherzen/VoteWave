@@ -72,6 +72,12 @@ class BaseClass():
                     self.id = str(uuid4()).replace("-", "")
                 del kwargs["id"]
 
+            # create inbox
+            if (name := self.__class__.__name__) == "User" or \
+               name == "Election" or name == "Poll":
+                print("creating new inbox....")
+                self.create_inbox()
+
             if temp := kwargs.get("__class__"):
                 del kwargs["__class__"]
 
@@ -140,6 +146,17 @@ class BaseClass():
     def all(self: object) -> list:
         """ Returns all instances of current class"""
         return models.storage.all(self)
+
+    def create_inbox(self):
+        """Creates and Returns a new inbox instance"""
+        from models.inboxes import Inbox
+        from models import storage
+
+        owner_type = self.__class__.__name__.lower()
+        if owner_type == "user" or owner_type == "election" or \
+           owner_type == "poll":
+            storage.add(Inbox(owner_id=self.id, owner_type=owner_type))
+            storage.save()
 
 
     def destroy(self):
