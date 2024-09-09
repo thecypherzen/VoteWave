@@ -46,3 +46,10 @@ class Voter(BaseClass, Base):
             self.poll_id = kwargs.get("poll_id")
             self.has_voted = False
             super().__init__()
+
+    @property
+    def inbox(self):
+        """Returns the inbox associated with a voter"""
+        from models import storage
+        obj = storage.get("User", self.user_id)
+        return obj.inbox
