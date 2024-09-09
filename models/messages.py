@@ -135,6 +135,35 @@ class Message(BaseClass, Base):
                     self._metadata.remove(meta_item)
         self.save()
 
+    def send(self):
+        """Sends a message instance the receiver"""
+        from models import storage
+
+        res = {f"{self.serial}":
+               {"success": False, "error": "Receiver doesn't exist"}
+               }
+        # fetch receiver's object
+        receiver_name = self.receiver_type.capitalize()
+        receiver_obj = storage.get(receiver_name, self.receiver_id)
+        if not receiver_obj:
+            return res
+
+        # get receiver's inbox
+        if any([receiver_name == "Election",
+                receiver_name == "Poll"]):
+            inbox = receiver_obj.inbox
+        elif any([receiver_name == "Candidate",
+                  receiver_name == "Voter"]):
+            user = storage.get("User", receiver_obj.user_id)
+            if not user:
+                return res
+            inbox = user.inbox
+        else:
+            return res
+
+        # send message
+        res = inbox.add_message(self)
+        return res
 
 
 """
