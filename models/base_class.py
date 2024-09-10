@@ -170,7 +170,7 @@ class BaseClass():
 
     def destroy(self):
         """ Deletes current instance of object from storage"""
-        pass
+        models.storage.delete(self)
 
     def save(self):
         """ Saves current instance of object to storage"""
