@@ -3,8 +3,9 @@
 from datetime import datetime, timedelta
 from sqlalchemy import DateTime, Integer, String
 from sqlalchemy.dialects.mysql import TEXT
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from models.base_class import Base, BaseClass
+from typing import List
 
 
 class Notice(BaseClass, Base):
@@ -24,15 +25,16 @@ class Notice(BaseClass, Base):
         primaryjoin="and_(Notice.owner_id == Election.id, \
         Notice.owner_type == 'election')", foreign_keys=[owner_id],
         back_populates="notices")
-    meta_data: Mapped[List["Metadata"]] = relationship(
-        primaryjoin="and_(Notice.owner_id == Metadata.owner_id, \
+    meta_data: Mapped["Metadata"] = relationship(
+        primaryjoin="and_(Notice.id == Metadata.owner_id, \
         Metadata.owner_type == 'notice')", back_populates="notice",
-        single_parent=True, cascade="all, delete-orphan",
-        overlaps="election, candidate, poll, user, notice")
+        single_parent=True, foreign_keys="Metadata.owner_id",
+        overlaps="_metadata, _metadata, candidate, election, poll, \
+        user")
     poll: Mapped["Poll"] = relationship(
         primaryjoin="and_(Notice.owner_id == Poll.id, \
         Notice.owner_type == 'poll')", foreign_keys=[owner_id],
-        back_populates="notices")
+        back_populates="notices", overlaps="notices, election")
 
 
     def __init__(self, *args, **kwargs):
