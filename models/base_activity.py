@@ -4,7 +4,7 @@
 """
 
 from sqlalchemy import Boolean, DateTime, String, ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.dialects.mysql import TEXT
 from datetime import date, datetime
 from models.base_class import BaseClass, Base
@@ -31,6 +31,10 @@ class Activity(BaseClass, Base):
     owner_id: Mapped[str] = mapped_column(ForeignKey("users.id"))
     results: Mapped[str] = mapped_column(String(255), default="")
     type: Mapped[str] = mapped_column(String(32))
+
+    # relationships
+    waitlist: Mapped["Waitlist"] = relationship(
+        back_populates="activity")
 
     __mapper_args__ = {"polymorphic_abstract": True,
                      "polymorphic_on": "type"}

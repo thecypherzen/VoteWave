@@ -66,6 +66,12 @@ class User(UserMixin, BaseClass, Base):
         back_populates="owner", cascade="all, delete-orphan")
     reviews: Mapped[List["Review"]] = relationship(
         back_populates="user", cascade="all, delete-orphan")
+    users_waitlists: Mapped[List["UserWaitlist"]] = relationship(
+        back_populates="user")
+
+    # association proxies
+    waitlists: AssociationProxy[List["Waitlist"]] = association_proxy(
+        "users_waitlists", "waitlist")
 
 
     # mapper behaviour config
