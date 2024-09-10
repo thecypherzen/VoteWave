@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 
 from sqlalchemy import Boolean, ForeignKey, Integer, String
+from sqlalchemy.ext.associationproxy import AssociationProxy, \
+    association_proxy
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from models.base_class import Base, BaseClass
 from typing import List
@@ -34,9 +36,10 @@ class Voter(BaseClass, Base):
         foreign_keys="Message.sender_id",
         overlaps="sent_messages, sent_messages")
 
-    """
-    red_flags = relationship()
-    """
+    # association proxies
+    redflags: AssociationProxy[List["Redflags"]] = association_proxy(
+        "sent_messages", "redflag")
+
 
     def __init__(self, *args, **kwargs):
         """Initialises a voter instance """
