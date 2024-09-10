@@ -57,6 +57,15 @@ class Storage():
         self.__session = scoped_session(sessionmaker(bind=self.__engine))
         Base.metadata.create_all(self.__engine)
 
+
+    def add(self, *objs):
+        """adds a new object to storage session"""
+        for obj in objs:
+            if isinstance(obj, list):
+                self.__session.add_all(obj)
+            else:
+                self.__session.add(obj)
+
     def all(self, obj=None):
         """gets all instanes of a class type from storag"""
         found_models = []
@@ -68,17 +77,16 @@ class Storage():
             return found_models
         return self.__session.query(toget).all()
 
-    def add(self, *objs):
-        """adds a new object to storage session"""
-        for obj in objs:
-            if isinstance(obj, list):
-                self.__session.add_all(obj)
-            else:
-                self.__session.add(obj)
 
     def close(self):
         """closes the current session"""
         self.__session.close()
+
+
+    def delete(self, obj):
+        """Removes an object from storage"""
+        self.__session.delete(obj)
+        self.__session.commit()
 
     def get(self, toget, id):
         """Returns a particular"""
@@ -113,6 +121,7 @@ class Storage():
     def reload(self):
         """Reloads database connections"""
         self.__session.remove()
+
 
     def save(self):
         """Saves current session to storage"""
