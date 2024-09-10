@@ -66,7 +66,7 @@ class Message(BaseClass, Base):
     admin_id: Mapped[str]  = mapped_column(
         String(32), nullable=True)
     subject: Mapped[str] = mapped_column(String(255), nullable=False)
-    content: Mapped[str] = mapped_column(LONGTEXT, nullable=False)
+    body: Mapped[str] = mapped_column(LONGTEXT, nullable=False)
 
     # relationships
     candidate: Mapped["Candidate"] = relationship(
