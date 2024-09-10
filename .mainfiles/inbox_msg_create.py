@@ -57,53 +57,61 @@ v4 = voters[2]
 
 print("\nCreating messages.....")
 # messages
-mes1 = Message(content="This is message 1", sender_id=e1.id,
+mes1 = Message(body="This is message 1", sender_id=e1.id,
                sender_type="election", receiver_id=v1.id,
-               receiver_type="voter", admin_id=admins[0].id)
-mes2 = Message(content="This is message 2", sender_id=p1.id,
+               receiver_type="voter", admin_id=admins[0].id,
+               subject="First Message")
+
+mes2 = Message(body="This is message 2", sender_id=p1.id,
                sender_type="poll", receiver_id=v2.id,
-               receiver_type="voter", admin_id=admins[1].id)
-mes3 = Message(content="This is message 3", sender_id=e1.id,
+               receiver_type="voter", admin_id=admins[1].id,
+               subject="Message 2 Title")
+mes3 = Message(body="This is message 3", sender_id=e1.id,
                sender_type="election", receiver_id=c1.id,
-               receiver_type="candidate", admin_id=admins[2].id)
-mes4 = Message(content="This is message 4", sender_id=e2.id,
+               receiver_type="candidate", admin_id=admins[2].id,
+               subject="Message 3 Title")
+mes4 = Message(body="This is message 4", sender_id=e2.id,
                sender_type="election", receiver_id=c2.id,
-               receiver_type="candidate", admin_id=admins[3].id)
-mes5 = Message(content="This is message 5", sender_id=p1.id,
+               receiver_type="candidate", admin_id=admins[3].id,
+               subject="Message 4 Title")
+mes5 = Message(body="This is message 5", sender_id=p1.id,
                sender_type="poll", receiver_id=v3.id,
-               receiver_type="voter", admin_id=admins[4].id)
-mes6 = Message(content="This is message 6", sender_id=p2.id,
+               receiver_type="voter", admin_id=admins[4].id,
+               subject="Message 5 Title")
+mes6 = Message(body="This is message 6", sender_id=p2.id,
                sender_type="poll", receiver_id=v2.id,
-               receiver_type="voter", admin_id=admins[2].id)
-mes7 = Message(content="This is message 7", sender_id=c1.id,
+               receiver_type="voter", admin_id=admins[2].id,
+               subject="Message 6 Title")
+mes7 = Message(body="This is message 7", sender_id=c1.id,
                sender_type="candidate", receiver_id=e1.id,
-               receiver_type="election")
-mes8 = Message(content="This is message 8", sender_id=c2.id,
+               receiver_type="election",subject="Message 7 Title")
+mes8 = Message(body="This is message 8", sender_id=c2.id,
                sender_type="candidate", receiver_id=e2.id,
-               receiver_type="election")
-mes9 = Message(content="This is message 9", sender_id=c3.id,
+               receiver_type="election",subject="Message 8 Title")
+mes9 = Message(body="This is message 9", sender_id=c3.id,
                sender_type="candidate", receiver_id=e3.id,
-               receiver_type="election")
-mes10 = Message(content="This is message 10", sender_id=v1.id,
+               receiver_type="election", subject="Message 9 Title")
+mes10 = Message(body="This is message 10", sender_id=v1.id,
                 sender_type="voter", receiver_id=p1.id,
-                receiver_type="poll")
-mes11= Message(content="This is message 11", sender_id=v2.id,
+                receiver_type="poll",subject="Message 10 Title")
+mes11= Message(body="This is message 11", sender_id=v2.id,
                sender_type="voter", receiver_id=e2.id,
-               receiver_type="election")
-mes12 = Message(content="This is message 12", sender_id=v3.id,
+               receiver_type="election",subject="Message 11 Title")
+mes12 = Message(body="This is message 12", sender_id=v3.id,
                 sender_type="voter", receiver_id=e1.id,
-                receiver_type="election")
-mes13 = Message(content="This is message 13", sender_id=v4.id,
+                receiver_type="election",subject="Message 12 Title")
+mes13 = Message(body="This is message 13", sender_id=v4.id,
                 sender_type="voter", receiver_type="poll",
-                receiver_id=p1.id)
-mes14 = Message(content="This is message 4", sender_id=v3.id,
+                receiver_id=p1.id, subject="Message 13 Title")
+mes14 = Message(body="This is message 4", sender_id=v3.id,
                 sender_type="voter", receiver_id=p2.id,
-                receiver_type="poll")
+                receiver_type="poll", subject="Message 14 Title")
 
 msgs = [mes1, mes2, mes3, mes4, mes5, mes6, mes7,
         mes8, mes9, mes10, mes11, mes12, mes13, mes14]
 storage.add(msgs)
 storage.save()
+
 print("done....")
 
 print("\nSending messages......")
@@ -147,4 +155,3 @@ print("msg13 sent by v4 check: ", mes13 in v4.sent_messages)
 print("msg14 sent by v3 check: ", mes14 in v3.sent_messages)
 
 print("CHECK COMPLETE...ALL SEEMS GOOD")
-

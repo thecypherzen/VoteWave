@@ -58,21 +58,26 @@ cand2 = e2.candidates[1]
 
 
 
-rf1msg = Message(content="redflag msg 1: My votes are not showing",
-                  sender_id=cand1.id, sender_type="candidate",
-                  receiver_id=e1.id, receiver_type="election")
+rf1msg = Message(body="redflag msg 1: My votes are not showing",
+                 sender_id=cand1.id, sender_type="candidate",
+                 receiver_id=e1.id, receiver_type="election",
+                 subject="Redflag Message - 1")
 
-rf2msg = Message(content="redflag msg 2: My we voters cannot see voting area",
-                  sender_id=evtr2.id, sender_type="voter",
-                  receiver_id=e2.id, receiver_type="election")
+rf2msg = Message(
+    body="redflag msg 2: My we voters cannot see voting area",
+    sender_id=evtr2.id, sender_type="voter",
+    receiver_id=e2.id, receiver_type="election",
+    subject="Redflag Message - 2")
 
-rf3msg = Message(content="redflag msg 3: We cannot vote ooo",
-                  sender_id=pvtr1.id, sender_type="voter",
-                  receiver_id=p1.id, receiver_type="poll")
+rf3msg = Message(body="redflag msg 3: We cannot vote ooo",
+                 sender_id=pvtr1.id, sender_type="voter",
+                 receiver_id=p1.id, receiver_type="poll",
+                 subject="Redflag Message - 3")
 
-rf4msg = Message(content="redflag msg4: Message from non-voter",
-                  sender_id=evtr3.id, sender_type="voter",
-                  receiver_id=p2.id, receiver_type="poll")
+rf4msg = Message(body="redflag msg4: Message from non-voter",
+                 sender_id=evtr3.id, sender_type="voter",
+                 receiver_id=p2.id, receiver_type="poll",
+                 subject="Redflag Message - 4")
 
 print(evtr3 in e1.voters)
 
