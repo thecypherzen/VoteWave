@@ -65,6 +65,7 @@ class Message(BaseClass, Base):
         String(16), nullable=False)
     admin_id: Mapped[str]  = mapped_column(
         String(32), nullable=True)
+    subject: Mapped[str] = mapped_column(String(255), nullable=False)
     content: Mapped[str] = mapped_column(LONGTEXT, nullable=False)
 
     # relationships
@@ -114,6 +115,8 @@ class Message(BaseClass, Base):
         if kwargs and \
            all([kwargs.get("content"), kwargs.get("sender_id"),
                 kwargs.get("sender_type")]):
+            self.subject = kwargs.get("subject") or \
+                f"Message-{self.random_string(16)}"
             super().__init__(*args, **kwargs)
 
     def add_metadata(self, *metadata):
