@@ -47,6 +47,8 @@ class Poll(BaseActivity, Base):
     invitations: Mapped[List["Invitation"]] = relationship(
         back_populates="poll", cascade="all, delete-orphan")
     owner: Mapped["User"] = relationship(back_populates="polls")
+    redflags: Mapped[List["Redflag"]] = relationship(
+        back_populates="poll", cascade="all, delete-orphan")
     reviews: Mapped[List["Review"]] = relationship(
         back_populates="poll", cascade="all, delete-orphan")
     sent_messages: Mapped[List["Message"]] = relationship(

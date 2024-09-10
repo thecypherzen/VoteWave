@@ -46,6 +46,8 @@ class Election(BaseActivity, Base):
     invitations: Mapped[List["Invitation"]] = relationship(
         back_populates="election", cascade="all, delete-orphan")
     owner: Mapped["User"] = relationship(back_populates="elections")
+    redflags: Mapped[List["Redflag"]] = relationship(
+        back_populates="election", cascade="all, delete-orphan")
     reviews: Mapped[List["Review"]] = relationship(
         back_populates="election", cascade="all, delete-orphan")
     sent_messages: Mapped[List["Message"]] = relationship(
@@ -55,6 +57,7 @@ class Election(BaseActivity, Base):
         overlaps="sent_messages, sent_messages")
     voters: Mapped[List["Voter"]] = relationship(
         back_populates="election", cascade="all, delete-orphan")
+
 
     """
     waitlist = relatiohship()
