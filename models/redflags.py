@@ -10,7 +10,7 @@ from models.base_class import Base, BaseClass
 
 
 class Redflag(BaseClass, Base):
-    """Defines a waitlist class"""
+    """Defines a redflag class"""
     count = 0
     __tablename__ = "redflags"
     serial: Mapped[str] = mapped_column(
@@ -36,7 +36,7 @@ class Redflag(BaseClass, Base):
         "message", "receiver")
 
     def __init__(self, *args, **kwargs):
-        """Initialises a the candidate class"""
+        """Initialises a redflag instance"""
         from models import storage
 
         if kwargs and (message := kwargs.get("message")):
