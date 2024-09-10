@@ -100,25 +100,14 @@ class Message(BaseClass, Base):
     @property
     def receiver(self):
         """Returns the receiver of a message"""
-        from models import storage
-        obj_name = self.receiver_type.capitalize()
-        return storage.get(obj_name, receiver_id)
+        return self.election if self.election else self.poll
+
 
     @property
     def sender(self):
         """Returns the sender of a message"""
-        from models import storage
-        obj_name = self.sender_type.capitalize()
-        return storage.get(obj_name, self.sender_id)
+        return self.candidate if self.candidate else self.voter
 
-    @property
-    def sent_by(self):
-        """Returns the object sending a message on behalf
-        of sender
-        """
-        from models import storage
-        obj_name = self.sent_by.capitalize()
-        return storage.get(obj_name, self.sent_by)
 
     def __init__(self, *args, **kwargs):
         """Initialises a message instance"""
