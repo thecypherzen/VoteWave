@@ -97,6 +97,16 @@ class Message(BaseClass, Base):
         "mdata_items", "mdata",
         creator=lambda data :MessageMetadata(mdata=data))
 
+    def __init__(self, *args, **kwargs):
+        """Initialises a message instance"""
+        if kwargs and \
+           all([kwargs.get("body"), kwargs.get("sender_id"),
+                kwargs.get("sender_type"), kwargs.get("subject"),
+                kwargs.get("receiver_type"),
+                kwargs.get("receiver_id")]):
+            self.subject = kwargs.get("subject") or \
+                f"Message-{self.random_string(16)}"
+            super().__init__(*args, **kwargs)
 
     @property
     def receiver(self):
@@ -109,15 +119,6 @@ class Message(BaseClass, Base):
         """Returns the sender of a message"""
         return self.candidate if self.candidate else self.voter
 
-
-    def __init__(self, *args, **kwargs):
-        """Initialises a message instance"""
-        if kwargs and \
-           all([kwargs.get("content"), kwargs.get("sender_id"),
-                kwargs.get("sender_type")]):
-            self.subject = kwargs.get("subject") or \
-                f"Message-{self.random_string(16)}"
-            super().__init__(*args, **kwargs)
 
     def add_metadata(self, *metadata):
         """Associates given metadata to a message instance"""
