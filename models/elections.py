@@ -8,17 +8,19 @@ from sqlalchemy.ext.associationproxy import AssociationProxy, \
     association_proxy
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from models.base_class import Base
-from models.base_activity import BaseActivity
+from models.base_activity import Activity
 from models.admin_polls_elections import admin_polls_elections as ape
 from typing import List
 
 
-class Election(BaseActivity, Base):
+class Election(Activity):
     """Defines an election class
 
     """
     count = 0
     __tablename__ = "elections"
+    id: Mapped[str] = mapped_column(
+        ForeignKey("activities.id"), primary_key=True)
     serial: Mapped[int] = mapped_column(
         Integer, nullable=False, autoincrement=True)
     location: Mapped[str] = mapped_column(String(255), nullable=False)
@@ -68,6 +70,8 @@ class Election(BaseActivity, Base):
     redflags = relationship()
     notices = relationship()
     """
+
+    __mapper_args__ = {"polymorphic_identity": "election"}
 
     def __init__(self, *args, **kwargs):
         """Initializes and election instance"""
