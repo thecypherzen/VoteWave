@@ -151,9 +151,6 @@ class BaseClass():
         return f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}" \
             if self.id else "None"
 
-    def add(self):
-        """Adds this instance to session"""
-        models.storage.add(self)
 
     def all(self: object) -> list:
         """ Returns all instances of current class"""
@@ -177,6 +174,7 @@ class BaseClass():
 
     def save(self):
         """ Saves current instance of object to storage"""
+        models.storage.add(self)
         models.storage.save()
 
     def to_dict(self):
