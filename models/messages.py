@@ -68,10 +68,26 @@ class Message(BaseClass, Base):
     content: Mapped[str] = mapped_column(LONGTEXT, nullable=False)
 
     # relationships
+    candidate: Mapped["Candidate"] = relationship(
+        primaryjoin="and_(Message.sender_id == Candidate.id, \
+        Message.sender_type == 'candidate')", foreign_keys=[sender_id],
+        overlaps="sent_messages, sent_messages, voter")
+    election: Mapped["Election"] = relationship(
+        primaryjoin="and_(Message.receiver_id == Election.id, \
+        Message.receiver_type == 'election')",
+        foreign_keys=[receiver_id], overlaps="poll")
     inbox_items: Mapped[List[MessageInbox]] = relationship(
         back_populates="message", cascade="all, delete-orphan")
     mdata_items: Mapped[List[MessageMetadata]] = relationship(
         back_populates="message", cascade="all, delete-orphan",)
+    poll: Mapped["Poll"] = relationship(
+        primaryjoin="and_(Message.receiver_id == Poll.id, \
+        Message.receiver_type == 'poll')", foreign_keys=[receiver_id])
+    redflag: Mapped["Redflag"] = relationship(back_populates="message")
+    voter: Mapped["Voter"] = relationship(
+        primaryjoin="and_(Message.sender_id == Voter.id, \
+        Message.sender_type == 'voter')", foreign_keys=[sender_id],
+        overlaps="sent_messages, sent_mesages")
 
     # association proxies
     inboxes: AssociationProxy[List["Inbox"]] = association_proxy(
