@@ -21,6 +21,8 @@ class Candidate(BaseClass, Base):
     party_initials: Mapped[str] = mapped_column(String(10), nullable=False)
     votes: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     manifesto: Mapped[str] = mapped_column(LONGTEXT, nullable=False)
+
+    # relationships
     election: Mapped["Election"] = relationship(back_populates="candidates")
     reviews: Mapped[List["Review"]] = relationship(
         back_populates="candidate", cascade="all, delete-orphan")
@@ -28,18 +30,13 @@ class Candidate(BaseClass, Base):
         primaryjoin="and_(Message.sender_id == Candidate.id, \
         Message.sender_type == 'candidate')",
         foreign_keys="Message.sender_id",
-        overlaps="sent_messages, sent_messages, sent_messages")
-
-    # relationships
+        overlaps="sent_messages, sent_messages")
     _metadata: Mapped[List["Metadata"]] = relationship(
         primaryjoin="and_(Metadata.owner_id == Candidate.id, \
         Metadata.owner_type == 'candidate')",
         foreign_keys="Metadata.owner_id",
         overlaps="_metadata, _metadata, _metadata")
 
-    """
-    redflags = relationship()
-    """
 
     def __init__(self, *args, **kwargs):
         """Initialises a the candidate class"""
