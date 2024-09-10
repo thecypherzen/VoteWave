@@ -51,10 +51,9 @@ class Activity(BaseClass, Base):
             elif etime.__class__.__name__ == "datetime":
                 self.ends_at = etime
             self.status = "pending"
-            self.salt = BaseActivity.generate_salt()
-            self.security_key = \
-                BaseActivity.generate_hash(text=kwargs.get("security_key"),
-                                           salt=self.salt)
+            self.salt = self.generate_salt()
+            self.security_key = self.generate_hash(
+                text=kwargs.get("security_key"), salt=self.salt)
             self.description = kwargs.get("description") or ""
             self.guidelines = kwargs.get("guidelines") or ""
             self.is_public = kwargs.get("is_public") or True
