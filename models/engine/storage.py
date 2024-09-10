@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 from models.base_class import Base, BaseClass
-from models.base_activity import BaseActivity
+from models.base_activity import Activity
 from models.admins import Admin
 from models.blacklist import Blacklist
 from models.candidates import Candidate
@@ -22,7 +22,6 @@ from models.reviews import Review
 from models.users import User
 from models.voters import Voter
 from models.waitlists import Waitlist
-
 from sqlalchemy import create_engine, desc
 from sqlalchemy.orm import sessionmaker, scoped_session
 from os import getenv
