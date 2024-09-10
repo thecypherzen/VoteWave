@@ -2,6 +2,8 @@
 
 from sqlalchemy import DateTime, ForeignKey, Integer, String
 from sqlalchemy.dialects.mysql import LONGTEXT
+from sqlalchemy.ext.associationproxy import AssociationProxy, \
+    association_proxy
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from models.base_class import Base, BaseClass
 from typing import List
@@ -37,6 +39,9 @@ class Candidate(BaseClass, Base):
         foreign_keys="Metadata.owner_id",
         overlaps="_metadata, _metadata, _metadata")
 
+    # association proxies
+    redflags: AssociationProxy[List["Redflag"]] = association_proxy(
+        "sent_messages", "redflag")
 
     def __init__(self, *args, **kwargs):
         """Initialises a the candidate class"""
