@@ -46,6 +46,11 @@ class Poll(BaseActivity, Base):
         overlaps="inbox, inbox")
     invitations: Mapped[List["Invitation"]] = relationship(
         back_populates="poll", cascade="all, delete-orphan")
+    notices: Mapped[List["Notice"]] = relationship(
+        primaryjoin="and_(Notice.owner_id == Poll.id, \
+        Notice.owner_type == 'poll')", back_populates="poll",
+        overlaps="election, notices", cascade="all, delete-orphan",
+        foreign_keys="Notice.owner_id")
     owner: Mapped["User"] = relationship(back_populates="polls")
     redflags: Mapped[List["Redflag"]] = relationship(
         back_populates="poll", cascade="all, delete-orphan")

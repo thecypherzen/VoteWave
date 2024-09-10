@@ -45,6 +45,10 @@ class Election(BaseActivity, Base):
         overlaps="inbox, inbox")
     invitations: Mapped[List["Invitation"]] = relationship(
         back_populates="election", cascade="all, delete-orphan")
+    notices: Mapped[List["Notice"]] = relationship(
+        primaryjoin="and_(Notice.owner_id == Election.id, \
+        Notice.owner_type == 'election')",cascade="all, delete-orphan",
+        back_populates="election", foreign_keys="Notice.owner_id")
     owner: Mapped["User"] = relationship(back_populates="elections")
     redflags: Mapped[List["Redflag"]] = relationship(
         back_populates="election", cascade="all, delete-orphan")

@@ -40,9 +40,11 @@ class Metadata(BaseClass, Base):
         back_populates="mdata", cascade="all, delete-orphan")
     messages = association_proxy("message_items", "message")
     notice: Mapped["Notice"] = relationship(
-        primary_join="and_(Metadata.owner_id == 'Notice.owner_id', \
+        primaryjoin="and_(Metadata.owner_id == Notice.id, \
         Metadata.owner_type == 'notice')", back_populates="meta_data",
-        overlaps="election, candidate, poll, user, meta_data")
+        overlaps="election, candidate, poll, user, \
+        notices, meta_data, _metadata, _metadata,",
+        foreign_keys="Metadata.owner_id")
     poll: Mapped["Poll"] = relationship(
         back_populates="_metadata", foreign_keys="Metadata.owner_id",
         overlaps="_metadata, election, user, candidate, notice",
