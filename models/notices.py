@@ -19,6 +19,22 @@ class Notice(BaseClass, Base):
     body: Mapped[str] = mapped_column(TEXT, nullable=False)
     expires: Mapped[datetime] = mapped_column(DateTime, nullable=False)
 
+    # relationships
+    election: Mapped["Election"] = relationship(
+        primaryjoin="and_(Notice.owner_id == Election.id, \
+        Notice.owner_type == 'election')", foreign_keys=[owner_id],
+        back_populates="notices")
+    meta_data: Mapped[List["Metadata"]] = relationship(
+        primaryjoin="and_(Notice.owner_id == Metadata.owner_id, \
+        Metadata.owner_type == 'notice')", back_populates="notice",
+        single_parent=True, cascade="all, delete-orphan",
+        overlaps="election, candidate, poll, user, notice")
+    poll: Mapped["Poll"] = relationship(
+        primaryjoin="and_(Notice.owner_id == Poll.id, \
+        Notice.owner_type == 'poll')", foreign_keys=[owner_id],
+        back_populates="notices")
+
+
     def __init__(self, *args, **kwargs):
         """Initialises  of a notice"""
         items = ["owner_id", "owner_type", "subject", "body"]
@@ -28,3 +44,8 @@ class Notice(BaseClass, Base):
             if kwargs.get("expires"):
                 del kwargs["expires"]
             super().__init__(*args, **kwargs)
+
+    @property
+    def owner(self):
+        """Returns the owner of a notice - poll/election"""
+        return self.election if self.election else self.poll
