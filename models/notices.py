@@ -30,7 +30,7 @@ class Notice(BaseClass, Base):
         Metadata.owner_type == 'notice')", back_populates="notice",
         single_parent=True, foreign_keys="Metadata.owner_id",
         overlaps="_metadata, _metadata, candidate, election, poll, \
-        user")
+        user", cascade="all, delete-orphan")
     poll: Mapped["Poll"] = relationship(
         primaryjoin="and_(Notice.owner_id == Poll.id, \
         Notice.owner_type == 'poll')", foreign_keys=[owner_id],
