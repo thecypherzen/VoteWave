@@ -7,14 +7,16 @@ from sqlalchemy import Boolean, DateTime, String, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.dialects.mysql import TEXT
 from datetime import date, datetime
-from models.base_class import BaseClass
+from models.base_class import BaseClass, Base
 
 
 format = "%Y-%m-%dT%H:%M:%S.%f"
 
 
-class BaseActivity(BaseClass):
-    """Defines a user class"""
+class Activity(BaseClass, Base):
+    """Defines an Activity Class"""
+    count = 0
+    __tablename__ = "activities"
     starts_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
     ends_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
     status: Mapped[str] = mapped_column(String(10), nullable=False)
@@ -28,6 +30,11 @@ class BaseActivity(BaseClass):
                                             default=True)
     owner_id: Mapped[str] = mapped_column(ForeignKey("users.id"))
     results: Mapped[str] = mapped_column(String(255), default="")
+    type: Mapped[str] = mapped_column(String(32))
+
+    __mapper_args__ = {"polymorphic_abstract": True,
+                     "polymorphic_on": "type"}
+
 
     def __init__(self, *args, **kwargs):
         """Initialize user class"""
