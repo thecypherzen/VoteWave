@@ -2,7 +2,8 @@
 """defines the user class"""
 
 
-from sqlalchemy import Integer, String
+from sqlalchemy import Boolean, ForeignKey, Integer, String
+from sqlalchemy.dialects.mysql import TEXT
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from models.base_class import Base, BaseClass
 
@@ -12,11 +13,14 @@ class Question(BaseClass, Base):
 
     """Defines a user class"""
     __tablename__ = "questions"
-    serial: Mapped[int] = mapped_column(Integer, nullable=False,
-                                        autoincrement=True)
-    poll_id: Mapped[str] = mapped_column(String(32), nullable=False)
-    title: Mapped[str] = mapped_column(String(128), nullable=False)
-    runner_text: Mapped[str] = mapped_column(String(128), nullable=False)
+    serial: Mapped[int] = mapped_column(
+        Integer, nullable=False, autoincrement=True)
+    poll_id: Mapped[str] = mapped_column(
+        ForeignKey("polls.id"), nullable=False)
+    title: Mapped[str] = mapped_column(TEXT, nullable=False)
+    runner_text: Mapped[str] = mapped_column(String(128))
+    multichoice: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, default=True)
     location: Mapped[str] = mapped_column(String(255), nullable=False)
     """
     options = relationship()
@@ -25,13 +29,11 @@ class Question(BaseClass, Base):
 
     def __init__(self, *args, **kwargs):
         """Initialize user class"""
-        to_delete = ["poll_id", "location", "serial", "title", "runner_text"]
         if all([kwargs.get("poll_id"), kwargs.get("title")]):
-            self.poll_id = kwargs.get("poll_id")
-            self.title = kwargs.get("title")
+            items = ["location", "runner_text"]
             self.runner_text = kwargs.get("runner_text") or ""
-            self.location = kwargs.get("location") or ""
-            for item in to_delete:
+            self.location = "location/for/question"
+            for item in items:
                 if kwargs.get(item):
                     del kwargs[item]
             super().__init__(*args, **kwargs)
