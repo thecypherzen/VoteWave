@@ -43,7 +43,7 @@ class User(UserMixin, BaseClass, Base):
     _metadata: Mapped[List["Metadata"]] = relationship(
         back_populates="user", foreign_keys="Metadata.owner_id",
         primaryjoin="and_(Metadata.owner_id == User.id, \
-        Metadata.owner_type == 'user')", overlaps="_metadata")
+        Metadata.owner_type == 'user')", overlaps="_metadata, meta_data")
     admin_info: Mapped["Admin"] = relationship(
         back_populates="user", cascade="all, delete-orphan")
     blacklist_entries: Mapped[List["Blacklist"]] = relationship(
