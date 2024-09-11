@@ -68,9 +68,6 @@ class Poll(Activity):
 
     """
     questions = relationship()
-    waitlist = relatiohship()
-    redflags = relationship()
-    notices = relationship()
     """
 
     __mapper_args__ = {"polymorphic_identity": "poll"}

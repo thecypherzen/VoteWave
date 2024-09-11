@@ -65,12 +65,6 @@ class Election(Activity):
         back_populates="election", cascade="all, delete-orphan")
 
 
-    """
-    waitlist = relatiohship()
-    redflags = relationship()
-    notices = relationship()
-    """
-
     __mapper_args__ = {"polymorphic_identity": "election"}
 
     def __init__(self, *args, **kwargs):
