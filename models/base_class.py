@@ -21,7 +21,8 @@ class Base(DeclarativeBase):
 
 class BaseClass():
     """The base clase for all models"""
-    id: Mapped[str] = mapped_column(String(32), primary_key=True)
+    id: Mapped[str] = mapped_column(
+        String(32),primary_key=True, index=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime, default=datetime.utcnow())
     updated_at: Mapped[datetime] = mapped_column(
