@@ -29,6 +29,8 @@ class BaseClass():
         DateTime, default=datetime.utcnow())
     status: Mapped[str] = mapped_column(
         String(10), nullable=False, default="inactive")
+    deleted_at: Mapped[datetime] = mapped_column(
+        DateTime, nullable=True)
 
     def __init__(self, *args, **kwargs):
         # handle empty kwargs
@@ -116,7 +118,6 @@ class BaseClass():
         bytes = secrets.token_bytes(chars)
         return "".join(secrets.choice(charset) for _ in range(chars))
 
-
     @property
     def blacklist(self):
         """A getter that returns a list users blacklisted by
@@ -127,6 +128,11 @@ class BaseClass():
                     for entry in entries]
         else:
             return None
+
+    @property
+    def is_deleted(self):
+        """Returns True if instnace is deleted else False"""
+        return self.deleted_at is not None
 
     @property
     def received_messages(self):
@@ -155,7 +161,11 @@ class BaseClass():
 
     def all(self: object) -> list:
         """ Returns all instances of current class"""
-        return models.storage.all(self)
+        return models.storage.all(self.__class__.__name__)
+
+    def all_deleted(self) -> list:
+        """Returns all deleted instances of an object"""
+        return models.storage.trashed(self.__class__.__name__)
 
     def create_inbox(self):
         """Creates and Returns a new inbox instance"""
@@ -168,10 +178,15 @@ class BaseClass():
             storage.add(Inbox(owner_id=self.id, owner_type=owner_type))
             storage.save()
 
-
     def destroy(self):
         """ Deletes current instance of object from storage"""
         models.storage.delete(self)
+        return True
+
+    def restore(self: object) -> object:
+        """Restores deleted instance of object"""
+        models.storage.restore(self)
+        return True
 
     def save(self):
         """ Saves current instance of object to storage"""
@@ -195,6 +210,7 @@ class BaseClass():
             if obj_copy.get(item):
                 del obj_copy[item]
         return obj_copy
+
 
     def update(self, **args):
         """Updates values of current instance with passed kwargs"""

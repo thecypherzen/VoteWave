@@ -58,6 +58,20 @@ class Storage():
         Base.metadata.create_all(self.__engine)
 
 
+    def __all(self, obj=None):
+        """Returns all instances of a class type from storage
+        if any is specified else all objects.
+        """
+        found_models = []
+        if not obj:
+            for model in self.__models.values():
+                found_models += self.__session.query(model).all()
+        elif not (toget := self.resolve_model(obj)):
+            return found_models
+        else:
+            found_models = self.__session.query(toget).all()
+        return found_models
+
     def add(self, *objs):
         """adds a new object to storage session"""
         for obj in objs:
@@ -67,15 +81,9 @@ class Storage():
                 self.__session.add(obj)
 
     def all(self, obj=None):
-        """gets all instanes of a class type from storag"""
-        found_models = []
-        if not obj:
-            for model in self.__models.values():
-                found_models += self.__session.query(model).all()
-            return found_models
-        elif not (toget := self.resolve_model(obj)):
-            return found_models
-        return self.__session.query(toget).all()
+        """gets all instanes of a class type from storage"""
+        return [model for model in self.__all(obj)
+                if not model.is_deleted]
 
 
     def close(self):
@@ -84,9 +92,19 @@ class Storage():
 
 
     def delete(self, obj):
-        """Removes an object from storage"""
+        """Softly deletes an object - starts the countdown to its
+            permament deletion
+        """
+        from datetime import datetime
+
+        obj.deleted_at = datetime.utcnow()
+        self.save()
+
+    def destroy(self, obj):
+        """Permanently deletes an object from storage
+        """
         self.__session.delete(obj)
-        self.__session.commit()
+        self.save()
 
     def get(self, toget, id):
         """Returns a particular"""
@@ -94,7 +112,7 @@ class Storage():
             return None
         all_items = self.all(obj)
         for item in all_items:
-            if item.id == id:
+            if item.id == id and not item.deleted_at:
                 return item
         return None
 
@@ -109,18 +127,23 @@ class Storage():
 
     def resolve_model(self, toget):
         """resolves a model's name or object if it exists or None"""
+        clsname = None
         if isinstance(toget, str):
             if toget in self.__models:
                 return self.__models[toget]
             return None
-        else:
-            if toget in self.__models.values():
-                return toget
+        elif toget in self.__models.values():
+            return toget
         return None
 
     def reload(self):
         """Reloads database connections"""
         self.__session.remove()
+
+    def restore(self, obj):
+        """Restores a deleted item"""
+        obj.deleted_at = None
+        self.save()
 
 
     def save(self):
@@ -129,6 +152,15 @@ class Storage():
 
     def session(self):
         return self.__session()
+
+    def trashed(self, objj=None):
+        """Gets all intances of trashed object if specified
+        Else, returns all trashed objects
+        """
+        if not (obj := self.resolve_model(objj)):
+            return None
+        all_items = self.__all(obj)
+        return [item for item in all_items if item.is_deleted]
 
 
 
