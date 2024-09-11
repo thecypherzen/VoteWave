@@ -21,6 +21,7 @@ from models.redflags import Redflag
 from models.reviews import Review
 from models.users import User
 from models.voters import Voter
+from models.waitlists import UserWaitlist
 from models.waitlists import Waitlist
 from sqlalchemy import create_engine, desc
 from sqlalchemy.orm import sessionmaker, scoped_session
@@ -125,6 +126,9 @@ class Storage():
     def save(self):
         """Saves current session to storage"""
         self.__session.commit()
+
+    def session(self):
+        return self.__session()
 
 
 

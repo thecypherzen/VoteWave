@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
-from sqlalchemy import DateTime, Integer, String
+from sqlalchemy import DateTime, ForeignKey, Integer, String, \
+    UniqueConstraint
 from sqlalchemy.ext.associationproxy import AssociationProxy, \
     association_proxy
 from sqlalchemy.orm import Mapped, mapped_column, relationship
