@@ -33,9 +33,10 @@ class Question(BaseClass, Base):
         cascade="all, delete-orphan",
         overlaps="_metadata,_metadata, _metadata, candidate, \
         election, meta_data, poll, user")
-    """
-    options = relationship()
-    """
+    options: Mapped[List["Option"]] = relationship(
+        back_populates="question", cascade="all, delete-orphan")
+
+
 
     def __init__(self, *args, **kwargs):
         """Initialize user class"""
