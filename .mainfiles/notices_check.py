@@ -75,3 +75,4 @@ print("notice not in election.notices anymore: ",
       notice1 not in e1.notices)
 print("notice metadata doesn't exist anymore: ",
       storage.get("Metadata", notice1_meta.id) is None)
+
