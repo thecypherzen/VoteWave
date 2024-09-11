@@ -4,25 +4,34 @@
 """
 
 from sqlalchemy import ForeignKey, Integer, String
+from sqlalchemy.ext.associationproxy import AssociationProxy, \
+    association_proxy
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from models.base_class import Base
-from models.base_activity import BaseActivity
+from models.base_activity import Activity
 from models.admin_polls_elections import admin_polls_elections as ape
 from typing import List
 
 
-class Election(BaseActivity, Base):
+class Election(Activity):
     """Defines an election class
 
     """
     count = 0
     __tablename__ = "elections"
-    serial: Mapped[int] = mapped_column(Integer, nullable=False,
-                                        autoincrement=True)
+    id: Mapped[str] = mapped_column(
+        ForeignKey("activities.id"), primary_key=True)
+    serial: Mapped[int] = mapped_column(
+        Integer, nullable=False, autoincrement=True)
     location: Mapped[str] = mapped_column(String(255), nullable=False)
     title: Mapped[str] = mapped_column(String(128), nullable=False)
 
-    # relatinships
+    # relationships
+    _metadata: Mapped[List["Metadata"]] = relationship(
+        back_populates="election", overlaps="_metadata",
+        primaryjoin="and_(Metadata.owner_id == Election.id, \
+        Metadata.owner_type == 'election')",
+        foreign_keys="Metadata.owner_id")
     admins: Mapped[List["Admin"]] = relationship(
         secondary="admin_polls_elections", overlaps="admins")
     blacklist_entries: Mapped[List["Blacklist"]] = relationship(
@@ -38,21 +47,25 @@ class Election(BaseActivity, Base):
         overlaps="inbox, inbox")
     invitations: Mapped[List["Invitation"]] = relationship(
         back_populates="election", cascade="all, delete-orphan")
-    _metadata: Mapped[List["Metadata"]] = relationship(
-        back_populates="election", overlaps="_metadata",
-        primaryjoin="and_(Metadata.owner_id == Election.id, \
-        Metadata.owner_type == 'election')",
-        foreign_keys="Metadata.owner_id")
+    notices: Mapped[List["Notice"]] = relationship(
+        primaryjoin="and_(Notice.owner_id == Election.id, \
+        Notice.owner_type == 'election')",cascade="all, delete-orphan",
+        back_populates="election", foreign_keys="Notice.owner_id")
     owner: Mapped["User"] = relationship(back_populates="elections")
-    voters: Mapped[List["Voter"]] = relationship(
+    redflags: Mapped[List["Redflag"]] = relationship(
         back_populates="election", cascade="all, delete-orphan")
     reviews: Mapped[List["Review"]] = relationship(
         back_populates="election", cascade="all, delete-orphan")
-    """
-    waitlist = relatiohship()
-    redflags = relationship()
-    notices = relationship()
-    """
+    sent_messages: Mapped[List["Message"]] = relationship(
+        primaryjoin="and_(Message.sender_id == Election.id, \
+        Message.sender_type == 'election')",
+        foreign_keys="Message.sender_id",
+        overlaps="sent_messages, sent_messages")
+    voters: Mapped[List["Voter"]] = relationship(
+        back_populates="election", cascade="all, delete-orphan")
+
+
+    __mapper_args__ = {"polymorphic_identity": "election"}
 
     def __init__(self, *args, **kwargs):
         """Initializes and election instance"""

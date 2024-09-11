@@ -1,37 +1,63 @@
 #!/usr/bin/python3
-"""defines the user class"""
+"""defines the question class"""
 
 
-from sqlalchemy import Integer, String
+from sqlalchemy import Boolean, ForeignKey, Integer, String
+from sqlalchemy.dialects.mysql import TEXT
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from models.base_class import Base, BaseClass
+from typing import List
 
 
 class Question(BaseClass, Base):
     count = 0
 
-    """Defines a user class"""
+    """Defines a question class"""
     __tablename__ = "questions"
-    serial: Mapped[int] = mapped_column(Integer, nullable=False,
-                                        autoincrement=True)
-    poll_id: Mapped[str] = mapped_column(String(32), nullable=False)
-    title: Mapped[str] = mapped_column(String(128), nullable=False)
-    runner_text: Mapped[str] = mapped_column(String(128), nullable=False)
+    serial: Mapped[int] = mapped_column(
+        Integer, nullable=False, autoincrement=True)
+    poll_id: Mapped[str] = mapped_column(
+        ForeignKey("polls.id", ondelete="CASCADE",
+        onupdate="CASCADE"), nullable=False)
+    title: Mapped[str] = mapped_column(TEXT, nullable=False)
+    runner_text: Mapped[str] = mapped_column(String(128))
+    multichoice: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, default=True)
     location: Mapped[str] = mapped_column(String(255), nullable=False)
-    """
-    options = relationship()
-    metadata = relationship()
-    """
+
+    # relationships
+    meta_data: Mapped[List["Metadata"]] = relationship(
+        primaryjoin="and_(Question.id == Metadata.owner_id, \
+        Metadata.owner_type =='question')",
+        foreign_keys="Metadata.owner_id",
+        cascade="all, delete-orphan",
+        overlaps="_metadata,_metadata, _metadata, candidate, \
+        election, meta_data, poll, user")
+    options: Mapped[List["Option"]] = relationship(
+        back_populates="question", cascade="all, delete-orphan")
+
+
 
     def __init__(self, *args, **kwargs):
         """Initialize user class"""
-        to_delete = ["poll_id", "location", "serial", "title", "runner_text"]
         if all([kwargs.get("poll_id"), kwargs.get("title")]):
-            self.poll_id = kwargs.get("poll_id")
-            self.title = kwargs.get("title")
+            items = ["location", "runner_text"]
             self.runner_text = kwargs.get("runner_text") or ""
-            self.location = kwargs.get("location") or ""
-            for item in to_delete:
+            self.location = "location/for/question"
+            for item in items:
                 if kwargs.get(item):
                     del kwargs[item]
             super().__init__(*args, **kwargs)
+
+    def add_option(self, option):
+        """Adds an option to a question"""
+        if option not in self.options:
+            self.options.append(option)
+            self.save()
+
+    def remove_option(self, option):
+        """Removes an option from a question"""
+        if option in self.options:
+            self.options.remove(option)
+            self.save()
+

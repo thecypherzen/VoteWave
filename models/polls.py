@@ -3,29 +3,37 @@
     elections will inherit
 """
 
-from sqlalchemy import Boolean, Integer, String
+from sqlalchemy import Boolean, ForeignKey, Integer, String
+from sqlalchemy.ext.associationproxy import AssociationProxy, \
+    association_proxy
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from models.base_class import Base
-from models.base_activity import BaseActivity
+from models.base_activity import Activity
 from models.admin_polls_elections import admin_polls_elections as ape
 from typing import List
 
-class Poll(BaseActivity, Base):
+class Poll(Activity):
     """Defines a poll class
 
     """
     count = 0
     __tablename__ = "polls"
-    serial: Mapped[int] = \
-        mapped_column(Integer, nullable=False, autoincrement=True)
+    id: Mapped[str] = mapped_column(
+        ForeignKey("activities.id"), primary_key=True)
+    serial: Mapped[int] = mapped_column(
+        Integer, nullable=False, autoincrement=True)
     location: Mapped[str] = mapped_column(String(255), nullable=False)
     title: Mapped[str] = mapped_column(String(128), nullable=False)
-    allows_anonymous: Mapped[bool] = \
-        mapped_column(Boolean, nullable=False, default=True)
-    allow_multi_votes: Mapped[bool] = \
-        mapped_column(Boolean, nullable=False, default=True)
+    allows_anonymous: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, default=True)
+    allow_multi_votes: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, default=True)
 
     # relationships
+    _metadata: Mapped[List["Metadata"]] = relationship(
+        back_populates="poll", overlaps="_metadata, _metadata",
+        foreign_keys="Metadata.owner_id", primaryjoin="and_(Poll.id \
+        == Metadata.owner_id, Metadata.owner_type == 'poll')")
     admins: Mapped[List["Admin"]] = relationship(
         secondary=ape, overlaps="admins")
     blacklist_entries: Mapped[List["Blacklist"]] = relationship(
@@ -38,23 +46,31 @@ class Poll(BaseActivity, Base):
         primaryjoin="and_(Inbox.owner_id == Poll.id, \
         Inbox.owner_type == 'poll')", foreign_keys="Inbox.owner_id",
         overlaps="inbox, inbox")
-    _metadata: Mapped[List["Metadata"]] = relationship(
-        back_populates="poll", overlaps="_metadata, _metadata",
-        foreign_keys="Metadata.owner_id", primaryjoin="and_(Poll.id \
-        == Metadata.owner_id, Metadata.owner_type == 'poll')")
     invitations: Mapped[List["Invitation"]] = relationship(
         back_populates="poll", cascade="all, delete-orphan")
+    notices: Mapped[List["Notice"]] = relationship(
+        primaryjoin="and_(Notice.owner_id == Poll.id, \
+        Notice.owner_type == 'poll')", back_populates="poll",
+        overlaps="election, notices", cascade="all, delete-orphan",
+        foreign_keys="Notice.owner_id")
     owner: Mapped["User"] = relationship(back_populates="polls")
+    redflags: Mapped[List["Redflag"]] = relationship(
+        back_populates="poll", cascade="all, delete-orphan")
     reviews: Mapped[List["Review"]] = relationship(
         back_populates="poll", cascade="all, delete-orphan")
+    sent_messages: Mapped[List["Message"]] = relationship(
+        primaryjoin="and_(Message.sender_id == Poll.id, \
+        Message.sender_type == 'poll')",
+        overlaps="sent_messages, sent_messages",
+        foreign_keys="Message.sender_id")
     voters: Mapped[List["Voter"]] = relationship(
         back_populates="poll", cascade="all, delete-orphan")
+
     """
     questions = relationship()
-    waitlist = relatiohship()
-    redflags = relationship()
-    notices = relationship()
     """
+
+    __mapper_args__ = {"polymorphic_identity": "poll"}
 
     def __init__(self, *args, **kwargs):
         """Initializes a poll instance """

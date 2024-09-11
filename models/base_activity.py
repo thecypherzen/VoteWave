@@ -4,17 +4,19 @@
 """
 
 from sqlalchemy import Boolean, DateTime, String, ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.dialects.mysql import TEXT
 from datetime import date, datetime
-from models.base_class import BaseClass
+from models.base_class import BaseClass, Base
 
 
 format = "%Y-%m-%dT%H:%M:%S.%f"
 
 
-class BaseActivity(BaseClass):
-    """Defines a user class"""
+class Activity(BaseClass, Base):
+    """Defines an Activity Class"""
+    count = 0
+    __tablename__ = "activities"
     starts_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
     ends_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
     status: Mapped[str] = mapped_column(String(10), nullable=False)
@@ -28,6 +30,15 @@ class BaseActivity(BaseClass):
                                             default=True)
     owner_id: Mapped[str] = mapped_column(ForeignKey("users.id"))
     results: Mapped[str] = mapped_column(String(255), default="")
+    type: Mapped[str] = mapped_column(String(32))
+
+    # relationships
+    waitlist: Mapped["Waitlist"] = relationship(
+        back_populates="activity")
+
+    __mapper_args__ = {"polymorphic_abstract": True,
+                     "polymorphic_on": "type"}
+
 
     def __init__(self, *args, **kwargs):
         """Initialize user class"""
@@ -44,10 +55,9 @@ class BaseActivity(BaseClass):
             elif etime.__class__.__name__ == "datetime":
                 self.ends_at = etime
             self.status = "pending"
-            self.salt = BaseActivity.generate_salt()
-            self.security_key = \
-                BaseActivity.generate_hash(text=kwargs.get("security_key"),
-                                           salt=self.salt)
+            self.salt = self.generate_salt()
+            self.security_key = self.generate_hash(
+                text=kwargs.get("security_key"), salt=self.salt)
             self.description = kwargs.get("description") or ""
             self.guidelines = kwargs.get("guidelines") or ""
             self.is_public = kwargs.get("is_public") or True
@@ -57,109 +67,3 @@ class BaseActivity(BaseClass):
                 if kwargs.get(key):
                     del kwargs[key]
         super().__init__(*args, **kwargs)
-
-
-    @property
-    def admins(self):
-        """Returns the list of admins of child activity"""
-        pass
-
-
-    @property
-    def chatroom(self):
-        """returns the chatroom object"""
-        pass
-
-    @property
-    def redflags(self):
-        """A getter that returns a list users blacklisted from child activty"""
-        pass
-
-    @property
-    def reviews(self):
-        """A getter that returns a list of reviews for child activty"""
-        pass
-
-    @property
-    def voters(self):
-        """A getter that returns a list of voters in a child activty"""
-        pass
-
-    @property
-    def waitlist(self):
-        """A getter that returns a list of users on the waitlist
-        of a child activty
-        """
-        pass
-
-    def create_invite(self):
-        """Generates an invitation link for a newly created
-        activity or its children
-        """
-        pass
-
-    def duration(self):
-        """Claculates and returns the duration which an activity lasted
-        """
-        pass
-
-    def generate_report(self):
-        """Creates reports of an activity based on activity's results
-
-            Return: dictionary of report
-         """
-        pass
-
-    def share_with(self, link, users=[]):
-        """sends an invitation link of the current event with another user
-        Return: True on success, False on error
-        """
-        pass
-
-    def update_blacklist(self, *blacklist_ids, add=True):
-        """Updates an activity's blacklist.
-
-        If add is True, items with the passed blacklist_ids are added,
-            else, they are removed
-
-        Returns: True on success or False on failure of any or all
-        """
-        pass
-
-    def update_flags(self, *flag_ids, resolved=True):
-        """Updates an activity's red flags, by updating their treated
-        status to either True or false, based on the value of treated.
-
-        Returns: True on success or False on failure of any or all
-        """
-        pass
-
-    def update_reviews(self, *review_ids, add=True):
-        """Updates an activity's list of reviews.
-
-        If add is True, reviews with ppthe passed ids are added,
-            else, they are removed
-
-        Returns: True on success or False on failure of any or all
-        """
-        pass
-
-    def update_voters(self, *voter_ids, add=True):
-        """Updates an activity's list of voters.
-
-        If add is True, voters with the passed user_ids are added,
-            else, they are removed
-
-        Returns: True on success or False on failure of any or all
-        """
-        pass
-
-    def update_waitlist(self, *wait_ids, add=True):
-        """Updates an activity's wait list.
-
-        If add is True, wait list items with the passed ids are added,
-            else, they are removed
-
-        Returns: True on success or False on failure of any or all
-        """
-        pass

@@ -2,6 +2,8 @@
 
 from sqlalchemy import DateTime, ForeignKey, Integer, String
 from sqlalchemy.dialects.mysql import LONGTEXT
+from sqlalchemy.ext.associationproxy import AssociationProxy, \
+    association_proxy
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from models.base_class import Base, BaseClass
 from typing import List
@@ -21,20 +23,25 @@ class Candidate(BaseClass, Base):
     party_initials: Mapped[str] = mapped_column(String(10), nullable=False)
     votes: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     manifesto: Mapped[str] = mapped_column(LONGTEXT, nullable=False)
+
+    # relationships
     election: Mapped["Election"] = relationship(back_populates="candidates")
     reviews: Mapped[List["Review"]] = relationship(
         back_populates="candidate", cascade="all, delete-orphan")
-
-    # relationships
+    sent_messages: Mapped[List["Message"]] = relationship(
+        primaryjoin="and_(Message.sender_id == Candidate.id, \
+        Message.sender_type == 'candidate')",
+        foreign_keys="Message.sender_id",
+        overlaps="sent_messages, sent_messages")
     _metadata: Mapped[List["Metadata"]] = relationship(
         primaryjoin="and_(Metadata.owner_id == Candidate.id, \
         Metadata.owner_type == 'candidate')",
         foreign_keys="Metadata.owner_id",
         overlaps="_metadata, _metadata, _metadata")
 
-    """
-    redflags = relationship()
-    """
+    # association proxies
+    redflags: AssociationProxy[List["Redflag"]] = association_proxy(
+        "sent_messages", "redflag")
 
     def __init__(self, *args, **kwargs):
         """Initialises a the candidate class"""
@@ -46,6 +53,13 @@ class Candidate(BaseClass, Base):
             self.party_initials = kwargs.get("party_initials") or ""
             self.manifesto = kwargs.get("manifesto") or ""
             super().__init__()
+
+    @property
+    def inbox(self):
+        """Returns the inbox associated with a candidate"""
+        from models import storage
+        obj = storage.get("User", self.user_id)
+        return obj.inbox
 
     def raise_redflag(self, message, metadata=None):
         """raises a redflag about an election

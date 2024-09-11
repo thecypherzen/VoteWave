@@ -21,13 +21,16 @@ class Base(DeclarativeBase):
 
 class BaseClass():
     """The base clase for all models"""
-    id: Mapped[str] = mapped_column(String(32), primary_key=True)
-    created_at: Mapped[datetime] = \
-        mapped_column(DateTime, default=datetime.utcnow())
-    updated_at: Mapped[datetime] = \
-        mapped_column(DateTime, default=datetime.utcnow())
-    status: Mapped[str] = \
-        mapped_column(String(10), nullable=False, default="inactive")
+    id: Mapped[str] = mapped_column(
+        String(32),primary_key=True, index=True)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime, default=datetime.utcnow())
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime, default=datetime.utcnow())
+    status: Mapped[str] = mapped_column(
+        String(10), nullable=False, default="inactive")
+    deleted_at: Mapped[datetime] = mapped_column(
+        DateTime, nullable=True)
 
     def __init__(self, *args, **kwargs):
         # handle empty kwargs
@@ -71,6 +74,12 @@ class BaseClass():
                 else:
                     self.id = str(uuid4()).replace("-", "")
                 del kwargs["id"]
+
+            # create inbox
+            if (name := self.__class__.__name__) == "User" or \
+               name == "Election" or name == "Poll":
+                print("creating new inbox....")
+                self.create_inbox()
 
             if temp := kwargs.get("__class__"):
                 del kwargs["__class__"]
@@ -120,26 +129,68 @@ class BaseClass():
         else:
             return None
 
+    @property
+    def is_deleted(self):
+        """Returns True if instnace is deleted else False"""
+        return self.deleted_at is not None
+
+    @property
+    def received_messages(self):
+        """Returns an instances messages from their inbox"""
+        if not hasattr(self, "inbox"):
+            return None
+        return self.inbox.messages if self.inbox else None
+
+    @property
+    def sent_messages(self):
+        """Returns messages sent by a user"""
+        from models import storage
+
+        if any([(name := self.__class__.__name__) == "Voter",
+                name == "Candidate", name == "Election",
+                name == "Poll"]):
+            return self.sent_messages
+        return None
+
+
     def __str__(self):
         """ Defines a string representation of class"""
         return f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}" \
             if self.id else "None"
 
-    def add(self):
-        """Adds this instance to session"""
-        models.storage.add(self)
 
     def all(self: object) -> list:
         """ Returns all instances of current class"""
-        return models.storage.all(self)
+        return models.storage.all(self.__class__.__name__)
 
+    def all_deleted(self) -> list:
+        """Returns all deleted instances of an object"""
+        return models.storage.trashed(self.__class__.__name__)
+
+    def create_inbox(self):
+        """Creates and Returns a new inbox instance"""
+        from models.inboxes import Inbox
+        from models import storage
+
+        owner_type = self.__class__.__name__.lower()
+        if owner_type == "user" or owner_type == "election" or \
+           owner_type == "poll":
+            storage.add(Inbox(owner_id=self.id, owner_type=owner_type))
+            storage.save()
 
     def destroy(self):
         """ Deletes current instance of object from storage"""
-        pass
+        models.storage.delete(self)
+        return True
+
+    def restore(self: object) -> object:
+        """Restores deleted instance of object"""
+        models.storage.restore(self)
+        return True
 
     def save(self):
         """ Saves current instance of object to storage"""
+        models.storage.add(self)
         models.storage.save()
 
     def to_dict(self):
@@ -159,6 +210,7 @@ class BaseClass():
             if obj_copy.get(item):
                 del obj_copy[item]
         return obj_copy
+
 
     def update(self, **args):
         """Updates values of current instance with passed kwargs"""

@@ -29,25 +29,32 @@ class Metadata(BaseClass, Base):
         back_populates="_metadata",
         primaryjoin="and_(Metadata.owner_id == Election.id, \
         Metadata.owner_type == 'election')",
-        overlaps="_metadata, user", foreign_keys="Metadata.owner_id")
+        overlaps="_metadata, user, notice",
+        foreign_keys="Metadata.owner_id")
     candidate: Mapped["Candidate"] = relationship(
         back_populates="_metadata", foreign_keys="Metadata.owner_id",
-        overlaps="_metadata, election, poll, user",
+        overlaps="_metadata, election, poll, user, notice",
         primaryjoin="and_(Metadata.owner_id == Candidate.id, \
         Metadata.owner_type == 'candidate')")
     message_items: Mapped["MessageMetadata"] = relationship(
         back_populates="mdata", cascade="all, delete-orphan")
     messages = association_proxy("message_items", "message")
+    notice: Mapped["Notice"] = relationship(
+        primaryjoin="and_(Metadata.owner_id == Notice.id, \
+        Metadata.owner_type == 'notice')", back_populates="meta_data",
+        overlaps="election, candidate, poll, user, \
+        notices, meta_data, _metadata, _metadata,",
+        foreign_keys="Metadata.owner_id")
     poll: Mapped["Poll"] = relationship(
         back_populates="_metadata", foreign_keys="Metadata.owner_id",
-        overlaps="_metadata, election, user, candidate",
+        overlaps="_metadata, election, user, candidate, notice",
         primaryjoin="and_(Metadata.owner_id == Poll.id, \
         Metadata.owner_type == 'poll')")
     user: Mapped["User"] = relationship(
         back_populates="_metadata", foreign_keys="Metadata.owner_id",
         primaryjoin="and_(Metadata.owner_id == User.id, \
         Metadata.owner_type == 'user')",
-        overlaps="_metadata, election, candidate, poll")
+        overlaps="_metadata, election, candidate, notice, poll")
 
 
     def __init__(self, *args, **kwargs):

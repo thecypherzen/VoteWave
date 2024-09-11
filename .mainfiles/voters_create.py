@@ -47,15 +47,13 @@ p2_voters = [p2voter1, p2voter2, p2voter3, p2voter4, p2voter5]
 
 voters = storage.all(Voter)
 
-with open("res.txt", "a") as stdout:
-    print(".....election1 voters.....", file=stdout)
-    for voter in voters:
-        print(voter.user_id, voter.id, file=stdout)
-        print(file=stdout)
-        for e in voter.elections:
-            print("  in election -> ", e.id, file=stdout)
-        for p in voter.polls:
-            print("  in poll -> ", p.id, file=stdout)
-            print("............................................")
+print(".....election1 voters.....")
+for voter in voters:
+    print("voter: ", voter.id)
+    if voter.election:
+        print("\tin election -> ", voter.election.id)
+    else:
+        print("\tin poll -> ", voter.poll.id)
+    print("............................................")
 
 

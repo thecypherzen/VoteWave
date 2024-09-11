@@ -21,9 +21,6 @@ class Inbox(BaseClass, Base):
     # relationships
     message_items: Mapped[List[MessageInbox]] = relationship(
         back_populates="inbox", cascade="all, delete-orphan")
-    messages = association_proxy(
-        "message_items", "message",
-        creator=lambda mesg: MessageInbox(message=mesg))
     user: Mapped["User"] = relationship(
         back_populates="inbox", foreign_keys="Inbox.owner_id",
         primaryjoin="and_(Inbox.owner_id == User.id, \
@@ -40,6 +37,12 @@ class Inbox(BaseClass, Base):
         Inbox.owner_type == 'poll')", overlaps="inbox, user, election"
     )
 
+    # association proxies
+    messages = association_proxy(
+        "message_items", "message",
+        creator=lambda mesg: MessageInbox(message=mesg)
+    )
+
     def __init__(self, *args, **kwargs):
         """Initialises an inbox instance"""
         items = ["owner_id", "owner_type"]
@@ -49,13 +52,27 @@ class Inbox(BaseClass, Base):
 
     def add_message(self, *messages):
         """Adds messages to an inbox"""
+        res = {}
         for message in messages:
             if isinstance(message, list):
                 for msg in message:
-                    self.messages.append(msg)
+                    try:
+                        self.messages.append(msg)
+                        temp = {"success": True}
+                    except Exception as e:
+                        temp = {"success": False, "error": e}
+                    finally:
+                        res[f"{msg.serial}"] = temp
             else:
-                self.messages.append(message)
+                try:
+                    self.messages.append(message)
+                    temp = {"success": True}
+                except Exception as e:
+                    temp = {"success": False, "error": e}
+                finally:
+                    res[f"{message.serial}"] = temp
         self.save()
+        return res
 
 
     def remove_message(self, *messages):
