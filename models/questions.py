@@ -48,3 +48,16 @@ class Question(BaseClass, Base):
                 if kwargs.get(item):
                     del kwargs[item]
             super().__init__(*args, **kwargs)
+
+    def add_option(self, option):
+        """Adds an option to a question"""
+        if option not in self.options:
+            self.options.append(option)
+            self.save()
+
+    def remove_option(self, option):
+        """Removes an option from a question"""
+        if option in self.options:
+            self.options.remove(option)
+            self.save()
+
