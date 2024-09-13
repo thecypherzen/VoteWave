@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+:root {
+  font-family: Inter, system-ui, Avenir, Arial, sans-serif;
+  line-height: 1.5;
+  font-size: 10px;
+  color-scheme: light;
+  /* font-synthesis: none; */
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Variables */
+  /* Colours */
+  --color-dark: rgba(33, 37, 41, 1);
+  --color-primary: rgba(4, 56, 115, 1);
+  --color-secondary: rgba(79, 156, 249, 1);
+  --color-secondary-light: rgba(196, 222, 253, 1);
+  --color-accent: rgba(255, 228, 146, 1);
+  --color-light: rgba(255, 255, 255, 1);
+
+  /* Sizes */
+  --sz-mini: 0.5rem;
+  --sz-sm: 1rem;
+  --sz-xsm: 1.5rem;
+  --sz-md: 2rem;
+  --sz-xmd: 2.4rem;
+  --sz-xxmd: 3rem;
+  --sz-lg: 3.5rem;
+  --sz-xlg: 4rem;
+  --sz-xxlg: 5rem;
+  --sz-big: 10rem;
+  --sz-xbig: 20rem;
+  --sz-giant: 40rem;
+
+  /* Font Sizes */
+  --fs-xsm: 0.5rem;
+  --fs-sm: 1rem;
+  --fs-normal: 1.6rem;
+  --fs-lg: 2.5rem;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  justify-content: center;
+  min-width: 320px;
+  min-height: 100vh;
+  font-size: var(--fs-normal);
+}
+
+/* General Utilities */
+.btn {
+	outline: none;
+	text-decoration: none;
+	border: none;
+	padding: var(--sz-sm) var(--sz-md);
+	border-radius: var(--sz-mini);
+	font-size: var(--fs-normal);
+	color: inherit;
+	cursor: pointer;
+}
+
+.btnDark {
+	background: var(--color-dark);
+	color: var(--color-light);
+}
+
+@media (prefers-color-scheme: dark) {
+
+}
