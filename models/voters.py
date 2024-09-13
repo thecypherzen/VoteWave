@@ -34,7 +34,7 @@ class Voter(BaseClass, Base):
         primaryjoin="and_(Message.sender_id == Voter.id, \
         Message.sender_type == 'voter')",
         foreign_keys="Message.sender_id",
-        overlaps="sent_messages, sent_messages")
+        overlaps="sent_messages, sent_messages, e_sender,p_sender")
 
     # association proxies
     redflags: AssociationProxy[List["Redflags"]] = association_proxy(

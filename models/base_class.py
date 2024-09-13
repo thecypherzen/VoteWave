@@ -91,6 +91,22 @@ class BaseClass():
 
 
     @classmethod
+    def all(self) -> list:
+        """ Returns all instances of current class"""
+        return models.storage.all(self.__name__)
+
+    @classmethod
+    def all_deleted(self) -> list:
+        """Returns all deleted instances of an object"""
+        return models.storage.trashed(self.__name__)
+    @classmethod
+    def get(self, id):
+        """Returns an a class instance with matched id or
+        None if not found
+        """
+        return models.storage.get(self, id)
+
+    @classmethod
     def generate_hash(cls, salt=None, text=None, chars=128):
         """Creates and returns a hash from a string"""
         if any([not text, not salt]):
@@ -158,14 +174,6 @@ class BaseClass():
         return f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}" \
             if self.id else "None"
 
-
-    def all(self: object) -> list:
-        """ Returns all instances of current class"""
-        return models.storage.all(self.__class__.__name__)
-
-    def all_deleted(self) -> list:
-        """Returns all deleted instances of an object"""
-        return models.storage.trashed(self.__class__.__name__)
 
     def create_inbox(self):
         """Creates and Returns a new inbox instance"""

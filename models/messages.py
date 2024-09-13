@@ -69,23 +69,40 @@ class Message(BaseClass, Base):
     body: Mapped[str] = mapped_column(LONGTEXT, nullable=False)
 
     # relationships
-    candidate: Mapped["Candidate"] = relationship(
+    c_receiver: Mapped["Candidate"] = relationship(
+        primaryjoin="and_(Message.receiver_id == Candidate.id, \
+        Message.receiver_type == 'candidate')", foreign_keys=[receiver_id],
+        overlaps="sent_messages, sent_messages, v_sender")
+    c_sender: Mapped["Candidate"] = relationship(
         primaryjoin="and_(Message.sender_id == Candidate.id, \
         Message.sender_type == 'candidate')", foreign_keys=[sender_id],
-        overlaps="sent_messages, sent_messages, voter")
-    election: Mapped["Election"] = relationship(
+        overlaps="sent_messages, sent_messages, v_sender")
+    e_receiver: Mapped["Election"] = relationship(
         primaryjoin="and_(Message.receiver_id == Election.id, \
         Message.receiver_type == 'election')",
-        foreign_keys=[receiver_id], overlaps="poll")
+        foreign_keys=[receiver_id], overlaps="poll, c_receiver")
+    e_sender: Mapped["Election"] = relationship(
+        primaryjoin="and_(Message.sender_id == Election.id, \
+        Message.sender_type == 'election')", foreign_keys=[sender_id],
+        overlaps="c_sender, p_sender, v_sender, sent_messages, sent_messages")
     inbox_items: Mapped[List[MessageInbox]] = relationship(
         back_populates="message", cascade="all, delete-orphan")
     mdata_items: Mapped[List[MessageMetadata]] = relationship(
         back_populates="message", cascade="all, delete-orphan",)
-    poll: Mapped["Poll"] = relationship(
+    p_receiver: Mapped["Poll"] = relationship(
         primaryjoin="and_(Message.receiver_id == Poll.id, \
-        Message.receiver_type == 'poll')", foreign_keys=[receiver_id])
+        Message.receiver_type == 'poll')", foreign_keys=[receiver_id],
+        overlaps="c_receiver")
+    p_sender: Mapped["Poll"] = relationship(
+        primaryjoin="and_(Message.sender_id == Poll.id, \
+        Message.sender_type == 'poll')", foreign_keys=[sender_id],
+        overlaps="c_sender, e_sender, v_sender, sent_messages")
     redflag: Mapped["Redflag"] = relationship(back_populates="message")
-    voter: Mapped["Voter"] = relationship(
+    v_receiver: Mapped["Voter"] = relationship(
+        primaryjoin="and_(Message.receiver_id == Voter.id, \
+        Message.receiver_type == 'voter')", foreign_keys=[receiver_id],
+        overlaps="e_receiver, p_receiver, c_receiver")
+    v_sender: Mapped["Voter"] = relationship(
         primaryjoin="and_(Message.sender_id == Voter.id, \
         Message.sender_type == 'voter')", foreign_keys=[sender_id],
         overlaps="sent_messages, sent_mesages")
@@ -111,13 +128,27 @@ class Message(BaseClass, Base):
     @property
     def receiver(self):
         """Returns the receiver of a message"""
-        return self.election if self.election else self.poll
+        if self.c_receiver:
+            return self.c_receiver
+        elif self.e_receiver:
+            return self.e_receiver
+        elif self.p_receiver:
+            return self.p_receiver
+        else:
+            return self.v_receiver
 
 
     @property
     def sender(self):
         """Returns the sender of a message"""
-        return self.candidate if self.candidate else self.voter
+        if self.c_sender:
+            return self.c_sender
+        elif self.e_sender:
+            return self.e_sender
+        elif self.p_receiver:
+            return self.p_sender
+        else:
+            return self.v_sender
 
 
     def add_metadata(self, *metadata):

@@ -61,7 +61,7 @@ class Poll(Activity):
     sent_messages: Mapped[List["Message"]] = relationship(
         primaryjoin="and_(Message.sender_id == Poll.id, \
         Message.sender_type == 'poll')",
-        overlaps="sent_messages, sent_messages",
+        overlaps="sent_messages, sent_messages, p_sender",
         foreign_keys="Message.sender_id")
     voters: Mapped[List["Voter"]] = relationship(
         back_populates="poll", cascade="all, delete-orphan")
