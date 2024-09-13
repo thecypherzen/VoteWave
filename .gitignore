@@ -5,4 +5,5 @@ res.txt
 *__pycache__*
 venv
 stdout.txt
-v-venv
+v-venv*
+valenv*
