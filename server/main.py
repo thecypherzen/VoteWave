@@ -13,7 +13,9 @@ import requests
 
 
 app = Flask(__name__)
-CORS(app, supports_credentials=True)
+CORS(app, supports_credentials=True,
+     resources={r"/*":
+                {"origins": f"http://localhost:{getenv("VW_CLIENT_PORT")}"}})
 app.secret_key = getenv("VW_APP_SECRET")
 client_base = getenv("VW_CLIENT")
 

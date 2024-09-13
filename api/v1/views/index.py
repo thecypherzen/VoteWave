@@ -11,4 +11,4 @@ from flask import json, Response
 def status():
     """Returns a status OK"""
     res = json.dumps({"status": "OK"}, indent=2) + '\n'
-    return Response(res, mime_type="application/json")
+    return Response(res, mimetype="application/json")
