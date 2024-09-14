@@ -1,0 +1,12 @@
+.nav-list li{
+	cursor: pointer;
+	transition: color 0.2s ease-in-out;
+}
+
+.nav-list li:hover{
+	color: var(--color-secondary);
+}
+
+.nav-item-icon{
+	margin-left: 0.5rem;
+}
