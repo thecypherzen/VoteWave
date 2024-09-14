@@ -1,0 +1,33 @@
+div.search-spinner{
+	width: 100%;
+	height: 100%;
+	border: 0.5rem solid var(--color-light);
+	border-radius: 50%;
+	animation: ccolor 1s ease-in-out infinite,
+	rotate 1s ease-in-out infinite;
+}
+
+@keyframes ccolor {
+	0% {
+		border-color: var(--color-light);
+	}
+	25% {
+		border-color: var(--color-secondary);
+	}
+	50% {
+		border-color: var(--color-accent);
+	}
+	75% {
+		border-color: var(--color-primary);
+	}
+	100% {
+		border-color: var(--color-accent);
+	}
+}
+
+@keyframes rotate {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
