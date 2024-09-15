@@ -20,11 +20,19 @@
   /* Colours */
   --color-dark: rgba(33, 37, 41, 1);
   --color-primary: rgba(4, 56, 115, 1);
+  --color-primary-light: rgba(4, 56, 116, 0.3);
   --color-secondary: rgba(79, 156, 249, 1);
   --color-secondary-light: rgba(196, 222, 253, 1);
+  --color-success: rgba(0, 255, 127, 1);
+  --color-warning: rgba(255, 87, 51, 1);
+  --color-danger: rgba(199, 0, 57, 1);
   --color-accent: rgba(255, 228, 146, 1);
   --color-light: rgba(255, 255, 255, 1);
-  --color-grey: rgb(188, 188, 188);
+  --color-grey: rgba(188, 188, 188, 1);
+  --color-grey-light:rgba(188, 188, 188, 0.3);
+  --color-purple-light: rgba(204, 204, 255 , 0.3);
+  --color-purple: rgba(93, 63, 211,1);
+
 
   /* Sizes */
   --sz-mini: 0.5rem;
@@ -64,8 +72,6 @@ input {
 .hidden {
 	display: none;
 }
-
-
 
 @media (prefers-color-scheme: dark) {
 
