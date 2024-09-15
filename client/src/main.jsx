@@ -9,11 +9,13 @@ import './styles/index.css'
 
 // pages
 import Activities from './pages/Activities';
+import ActivityDetails from './pages/ActivityDetails';
 import Landing from './pages/LandingPage';
-import NotFound from './pages/NotFoundPage.jsx';
+import NotFound from './pages/NotFoundPage';
 
 // loaders
 import { loader as activitiesLoader } from './pages/Activities';
+import { loader as detailsLoader } from './pages/ActivityDetails';
 
 // router
 const router = createBrowserRouter([
@@ -23,10 +25,17 @@ const router = createBrowserRouter([
 		errorElement: <NotFound />,
 	},
 	{
-		path: "/activities/live",
+		path: "/activities/",
 		element: <Activities />,
 		loader: activitiesLoader,
-		errorElement: <NotFound />
+		errorElement: <NotFound />,
+		children: [
+			{
+				path: "/activities/:activityId",
+				element: <ActivityDetails />,
+				loader: detailsLoader,
+			}
+		]
 	}
 ]);
 
