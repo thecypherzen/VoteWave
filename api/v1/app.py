@@ -30,6 +30,14 @@ def not_found(e):
     return Response(res, mimetype="application/json",
                     status=404)
 
+@app.errorhandler(400)
+def bad_request(e):
+    """Handles bad request"""
+    res = json.dumps({"error": f"{e.description}"},
+                  indent=2) + '\n'
+    return Response(res, mimetype="application/json",
+                    status=400)
+
 
 # start server
 if __name__ == "__main__":
