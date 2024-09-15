@@ -12,6 +12,9 @@ import Activities from './pages/Activities';
 import Landing from './pages/LandingPage';
 import NotFound from './pages/NotFoundPage.jsx';
 
+// loaders
+import { loader as activitiesLoader } from './pages/Activities';
+
 // router
 const router = createBrowserRouter([
 	{
@@ -20,8 +23,9 @@ const router = createBrowserRouter([
 		errorElement: <NotFound />,
 	},
 	{
-		path: "/activities",
+		path: "/activities/live",
 		element: <Activities />,
+		loader: activitiesLoader,
 		errorElement: <NotFound />
 	}
 ]);
