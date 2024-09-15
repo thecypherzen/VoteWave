@@ -1,0 +1,27 @@
+.error-content {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1rem;
+	font-weight: 500;
+}
+
+.error-content p:last-child{
+	font-style: italic;
+	margin-bottom: 1rem;
+	color: var(--color-grey);
+}
+
+.error-content a {
+	margin-left: 0px;
+}
+
+.error-content p > span {
+	background: var(--color-grey);
+	color: var(--color-dark);
+	padding: 0.5rem 1rem;
+	margin-right: 0.5rem;
+	border-radius: 0.5rem;
+	font-size: smaller;
+	text-align: center;
+}
