@@ -42,7 +42,7 @@
 
 
 #nav-list-wrapper {
-	width: 40%;
+	width: 50%;
 }
 
 .nav-list {
@@ -59,7 +59,10 @@
 	padding-inline: 2rem;
 }
 
-#nav-btn {
+#nav-btns {
 	margin-left: auto;
+	display: flex;
+	gap: 0.2rem;
 }
+
 
