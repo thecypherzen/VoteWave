@@ -33,7 +33,7 @@ def not_found(e):
 
 # start server
 if __name__ == "__main__":
-    app.run(host=getenv("VW_TEST_HOST" or "0.0.0.0"),
-            port=getenv("VW_API_PORT" or 5000),
+    app.run(host="0.0.0.0",
+            port=getenv("VW_API_PORT") or 5000,
             threaded=True, debug=True)
 
