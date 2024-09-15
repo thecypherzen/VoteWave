@@ -36,8 +36,8 @@ export default function NavBar(){
 						<Button
 							clist={["btn", "btn-accent"]}
 							id="search-btn"
-							href="/activities/live"
-							text="Live Activities"
+							href="/activities/"
+							text="Find Activities"
 						/>
 					</div>
 					<div id="login-btn">
