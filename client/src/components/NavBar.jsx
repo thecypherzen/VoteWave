@@ -1,11 +1,23 @@
 /* Defines the NavBar component */
 
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Button from './Button';
 import NavListItem from './NavListItem';
 import SearchBox from './SearchBox';
 import '../styles/navbar.css'
 
-
 export default function NavBar(){
+	const [searchValue, setSearchValue] = useState("");
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		if (searchValue) {
+			navigate("/activities",
+				{state: {searchTerm: searchValue}});
+		}
+	}, [searchValue]);
+
 	return (
 		<nav id="navbar">
 			<div className="nav-wrapper">
@@ -19,16 +31,21 @@ export default function NavBar(){
 						<NavListItem count={2} text="Games"/>
 					</ul>
 				</div>
-				<div>
-					<SearchBox
-						id="nav-search-form"
-						ph="Find ongoing activities"
-					/>
-				</div>
-				<div id="nav-btn">
-					<a id="signin-btn"
-					className="btn btn-secondary"
-					href="#">Login/Sign up</a>
+				<div id="nav-btns">
+					<div>
+						<Button
+							clist={["btn", "btn-accent"]}
+							id="search-btn" href="/activities"
+							text="Live Activities"
+						/>
+					</div>
+					<div id="login-btn">
+						<Button
+							clist={["btn", "btn-secondary"]}
+							id="signin-btn" href="#"
+							text="Login/Sign up"
+						/>
+					</div>
 				</div>
 			</div>
 		</nav>
