@@ -3,7 +3,8 @@ import '../styles/button.css';
 
 
 export default function Button({
-	href=null, id=null, clist=[], text
+	href=null, id=null, clist=[],
+	clickHandler=null, text
 }){
 	let element;
 	let items = null;
@@ -20,12 +21,14 @@ export default function Button({
 	}
 	if (href){
 		element = <Link to={href} id={id}
-		className={items ? items : ""}>
+		className={items ? items : ""}
+		onClick={ clickHandler }>
 			{text}
 		</Link>;
 	} else {
 		element = <button type="button" id={id}
-		className={items ? items : ""}>
+		className={items ? items : ""}
+		onClick={ clickHandler } >
 			{text} </button>
 	}
 
