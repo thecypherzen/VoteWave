@@ -28,7 +28,7 @@ def not_found(e):
     res = json.dumps({"error": "Not Found"},
                      indent=2) + '\n'
     return Response(res, mimetype="application/json",
-                    status=400)
+                    status=404)
 
 
 # start server
