@@ -38,6 +38,14 @@ def bad_request(e):
     return Response(res, mimetype="application/json",
                     status=400)
 
+@app.errorhandler(500)
+def server_error(e):
+    """Handles internal server errors"""
+    res = json.dumps({"error": f"{e.description}"})
+    return Response(res, mimetype="application/json",
+                    status=500)
+
+
 
 # start server
 if __name__ == "__main__":
