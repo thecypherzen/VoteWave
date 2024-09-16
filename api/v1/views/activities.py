@@ -51,6 +51,31 @@ def activity_detail(activity_id):
     activity = storage.get(type, activity_id)
     if not activity:
         abort(404)
-    res = json.dumps(activity.to_dict(), indent=2) + '\n'
+    act_dict = activity.to_dict()
+    act_dict["owner"] = [activity.owner.to_dict()]
+    act_dict["blacklist"] = [
+        usr.to_dict() for usr in activity.blacklist_entries]
+    act_dict["meta_data"] = [
+        md.to_dict() for md in activity._metadata]
+    act_dict["chatroom"] = activity.chatroom.to_dict() \
+        if activity.chatroom else None
+    res = ["admins", "candidates", "invitations",
+           "notices", "redflags", "reviews",
+           "voters"]
+    for ri in res:
+        if hasattr(activity, ri):
+            act_dict[ri] = [
+                  val.to_dict() for val in
+                      getattr(activity, ri)]
+
+    act_dict["sent_messages"] = [
+        msg.to_dict() for msg in activity.sent_messages] \
+        if activity.sent_messages else None
+
+    act_dict["received_messages"] = [
+        msg.to_dict() for msg in activity.received_messages] \
+        if activity.received_messages else None
+
+    res = json.dumps(act_dict, indent=2) + '\n'
     session.close()
     return Response(res, mimetype="application/json")
