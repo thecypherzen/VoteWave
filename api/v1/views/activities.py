@@ -39,16 +39,18 @@ def activity_detail(activity_id):
     """Returns the details of an activity by id
     if the activity is public
     """
-    print("CALLED.....")
     session = storage.session()
+    # get activity
     first = session.query(Activity)\
         .filter_by(id=activity_id).first()
     if not first:
         abort(404)
     type = first.type.capitalize()
+
+    # get activity details
     activity = storage.get(type, activity_id)
     if not activity:
         abort(404)
-    print("GOT HERE .....")
     res = json.dumps(activity.to_dict(), indent=2) + '\n'
+    session.close()
     return Response(res, mimetype="application/json")
