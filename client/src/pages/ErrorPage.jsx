@@ -6,7 +6,7 @@ export default function ErrorPage({error}){
 		<h1> Ouch!</h1>
 		<p>{error.message}</p>
 		<p><span>Response Text: </span> {
-			error.response.data.error
+			console.log(error)
 		}</p>
 	</div>
 	);
