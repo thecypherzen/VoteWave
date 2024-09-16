@@ -31,5 +31,7 @@ def user_details(user_id):
     user_dict["reviews"] = [rv.to_dict() for rv in user.reviews]
     user_dict["waitlists"] = [
         wl.to_dict() for wl in user.waitlists]
+    user_dict["meta_data"] = [
+        md.to_dict() for md in user._metadata]
     res = json.dumps(user_dict, indent=2) + '\n'
     return Response(res, mimetype="application/json")
