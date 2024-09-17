@@ -3,17 +3,20 @@ import { Form, useLoaderData } from "react-router-dom";
 import { getUserDetails } from "./UserProfilePage";
 import axios from "axios";
 import ErrorPage from "../pages/ErrorPage";
+import Button from '../components/Button';
 import styles from '../styles/activitydetails.module.css';
 
 export default function ActivityDetails() {
   const response = useLoaderData();
   const [userDetails, setUserDetails] = useState({});
   const [useError, setUseError] = useState(false);
-  const [startsAt, setStartsAt] = useState({});
+  const [startsAt, setStartsAt] = useState(null);
+
 
   useEffect(() => {
 	if (!response.error) {
 	  const data = response.data;
+	  getStartsAt(activity.starts_at, setStartsAt);
 	  (async () => {
 		  try {
 			const res = await getUserDetails(data);
@@ -92,9 +95,8 @@ export async function loader({ params }) {
   }
 }
 
-function getStartsAt(datestr){
-	const date = new Date(datestr);
-	const diff = Date.now() - date;
+function getStartsAt(datestr, setter){
+	const diff = new Date(datestr) - Date.now();
 	const res = {
 		seconds: Math.floor(diff / 1000),
 		minutes: Math.floor(diff / (60000)),
