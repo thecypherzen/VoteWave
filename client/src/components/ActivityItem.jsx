@@ -8,8 +8,9 @@ export default function ActivityItem({activity}){
 	<li id={activity.id}
 	 	className="activity-item"
 	>
-		<NavLink className={(isActive, isPending) => {
-			isActive ? "active" :
+		<NavLink to={`/activities/${activity.id}`}
+				className={(isActive, isPending) => {
+				isActive ? "active" :
 				isPending ? "pending" : ""
 		}}>
 			<p className="title">
