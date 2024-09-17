@@ -1,0 +1,12 @@
+.main {
+	height: inherit;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.main p {
+	font-style: italic;
+	color: var(--color-grey);
+}

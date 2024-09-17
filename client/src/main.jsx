@@ -10,6 +10,7 @@ import './styles/index.css'
 // pages
 import Activities from './pages/Activities';
 import ActivityDetails from './pages/ActivityDetails';
+import ActivitiesIndex from './pages/ActivitiesIndex';
 import Landing from './pages/LandingPage';
 import NotFound from './pages/NotFoundPage';
 
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
 		loader: activitiesLoader,
 		errorElement: <NotFound />,
 		children: [
+			{
+				index: true,
+				element: <ActivitiesIndex />
+			},
 			{
 				path: "/activities/:activityId",
 				element: <ActivityDetails />,
