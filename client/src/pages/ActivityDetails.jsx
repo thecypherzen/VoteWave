@@ -67,19 +67,25 @@ export default function ActivityDetails() {
 			</div>
 		</div>
 		<div className={styles.meta}>
-			{ activity.status !== "live" ?
-				<span className={styles.countDownBox}>
-					Starts in:&nbsp;
-					<span className={styles.countDown}>
-						{getStartsAt(activity.starts_at)}
-					</span>
-				</span>
-				:
-				<></>
+			<span className={styles.countDownBox}>
+				{
+					activity.status !== "ended" &&
+					activity.status !== "live" ?
+					<span>
+						<span>Starts in:</span>&nbsp; {startsAt}
+					</span> :
+					`${activity.status[0].toUpperCase() +
+						activity.status.slice(1, activity.status.length)}`
+				}
+			</span>
+			{
+				activity.status !== "live" &&
+				activity.status !== "ended" ?
+				<Form method="post" className={styles.joinForm}>
+					<Button clist={["btn", "btn-primary"]}
+						text="Join"/>
+				</Form> : <></>
 			}
-			<Form method="post">
-				<button type="button">Join</button>
-			</Form>
 		</div>
 </>
 );}
