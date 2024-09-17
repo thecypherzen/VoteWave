@@ -81,14 +81,18 @@ class Activity(BaseClass, Base):
             and len(self.candidates):
             self.status = "active"
             changed = True
+
         if now >= starts_diff:
             if now < ends_diff:
-                if self.status == "active":
-                    self.status = "live"
-                    changed = True
+                self.status = "live"
+                changed = True
             elif now >= ends_diff:
                 self.status = "ended"
                 changed = True
+        elif self.status != "pending":
+            self.status = "active"
+            changed = True
+
         if changed:
             self.save()
 
