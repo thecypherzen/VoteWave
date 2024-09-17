@@ -4,11 +4,9 @@ import { Outlet, useLoaderData } from 'react-router-dom';
 import axios from 'axios';
 import ActivitiesList from '../components/ActivitiesList';
 import ErrorPage from './ErrorPage';
-import Grid from "../components/Grid";
 import NavBar from '../components/NavBar';
 import Wrapper from "../components/Wrapper";
-import "../styles/activities.css";
-import "../styles/grid.css";
+import styles from "../styles/activities.module.css";
 
 export default function Activities(){
 	const response = useLoaderData();
@@ -21,18 +19,18 @@ export default function Activities(){
 	return (
 		<>
 			<NavBar />
-			<section id="activities">
-				<div className="heading">
+			<section className={styles.activities}>
+				<div className={styles.heading}>
 					<h1>Activities</h1>
 					<p>Feel free to request to participate in any activity you like. They're public!</p>
 				</div>
 				<Wrapper>
-					<Grid>
+					<div className={styles.grid}>
 						<ActivitiesList activities={activities}/>
-						<aside id="details">
+						<aside clasName={styles.details}>
 							<Outlet/>
 						</aside>
-					</Grid>
+					</div>
 				</Wrapper>
 			</section>
 		</>
