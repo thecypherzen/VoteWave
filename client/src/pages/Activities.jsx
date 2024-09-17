@@ -18,7 +18,6 @@ export default function Activities(){
 	const activities = response.data;
 	return (
 		<>
-			<NavBar />
 			<section className={styles.activities}>
 				<div className={styles.heading}>
 					<h1>Activities</h1>

@@ -7,27 +7,28 @@
 }
 
 .heading {
-	padding: 2rem 5rem;
+	padding: 2rem 5rem 4rem 5rem;
 	box-shadow: 0rem 0.2rem 1rem var(--color-grey-light);
 	text-align: center;
 	margin-bottom: 2rem;
+	background: var(--color-primary);
+	color: var(--color-light);
 }
 
 .activities h1 {
 	font-size: xx-large;
 	margin-bottom: 0.5rem;
-	color: var(--color-primary);
 }
 
 .heading > p {
 	font-style: italic;
-	color: var(--color-grey);
+	opacity: 0.7;
 	font-size: smaller;
 }
 
 aside {
 	padding: 3rem 5rem;
-	height: 60vh;
+	height: 70vh;
 }
 
 .details{
