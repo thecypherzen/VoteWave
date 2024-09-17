@@ -18,6 +18,9 @@ def all_activities():
     all_activities = session.query(Poll).filter_by(is_public=True).all() + \
         session.query(Election)\
             .filter_by(is_public=True).all()
+    for act in all_activities:
+        act.set_live_end()
+
     activities = [activity.to_dict()
                   for activity in all_activities]
     res = json.dumps(activities, indent=2) + '\n'
@@ -35,7 +38,7 @@ def live_activities():
     return Response(res, mimetype="application/json")
 
 @app_views.route("/activities/<string:activity_id>")
-def activity_detail(activity_id):
+def activity_details(activity_id):
     """Returns the details of an activity by id
     if the activity is public
     """
@@ -52,12 +55,11 @@ def activity_detail(activity_id):
     if not activity:
         abort(404)
     act_dict = activity.to_dict()
-    act_dict["owner"] = [activity.owner.to_dict()]
     act_dict["blacklist"] = [
         usr.to_dict() for usr in activity.blacklist_entries]
     act_dict["meta_data"] = [
         md.to_dict() for md in activity._metadata]
-    act_dict["chatroom"] = activity.chatroom.to_dict() \
+    act_dict["chatroom_id"] = activity.chatroom.id \
         if activity.chatroom else None
     res = ["admins", "candidates", "invitations",
            "notices", "redflags", "reviews",
@@ -65,16 +67,16 @@ def activity_detail(activity_id):
     for ri in res:
         if hasattr(activity, ri):
             act_dict[ri] = [
-                  val.to_dict() for val in
+                  val.id for val in
                       getattr(activity, ri)]
 
     act_dict["sent_messages"] = [
-        msg.to_dict() for msg in activity.sent_messages] \
-        if activity.sent_messages else None
+        msg.id for msg in activity.sent_messages] \
+        if activity.sent_messages else []
 
     act_dict["received_messages"] = [
-        msg.to_dict() for msg in activity.received_messages] \
-        if activity.received_messages else None
+        msg.id for msg in activity.received_messages] \
+        if activity.received_messages else []
 
     res = json.dumps(act_dict, indent=2) + '\n'
     session.close()
