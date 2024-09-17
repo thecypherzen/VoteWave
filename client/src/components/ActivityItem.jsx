@@ -20,10 +20,7 @@ export default function ActivityItem({activity}){
 				<span type={activity.type}>
 					{activity.type}
 				</span>
-				<span className={
-					activity.status == "live" ?
-					"live" : "not-live"
-				}>
+				<span className={activity.status}>
 					{activity.status}
 				</span>
 			</div>

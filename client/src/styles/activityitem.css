@@ -54,8 +54,14 @@
 	color: var(--color-dark);
 }
 
-.activity-item span.not-live{
-	background: var(--color-grey);
+.activity-item span.ended {
+	background: var(--color-warning);
+	color: var(--color-light);
+}
+
+.activity-item span.active{
+	background: var(--color-accent);
+	color: var(--color-dark);
 }
 
 .activity-item a {
