@@ -5,7 +5,7 @@ span {
 .heading {
 	display: flex;
 	flex-basis: 50%;
-	height: 70%;
+	min-height: 70%;
 	gap: 1.5rem;
 	margin-bottom: 2rem;
 }
@@ -13,16 +13,16 @@ span {
 .heading .titleBox {
 	width: 50%;
 	padding-inline: 1rem;
+	height: 100%;
 }
 
 .heading .detailsImg {
 	width: 50%;
-	height: 100%;
+	height: inherit;
 	background: var(--color-light);
 	box-shadow: 0rem 0rem 0.5rem var(--color-grey-light);
 	gap: var(--sz-md);
 	border-radius: 1rem;
-	margin-bottom: var(--sz-md);
 }
 
 .heading h2 {
@@ -52,7 +52,6 @@ span {
 	justify-content: space-between;
 	border-radius: 1rem;
 	height: 50px;
-	margin-bottom: 1.5rem;
 	font-size: x-small;
 	padding-inline: 2rem;
 	gap: 1rem;
@@ -83,6 +82,7 @@ span {
 	align-items: center;
 	justify-content: space-around;
 	border: 1px solid grey;
+	width: 100%;
 }
 
 .meta .status {
@@ -94,3 +94,15 @@ span {
 	justify-content: center;
 }
 
+.joinForm {
+	width: 50%;
+}
+.joinForm button {
+	outline: none;
+	width: 100%;
+}
+
+.joinForm button:hover {
+	background: var(--color-secondary);
+	color: var(--color-primary);
+}
