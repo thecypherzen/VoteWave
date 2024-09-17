@@ -19,10 +19,12 @@ def all_activities():
         session.query(Election)\
             .filter_by(is_public=True).all()
     for act in all_activities:
-        act.set_live_end()
+        act.update_status()
 
     activities = [activity.to_dict()
-                  for activity in all_activities]
+                  for activity in all_activities
+                  if activity.status != "pending"]
+
     res = json.dumps(activities, indent=2) + '\n'
     session.close()
     return Response(res, mimetype="application/json")
@@ -54,6 +56,7 @@ def activity_details(activity_id):
     activity = storage.get(type, activity_id)
     if not activity:
         abort(404)
+    activity.update_status()
     act_dict = activity.to_dict()
     act_dict["blacklist"] = [
         usr.to_dict() for usr in activity.blacklist_entries]
