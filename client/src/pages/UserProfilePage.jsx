@@ -9,10 +9,10 @@ export function loader(){
 	return null;
 }
 
-export function  getUserDetails({userId}){
+export async function  getUserDetails({owner_id}){
 	try {
-		const res = axios.get(
-			`http://0:8082/users/${userId}`
+		const res = await axios.get(
+			`http://0:8082/api/v1/users/${owner_id}`
 		);
 		return {error: false, data: res.data}
 	} catch (error) {
