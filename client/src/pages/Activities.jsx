@@ -14,8 +14,7 @@ export default function Activities(){
 	const response = useLoaderData();
 
 	if (response.error){
-		return(<ErrorPage error={response.error}
-			title={"We encountered an error."}
+		return(<ErrorPage error={response.data}
 		/>)
 	}
 	const activities = response.data;
