@@ -38,6 +38,7 @@ class Candidate(BaseClass, Base):
         Metadata.owner_type == 'candidate')",
         foreign_keys="Metadata.owner_id",
         overlaps="_metadata, _metadata, _metadata")
+    user: Mapped["User"] = relationship()
 
     # association proxies
     redflags: AssociationProxy[List["Redflag"]] = association_proxy(
@@ -45,7 +46,9 @@ class Candidate(BaseClass, Base):
 
     def __init__(self, *args, **kwargs):
         """Initialises a the candidate class"""
-        if kwargs and all([kwargs.get("election_id"), kwargs.get("user_id")]):
+        if kwargs and all(
+            [kwargs.get("election_id"),
+             kwargs.get("user_id")]):
             self.election_id = kwargs["election_id"]
             self.user_id = kwargs["user_id"]
             self.party_name = kwargs.get("party_name") or \
