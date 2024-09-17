@@ -112,13 +112,27 @@ function getStartsAt(datestr, setter){
 		months: Math.floor(diff / (3600000 * 168 * 4)),
 		years: Math.floor(diff / ( 3600000 * 8064))
 	}
-
-	return res.years > 0 ? `${res.years} years` :
-			res.months > 0 ? `${res.months} months` :
-			res.weeks > 0 ? `${res.weeks} weeks` :
-			res.days > 0 ? `${res.days} days` :
-			res.hours > 0 ? `${res.hours} hours` :
-			res.minutes > 0 ? `${res.minutes} minutes` :
-			res.seconds > 0 ? `${res.seconds} seconds` :
-			"error";
+	const startTime = res.years > 0 ?
+		`${res.years} year${res.years > 1 ?
+			"s" : ""}` :
+		res.months > 0 ?
+			`${res.months} month${res.months > 1 ?
+				"s" : ""}` :
+		res.weeks > 0 ?
+			`${res.weeks} week${res.weeks > 1 ?
+				"s" : ""}` :
+		res.days > 0 ?
+			`${res.days} day${res.days > 1 ?
+				"s" : ""}` :
+		res.hours > 0 ?
+			`${res.hours} hour${res.hours > 1 ?
+				"s" : ""}` :
+		res.minutes > 0 ?
+			`${res.minutes} minute${res.minutes > 1 ?
+				"s" : ""}` :
+		res.seconds > 0 ?
+			`${res.seconds} second${res.years > 1 ?
+				"s" : ""}` :
+		"ended";
+	setter(startTime);
 }
