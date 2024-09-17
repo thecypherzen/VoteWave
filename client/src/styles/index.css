@@ -73,6 +73,23 @@ input {
 	display: none;
 }
 
+.live {
+	background: var(--color-success);
+	color: var(--color-primary);
+}
+
+/* status styles */
+.pending {
+	background: var(--color-accent);
+	color: var(--color-dark);
+}
+
+.inactive {
+	background: var(--color-grey-light);
+	color: var(--color-dark);
+	opacity: 0.9;
+}
+
 @media (prefers-color-scheme: dark) {
 
 }
