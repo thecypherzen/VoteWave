@@ -42,7 +42,7 @@ export default function Activities(){
 
 export async function loader(){
 	try {
-		const res = await axios.get("http://localhost:8082/api/v1/activities");
+		const res = await axios.get("http://0:8082/api/v1/activities");
 		return {error: false, data: res.data};
 	} catch (err) {
 		return {error: true, data: err};

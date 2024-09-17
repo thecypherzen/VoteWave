@@ -1,5 +1,5 @@
 .grid {
-	grid-template-columns: 30% 70%;
+	grid-template-columns: 45% 55% !important;
 	grid-gap: 0rem;
 	padding: 0px !important;
 	align-items: center;
@@ -26,10 +26,11 @@
 
 aside {
 	padding: 3rem 5rem;
-	height: 64vh;
+	height: 60vh;
 }
 
-aside:last-child{
+#details{
 	border-top-right-radius: 1rem;
 	border-bottom-right-radius: 1rem;
+	padding-inline: 3.5rem;
 }
