@@ -1,0 +1,96 @@
+span {
+	display: inline-block;
+}
+
+.heading {
+	display: flex;
+	flex-basis: 50%;
+	height: 70%;
+	gap: 1.5rem;
+	margin-bottom: 2rem;
+}
+
+.heading .titleBox {
+	width: 50%;
+	padding-inline: 1rem;
+}
+
+.heading .detailsImg {
+	width: 50%;
+	height: 100%;
+	background: var(--color-light);
+	box-shadow: 0rem 0rem 0.5rem var(--color-grey-light);
+	gap: var(--sz-md);
+	border-radius: 1rem;
+	margin-bottom: var(--sz-md);
+}
+
+.heading h2 {
+	display: -webkit-box;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+	line-clamp: 3;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	font-size: var(--sz-xxmd);
+	line-height: normal;
+	margin-bottom: 1rem;
+}
+
+.heading .description {
+	font-style: italic;
+	color: var(--color-grey);
+	font-size: smaller;
+	margin-bottom: 2rem;
+}
+
+.userInfo {
+	background: var(--color-light);
+	box-shadow: 0rem 0rem 1rem var(--color-grey-light);
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	border-radius: 1rem;
+	height: 50px;
+	margin-bottom: 1.5rem;
+	font-size: x-small;
+	padding-inline: 2rem;
+	gap: 1rem;
+}
+
+.userInfo span:first-child {
+	margin-right: 1rem;
+	width: 60%;
+}
+
+.userInfo  .userImg {
+	height: 3rem;
+	width: 3rem;
+	border-radius: 50%;
+	background: var(--color-light);
+	border: 0.15rem solid var(--color-grey-light);
+
+}
+
+.userInfo > h4 {
+	color: var(--color-grey);
+	width: 20%;
+	flex-wrap: wrap;
+}
+
+.meta {
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+	border: 1px solid grey;
+}
+
+.meta .status {
+	height: 3rem;
+	border-radius: 1rem;
+	padding-inline: 3rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
