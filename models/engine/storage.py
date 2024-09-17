@@ -58,7 +58,7 @@ class Storage():
     __engine = create_engine(uri, pool_pre_ping=True)
 
     def __init__(self):
-        self.__session = scoped_session(sessionmaker(bind=self.__engine))
+        self.__session = scoped_session(sessionmaker(bind=self.__engine, expire_on_commit=False))
         Base.metadata.create_all(self.__engine)
 
 
