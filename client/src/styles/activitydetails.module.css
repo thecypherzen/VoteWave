@@ -81,28 +81,50 @@ span {
 	display: flex;
 	align-items: center;
 	justify-content: space-around;
-	border: 1px solid grey;
 	width: 100%;
+	height: 7vh;
+	gap:0.5rem;
 }
 
-.meta .status {
-	height: 3rem;
-	border-radius: 1rem;
-	padding-inline: 3rem;
-	display: flex;
-	flex-direction: column;
+.meta .countDownBox {
+	flex: 1 1 35%;
+	display: inline-flex;
+	padding: var(--sz-sm) var(--sz-md);
+	/*background: var(--color-grey-light);*/
+	border-radius: var(--sz-mini);
+	font-weight: 600;
+	align-items: center;
 	justify-content: center;
+	height: 100%;
+}
+
+.live {
+	background: var(--color-success);
+}
+
+.active {
+	background: var(--color-accent);
+	color: var(--color-primary);
+}
+
+.ended {
+	background: var(--color-warning);
+	color: var(--color-light);
 }
 
 .joinForm {
-	width: 50%;
+	display: inline-block;
+	height: inherit;
+	flex: 1 1 35%;
+	padding-block: 0px;
 }
+
+
 .joinForm button {
 	outline: none;
-	width: 100%;
+	font-weight: 500;
 }
 
 .joinForm button:hover {
-	background: var(--color-secondary);
-	color: var(--color-primary);
+	opacity: .9;
 }

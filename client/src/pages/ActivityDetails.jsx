@@ -67,7 +67,8 @@ export default function ActivityDetails() {
 			</div>
 		</div>
 		<div className={styles.meta}>
-			<span className={styles.countDownBox}>
+			<span className={`${styles.countDownBox}
+			${styles[activity.status]}`}>
 				{
 					activity.status !== "ended" &&
 					activity.status !== "live" ?
