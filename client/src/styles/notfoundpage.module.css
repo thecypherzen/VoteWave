@@ -1,4 +1,4 @@
-#content{
+.content{
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -8,6 +8,11 @@
 	min-height: 100vh;
 }
 
-#content > a {
+.content > a {
 	margin-top: var(--sz-lg);
+}
+
+.button {
+	width: auto;
+	margin-top: 2rem;
 }
