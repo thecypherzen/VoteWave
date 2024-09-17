@@ -62,7 +62,8 @@
 #nav-btns {
 	margin-left: auto;
 	display: flex;
-	gap: 0.2rem;
+	gap: 1rem;
+	width: fit-content;
 	align-items: center;
 }
 
