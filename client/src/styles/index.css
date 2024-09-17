@@ -68,6 +68,11 @@ input {
 	border-radius: var(--sz-sm);
 }
 
+button {
+	outline: none;
+	border: none;
+}
+
 /* General Utilities */
 .hidden {
 	display: none;
