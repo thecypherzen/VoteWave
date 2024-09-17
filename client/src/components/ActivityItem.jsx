@@ -1,26 +1,26 @@
 import { NavLink } from 'react-router-dom';
-import "../styles/activityitem.css";
+import styles from "../styles/activityitem.module.css";
 /**
  * Defines an Activity list item
  */
 export default function ActivityItem({activity}){
 	return (<>
 	<li id={activity.id}
-	 	className="activity-item"
+	 	className={styles.activityItem}
 	>
 		<NavLink to={`/activities/${activity.id}`}
-				className={(isActive, isPending) => {
-				isActive ? "active" :
-				isPending ? "pending" : ""
+				className={({isActive, isPending}) => {
+				return isActive ? styles.activeLink :
+				isPending ? styles.pendingLink : null
 		}}>
-			<p className="title">
+			<p className={styles.pending}>
 				{activity.title}
 			</p>
-			<div className="flags">
+			<div className={styles.flags}>
 				<span type={activity.type}>
 					{activity.type}
 				</span>
-				<span className={activity.status}>
+				<span className={styles[activity.status]}>
 					{activity.status}
 				</span>
 			</div>

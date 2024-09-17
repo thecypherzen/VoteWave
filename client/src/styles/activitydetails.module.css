@@ -35,6 +35,7 @@ span {
 	font-size: var(--sz-xxmd);
 	line-height: normal;
 	margin-bottom: 1rem;
+	color: var(--color-primary);
 }
 
 .heading .description {
@@ -108,8 +109,8 @@ span {
 }
 
 .ended {
-	background: var(--color-warning);
-	color: var(--color-light);
+	background: var(--color-grey-light);
+	color: var(--color-primary);
 }
 
 .joinForm {
