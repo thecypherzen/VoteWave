@@ -6,7 +6,7 @@
 	align-items: center;
 }
 
-section {
+.landingSeection {
 	display: flex;
 	gap: 2rem;
 }
@@ -33,6 +33,13 @@ section {
 	flex-basis: 60%;
 	height: 40rem;
 	border-radius: var(--sz-md);
+	transition: all 0.3s ease-in-out;
+}
+
+.sectionImage:hover {
+	scale: 1.05;
+	filter: hue-rotate(-30deg);
+	transform: translateY(-20px);
 }
 
 .sectionBtn {
@@ -56,5 +63,5 @@ section {
 }
 
 #hero-section .sectionImage {
-	background: url("../assets/heroimg1.png") center center/cover;
+	background: url("../assets/happypople1.png") center center/cover;
 }

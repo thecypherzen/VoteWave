@@ -5,7 +5,7 @@ import styles from "../styles/section.module.css";
 
 
 
-export default function Section({ id, children }){
+export default function Section({ id, clsname, children }){
 	return (
 	<section id={styles[id]}>
 		<Wrapper clist={[styles.sectionWrapper]}>
