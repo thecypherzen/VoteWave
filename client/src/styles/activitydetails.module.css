@@ -18,7 +18,7 @@ span {
 
 .heading .detailsImg {
 	width: 50%;
-	height: inherit;
+	height: clamp(100px, inherit, 240px);
 	background: var(--color-light);
 	box-shadow: 0rem 0rem 0.5rem var(--color-grey-light);
 	gap: var(--sz-md);
