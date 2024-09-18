@@ -1,6 +1,7 @@
 /* Defines the Activities Route */
 
-import { Outlet, useLoaderData } from 'react-router-dom';
+import { Outlet, useLoaderData, useNavigate
+ } from 'react-router-dom';
 import axios from 'axios';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import { faHouse } from '@fortawesome/free-solid-svg-icons';
@@ -11,6 +12,7 @@ import styles from "../styles/activities.module.css";
 
 export default function Activities(){
 	const response = useLoaderData();
+	const navigate = useNavigate();
 
 	if (response.error){
 		return(<ErrorPage error={response.data}
@@ -27,6 +29,7 @@ export default function Activities(){
 							document.getElementById("tooltip").
 							style.display = "none";
 						}}
+						onClick={() => navigate("/")}
 						className={styles.pageNav}>
 							<FontAwesomeIcon icon={faHouse} />
 							<span id="tooltip" className={styles.tooltip}>
