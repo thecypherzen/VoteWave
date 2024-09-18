@@ -1,4 +1,5 @@
 /* Defines the landing page */
+import Heading from '../components/Heading';
 import NavBar from '../components/NavBar';
 import Section, {
 	SectionImage,
@@ -18,6 +19,22 @@ export default function Landing(){
 				button={{
 					href: "/activities",
 					text: "Join activity",
+					clist: ["btn", "btn-secondary"],
+					icon: faArrowRight
+				}}/>
+			<SectionImage />
+		</Section>
+		<Heading clist={[styles.sectionHeading, styles.center]}
+				swoosh={[styles.swoosh, styles.accent]}
+				main={true}
+				text="Features" />
+		<Section id="features-section" clsname={styles.landingSection}>
+			<SectionText
+				heading="Create elections and opinion polls."
+				body="Elections require candidates and deny multiple voting while polls don't require candidates and allow multiple votes...You'd get a hang of it when you create one."
+				button={{
+					href: "/login",
+					text: "Get started",
 					clist: ["btn", "btn-secondary"],
 					icon: faArrowRight
 				}}/>
