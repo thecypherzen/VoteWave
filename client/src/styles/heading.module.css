@@ -1,0 +1,16 @@
+.heading {
+	padding-block: var(--sz-lg);
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+}
+
+.main {
+	margin-bottom: var(--sz-xlg);
+}
+
+.main h2 {
+	font-size: var(--sz-xxlg);
+}
