@@ -9,6 +9,7 @@
 .landingSection {
 	display: flex;
 	gap: 2rem;
+	padding-block: 3rem;
 }
 
 .sectionText {
@@ -19,7 +20,7 @@
 	height: 100%;
 }
 
-.sectionText h2 {
+.sectionHeading {
 	font-size: var(--sz-xlg);
 	margin-bottom: var(--sz-md);
 	line-height: 1.1em;
@@ -38,7 +39,7 @@
 
 .sectionImage:hover {
 	scale: 1.05;
-	filter: hue-rotate(-30deg);
+	filter: hue-rotate(-45deg);
 	transform: translateY(-20px);
 }
 
@@ -55,7 +56,24 @@
 	color: var(--color-primary);
 }
 
-/* Section-specific styles  */
+.center {
+	text-align: center;
+}
+
+.accent {
+	background-color: var(--color-accent);
+}
+
+.swoosh {
+	display: inline-block;
+	width: 20%;
+	height: 1rem;
+	position: absolute;
+	bottom: 1rem;
+	align-self: center;
+}
+
+/* Section-specific styles */
 #hero-section {
 	min-height: calc(100vh - 92px);
 	background: var(--color-primary);
@@ -64,4 +82,8 @@
 
 #hero-section .sectionImage {
 	background: url("../assets/happypople1.png") center center/cover;
+}
+
+#features-section .sectionImage{
+	background: url("../assets/votewaveimg3.png") center center/cover;
 }

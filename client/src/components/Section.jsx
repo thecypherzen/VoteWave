@@ -1,4 +1,5 @@
 import Button from './Button';
+import Heading from './Heading';
 import Wrapper from './Wrapper';
 import styles from "../styles/section.module.css";
 
@@ -28,7 +29,10 @@ export function SectionText({heading, body, button}){
 	return (
 	<>
 		<div className={styles.sectionText}>
-			<h2 className={styles.sectionHeading}>{heading}</h2>
+			<Heading
+				clist={[styles.sectionHeading]}
+				text={heading}/>
+			{/*<h2 className={styles.sectionHeading}>{heading}</h2>*/}
 			<p className={styles.sectionBody}>{body}</p>
 			<div className={styles.sectionBtn}>
 				<Button href={button.href} id={button.id}
