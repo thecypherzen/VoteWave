@@ -1,10 +1,11 @@
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import '../styles/button.css';
 
 
 export default function Button({
 	href=null, id=null, clist=[],
-	clickHandler=null, text
+	clickHandler=null, icon=null, text
 }){
 	let element;
 	let items = null;
@@ -24,12 +25,26 @@ export default function Button({
 		className={items ? items : ""}
 		onClick={ clickHandler }>
 			{text}
+			{icon ?
+			<span>
+				<FontAwesomeIcon
+				icon={icon}/>
+			</span> : ""
+			}
 		</Link>;
 	} else {
-		element = <button type="button" id={id}
+		element = <button
+		type="button" id={id}
 		className={items ? items : ""}
-		onClick={ clickHandler } >
-			{text} </button>
+		onClick={ clickHandler }>
+			{text}
+			{icon ?
+				<span>
+					<FontAwesomeIcon
+				icon={icon}/>
+				</span> : ""
+			}
+		</button>
 	}
 
 	return (<>{element}</>);
