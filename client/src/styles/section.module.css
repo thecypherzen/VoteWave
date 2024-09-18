@@ -1,0 +1,60 @@
+/* Geneeral styling  */
+.sectionWrapper {
+	display: flex;
+	flex: 1;
+	gap: 3rem;
+	align-items: center;
+}
+
+section {
+	display: flex;
+	gap: 2rem;
+}
+
+.sectionText {
+	flex-basis: 40%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	height: 100%;
+}
+
+.sectionText h2 {
+	font-size: var(--sz-xlg);
+	margin-bottom: var(--sz-md);
+	line-height: 1.1em;
+}
+
+.sectionText p {
+	margin-bottom: var(--sz-xmd);
+}
+
+.sectionImage {
+	flex-basis: 60%;
+	height: 40rem;
+	border-radius: var(--sz-md);
+}
+
+.sectionBtn {
+	width: clamp(5rem, 16rem, 19.6rem);
+}
+
+.sectionBtn a span {
+	margin-left: 1rem;
+}
+
+.sectionBtn a:hover {
+	background: var(--color-accent);
+	color: var(--color-primary);
+}
+
+/* Section-specific styles  */
+#hero-section {
+	min-height: calc(100vh - 92px);
+	background: var(--color-primary);
+	color: var(--color-light);
+}
+
+#hero-section .sectionImage {
+	background: url("../assets/heroimg1.png") center center/cover;
+}
