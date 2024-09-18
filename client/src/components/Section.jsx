@@ -7,7 +7,7 @@ import styles from "../styles/section.module.css";
 
 export default function Section({ id, clsname, children }){
 	return (
-	<section id={styles[id]}>
+	<section id={styles[id]} className={clsname}>
 		<Wrapper clist={[styles.sectionWrapper]}>
 			{children}
 		</Wrapper>
