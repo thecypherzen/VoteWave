@@ -28,10 +28,10 @@ export default function Landing(){
 				swoosh={[styles.swoosh, styles.accent]}
 				main={true}
 				text="Features" />
-		<Section id="features-section" clsname={styles.landingSection}>
+		<Section id="features-section1" clsname={styles.landingSection}>
 			<SectionText
 				heading="Create elections and opinion polls."
-				body="Elections require candidates and deny multiple voting while polls don't require candidates and allow multiple votes...You'd get a hang of it when you create one."
+				body="Share links to your event and invite friends to participate...You'd get a hang of it when you create one."
 				button={{
 					href: "/login",
 					text: "Get started",
@@ -40,6 +40,45 @@ export default function Landing(){
 				}}/>
 			<SectionImage />
 		</Section>
+		<Section id="features-section2" clsname={styles.landingSection}>
+			<SectionImage />
+			<SectionText
+				heading="Keep the room alive, no dulling!"
+				body="While events are ongoing, engage with other participants in the dedicated chatroom"
+				button={{
+					href: "/login",
+					text: "Try it now",
+					clist: ["btn", "btn-secondary"],
+					icon: faArrowRight
+				}}/>
+		</Section>
+
+		<Section id="features-section3" clsname={styles.landingSection}>
+			<SectionText
+				heading="Share voting results with participants."
+				body="It's automatic, but you could also download them."
+				button={{
+					href: "/login",
+					text: "Try it now",
+					clist: ["btn", "btn-secondary"],
+					icon: faArrowRight
+				}}/>
+			<SectionImage />
+		</Section>
+
+		<Section id="features-section4" clsname={styles.landingSection}>
+			<SectionImage />
+			<SectionText
+				heading="Access trivia games in games area."
+				body="You don't need an account to play...give it a try."
+				button={{
+					href: "/login",
+					text: "Let's go",
+					clist: ["btn", "btn-secondary"],
+					icon: faArrowRight
+				}}/>
+		</Section>
+
 		</>
 	);
 }
