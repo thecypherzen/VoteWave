@@ -8,8 +8,9 @@
 
 
 .main {
-	margin-bottom: var(--sz-xlg);
+	margin-bottom: var(--sz-lg);
 	position: relative;
+	padding-top: 7rem;
 }
 
 .main h2 {

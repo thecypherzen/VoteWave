@@ -5,8 +5,13 @@ import Section, {
 	SectionImage,
 	SectionText
 } from '../components/Section';
+import {
+	TeamMembers,
+	TeamMember
+} from '../components/TeamMembers';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import styles from '../styles/section.module.css';
+import tstyles from '../styles/teams.module.css';
 
 export default function Landing(){
 	return (
@@ -25,9 +30,8 @@ export default function Landing(){
 			<SectionImage />
 		</Section>
 		<Heading clist={[styles.center]}
-				swoosh={[styles.swoosh]}
 				main={true}
-				text="Features" />
+				text="Now you can..." />
 		<Section id="features-section1" clsname={styles.landingSection}>
 			<SectionText
 				heading="Create elections and opinion polls."
@@ -79,6 +83,30 @@ export default function Landing(){
 				}}/>
 		</Section>
 
+		<Heading clist={[styles.center]}
+				main={true}
+				text="Meet the Team" />
+		<TeamMembers>
+			<TeamMember
+				first="William"
+				last="Inyam"
+				//photo="/src/assets/team-william.png"
+				role="Full Stack Software Engineer (ALXSE-C22)"
+				ld="https://www.linkedin.com/in/william-inyam-2503a8202/"
+				tw="https://x.com/williamInyam"
+				gh="https://github.com/thecypherzen/"
+				clist={[tstyles.bgPrimary, tstyles.teamMember]}
+				/>
+			<TeamMember
+				first="Valentine"
+				last="Nyibiam"
+				role="Full Stack Software Engineer (ALXSE-C22)"
+				ld="https://www.linkedin.com/in/william-inyam-2503a8202/"
+				tw="https://x.com/williamInyam"
+				gh="https://github.com/thecypherzen/"
+				clist={[tstyles.bgPrimary, tstyles.teamMember]}
+				/>
+		</TeamMembers>
 		</>
 	);
 }

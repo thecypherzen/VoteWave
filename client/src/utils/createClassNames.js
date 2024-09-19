@@ -10,5 +10,6 @@ export function classNameFromList(list=null){
 			}
 		}
 	}
+
 	return className;
 }

@@ -81,6 +81,17 @@
 	min-height: calc(100vh - 92px);
 	background: var(--color-primary);
 	color: var(--color-light);
+	position: relative;
+}
+
+#hero-section::before {
+	content: "";
+	position: absolute;
+	top: 0rem;
+	left: 0rem;
+	width: 100%;
+	height:100%;
+	background: url("../assets/herobgvector.png") no-repeat center center/contain;
 }
 
 #hero-section .sectionImage {
@@ -91,8 +102,23 @@
 	width: 0px;
 	height: 0px;
 }
+
 #features-section1 .sectionImage{
 	background: url("../assets/votewaveimg3.png") center center/cover;
+}
+#features-section1 {
+	position: relative;
+}
+
+#features-section1::before {
+	content: "";
+	position: absolute;
+	top: 0rem;
+	left: 0rem;
+	width: 30%;
+	height:90%;
+	background: url("../assets/createbgvector.png") no-repeat center center;
+	opacity: 0.6;
 }
 
 #features-section2 .sectionImage{
