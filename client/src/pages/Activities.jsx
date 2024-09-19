@@ -56,7 +56,7 @@ function showToolTip(e){
 	const {clientX: x, clientY: y} = e;
 	const tooltip = document.getElementById("tooltip");
 	tooltip.style.display = "inline-flex";
-	tooltip.style.left = `${x-82}px`;
+	tooltip.style.left = `${x-110}px`;
 	tooltip.style.top = `${y-60}px`;
 }
 
