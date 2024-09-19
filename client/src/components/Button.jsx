@@ -5,25 +5,17 @@ import '../styles/button.css';
 
 export default function Button({
 	href=null, id=null, clist=[],
-	clickHandler=null, icon=null, text
+	clickHandler=null, icon=null,
+	target=null, text
 }){
 	let element;
-	let items = null;
+	const items = clist.join(" ");
 
-	if (clist.length){
-		let len = clist.length;
-		items = "";
-		for (let i = 0; i < len; i++){
-			items += clist[i];
-			if (i < len - 1){
-				items += " ";
-			}
-		}
-	}
 	if (href){
 		element = <Link to={href} id={id}
 		className={items ? items : ""}
-		onClick={ clickHandler }>
+		onClick={ clickHandler }
+		target={target ? target : "" }>
 			{text}
 			{icon ?
 			<span>
@@ -46,6 +38,5 @@ export default function Button({
 			}
 		</button>
 	}
-
 	return (<>{element}</>);
 }

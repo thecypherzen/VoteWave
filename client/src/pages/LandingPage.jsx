@@ -1,6 +1,7 @@
 /* Defines the landing page */
 import Heading from '../components/Heading';
 import NavBar from '../components/NavBar';
+import Footer from '../components/Footer';
 import Section, {
 	SectionImage,
 	SectionText
@@ -110,6 +111,22 @@ export default function Landing(){
 				clist={[tstyles.bgPrimary, tstyles.teamMember]}
 				/>
 		</TeamMembers>
+
+		<Section id="full-no-swoosh"
+			clsname={`${styles.landingSection} ${styles.center}`}>
+		<SectionText
+				heading="Briefly speaking"
+				body="This project is aimed at uniqueness, building on the already existing idea of e-voting and seeing how to make it better by coupling more that just voting - chatrooms and games as well as extending our application to be accessible via telegram"
+				button={{
+					target: "_blank",
+					href: "https://github.com/thecypherzen/voteWave/",
+					text: "View repo",
+					clist: ["btn", "btn-primary"],
+					icon: faArrowRight
+				}}
+				/>
+		</Section>
+		<Footer />
 		</>
 	);
 }
