@@ -12,6 +12,7 @@ import {
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import styles from '../styles/section.module.css';
 import tstyles from '../styles/teams.module.css';
+import hstyles from '../styles/heading.module.css';
 
 export default function Landing(){
 	return (
@@ -83,9 +84,11 @@ export default function Landing(){
 				}}/>
 		</Section>
 
-		<Heading clist={[styles.center]}
+		<Heading clist={[styles.center, hstyles.colorPrimary]}
 				main={true}
-				text="Meet the Team" />
+				text="Meet the Team"
+				runner="These guys love to do hard things...it's now their dna 😀. Sometimes it gets really tough, but somehow, they come out thougher."
+				rclist={[hstyles.runner, hstyles.center]}/>
 		<TeamMembers>
 			<TeamMember
 				first="William"
