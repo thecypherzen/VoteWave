@@ -24,8 +24,8 @@ export default function Landing(){
 				}}/>
 			<SectionImage />
 		</Section>
-		<Heading clist={[styles.sectionHeading, styles.center]}
-				swoosh={[styles.swoosh, styles.accent]}
+		<Heading clist={[styles.center]}
+				swoosh={[styles.swoosh]}
 				main={true}
 				text="Features" />
 		<Section id="features-section1" clsname={styles.landingSection}>

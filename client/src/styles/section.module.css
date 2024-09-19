@@ -18,12 +18,27 @@
 	flex-direction: column;
 	justify-content: space-between;
 	height: 100%;
+	margin-bottom: var(--sz-xmd);
 }
 
 .sectionHeading {
 	font-size: var(--sz-xlg);
-	margin-bottom: var(--sz-md);
+	margin-bottom: var(--sz-xmd);
 	line-height: 1.1em;
+	position: relative;
+	z-index: 10;
+}
+
+.sectionHeading::before {
+	content: "";
+	position: absolute;
+	bottom: -1rem;
+	left: 0rem;
+	background: url("../assets/swoosh.png") no-repeat center center;
+	height: 2rem;
+	width: 100%;
+	rotate: -2deg;
+	z-index: -1;
 }
 
 .sectionText p {
@@ -60,18 +75,6 @@
 	text-align: center;
 }
 
-.accent {
-	background-color: var(--color-accent);
-}
-
-.swoosh {
-	display: inline-block;
-	width: 20%;
-	height: 1rem;
-	position: absolute;
-	bottom: 1rem;
-	align-self: center;
-}
 
 /* Section-specific styles */
 #hero-section {
@@ -84,6 +87,10 @@
 	background: url("../assets/happypople1.png") center center/cover;
 }
 
+#hero-section .sectionHeading::before{
+	width: 0px;
+	height: 0px;
+}
 #features-section1 .sectionImage{
 	background: url("../assets/votewaveimg3.png") center center/cover;
 }
@@ -91,7 +98,6 @@
 #features-section2 .sectionImage{
 	background: url("../assets/heroimg2.png") center center/cover;
 }
-
 
 #features-section3 .sectionImage{
 	background: url("../assets/heroimg1.png") center center/cover;
@@ -109,4 +115,9 @@
 #features-section4 {
 	background: var(--color-primary);
 	color: var(--color-light);
+}
+
+#features-section3 .sectionHeading::before,
+#features-section4 .sectionHeading::before {
+	filter: hue-rotate(160deg);
 }

@@ -4,13 +4,15 @@
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	position: relative;
 }
+
 
 .main {
 	margin-bottom: var(--sz-xlg);
+	position: relative;
 }
 
 .main h2 {
 	font-size: var(--sz-xxlg);
 }
+

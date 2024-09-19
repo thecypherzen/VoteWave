@@ -32,7 +32,6 @@ export function SectionText({heading, body, button}){
 			<Heading
 				clist={[styles.sectionHeading]}
 				text={heading}/>
-			{/*<h2 className={styles.sectionHeading}>{heading}</h2>*/}
 			<p className={styles.sectionBody}>{body}</p>
 			<div className={styles.sectionBtn}>
 				<Button href={button.href} id={button.id}

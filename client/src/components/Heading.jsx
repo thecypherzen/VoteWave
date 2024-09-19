@@ -7,13 +7,13 @@ export default function Heading({clist=null, swoosh=null, main=false, text}){
 	let divClassName = "";
 	if (main) {
 		divClassName += `${styles.heading} ${styles.main}`;
+	} else {
+		divClassName = styles.headingBox;
 	}
 	return (
 		<div className={divClassName}>
-			<h2 className={hClassName}>{text}</h2>
-			{swoosh ?
-			<span className={sClassName}>
-			</span> : ""}
+			<h2 className={hClassName}>{text}
+			</h2>
 		</div>
 	);
 }
