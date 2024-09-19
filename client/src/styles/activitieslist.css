@@ -1,0 +1,7 @@
+#activities-list {
+	overflow-y: scroll;
+	/*background-color: var(--color-secondary-light);*/
+	box-shadow: 0rem 0rem 1rem var(--color-grey-light);
+	border-radius: 1rem;
+	padding-block: 1.5rem;
+}

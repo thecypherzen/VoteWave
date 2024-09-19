@@ -28,12 +28,28 @@ def not_found(e):
     res = json.dumps({"error": "Not Found"},
                      indent=2) + '\n'
     return Response(res, mimetype="application/json",
+                    status=404)
+
+@app.errorhandler(400)
+def bad_request(e):
+    """Handles bad request"""
+    res = json.dumps({"error": f"{e.description}"},
+                  indent=2) + '\n'
+    return Response(res, mimetype="application/json",
                     status=400)
+
+@app.errorhandler(500)
+def server_error(e):
+    """Handles internal server errors"""
+    res = json.dumps({"error": f"{e.description}"})
+    return Response(res, mimetype="application/json",
+                    status=500)
+
 
 
 # start server
 if __name__ == "__main__":
-    app.run(host=getenv("VW_TEST_HOST" or "0.0.0.0"),
-            port=getenv("VW_API_PORT" or 5000),
+    app.run(host="0.0.0.0",
+            port=getenv("VW_API_PORT") or 5000,
             threaded=True, debug=True)
 

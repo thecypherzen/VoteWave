@@ -1,0 +1,103 @@
+#teams-section{
+	padding: var(--sz-lg) var(--sz-md) var(--sz-big) var(--sz-md);
+	height: 90vh;
+}
+
+.teamsWrapper {
+	display: flex;
+	gap: 4rem;
+	justify-content: center;
+	height: 100%;
+}
+
+.teamMember {
+	color: var(--color-dark);
+	background: var(--color-secondary);
+	color: var(--color-light);
+	border-radius: var(--sz-md);
+	box-shadow: 0rem 0rem 1rem var(--color-grey-light);
+	display: flex;
+	width: 40%;
+	height: 100%;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	padding-block: 4rem;
+	transition: all 0.5s ease-in-out;
+}
+
+.teamMember:hover {
+	scale: 1.05;
+	background: var(--color-primary);
+	color: var(--color-light);
+}
+
+.teamMember:hover .name {
+	color: var(--color-accent);
+}
+
+.teamMember .memberDetails {
+	text-align: center;
+}
+
+.teamMember .name {
+	font-size: var(--sz-xmd);
+	color: var(--color-primary);
+	margin-bottom: 2rem;
+	transition: all 0.7s ease-in-out;
+}
+
+.teamMember .name span {
+	color: var(--color-light);
+}
+
+.teamMember .name h5 {
+	color: var(--color-light);
+	font-size: small;
+	opacity: 0.6;
+	font-weight: 600;
+}
+
+.teamMember .socials {
+	display: flex;
+	gap: 1rem;
+	justify-content: center;
+}
+
+.teamMember .socials a {
+	color: var(--color-secondary);
+	/*border: var(--color-dark) 1px solid;*/
+	height: 4rem;
+	width: 4rem;
+	border-radius: 0.5rem;
+	background-color: var(--color-light);
+	box-shadow: 0rem 0rem 1rem var(--color-grey-light);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+	transition: all 0.3s ease-in-out;
+}
+
+
+.teamMember .socials a:hover {
+	background: var(--color-accent);
+	color: var(--color-primary);
+}
+
+.memberImage {
+	background: grey;
+	height: 50%;
+	width: 50%;
+	border-radius: 50%;
+	margin-bottom: 3rem;
+	border: 1rem solid var(--color-light);
+}
+
+.teamMember:first-child .memberImage{
+	background: url("../assets/team-william.png") no-repeat center center/cover;
+}
+
+.teamMember:nth-child(2) .memberImage{
+	background: url("../assets/team-valentine.png") no-repeat center center/cover;
+}

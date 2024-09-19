@@ -1,0 +1,18 @@
+.footer {
+	background: var(--color-primary);
+	color: var(--color-light);
+}
+
+.footer .content {
+	display: flex;
+	flex-direction: column;
+	min-height: 20vh;
+	justify-content: center;
+	align-items: center;
+}
+
+.footer .content p {
+	font-size: small;
+	letter-spacing: 10px;
+	opacity: 0.7;
+}

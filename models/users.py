@@ -44,7 +44,7 @@ class User(UserMixin, BaseClass, Base):
         back_populates="user", foreign_keys="Metadata.owner_id",
         primaryjoin="and_(Metadata.owner_id == User.id, \
         Metadata.owner_type == 'user')", overlaps="_metadata, meta_data")
-    admin_info: Mapped["Admin"] = relationship(
+    admin_info: Mapped[List["Admin"]] = relationship(
         back_populates="user", cascade="all, delete-orphan")
     blacklist_entries: Mapped[List["Blacklist"]] = relationship(
         back_populates="user", foreign_keys="Blacklist.user_id",
@@ -70,6 +70,10 @@ class User(UserMixin, BaseClass, Base):
         back_populates="user", cascade="all, delete-orphan")
 
     # association proxies
+    admin_elections: AssociationProxy[List["Admin"]] = \
+        association_proxy("admin_info", "elections")
+    admin_polls: AssociationProxy[List["Admin"]] = \
+        association_proxy("admin_info", "polls")
     waitlists: AssociationProxy[List["UserWaitlist"]] = \
         association_proxy("users_waitlists", "waitlist")
 
@@ -98,4 +102,13 @@ class User(UserMixin, BaseClass, Base):
                 if kwargs.get(item):
                     del kwargs[item]
             super().__init__(*args, **kwargs)
+
+    @property
+    def admin_of(self):
+        """Returns list of activities where user is admin"""
+        res = []
+        for item in self.admin_elections + self.admin_polls:
+            if item:
+                res += item
+        return res
 

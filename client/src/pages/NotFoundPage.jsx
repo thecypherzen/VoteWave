@@ -1,10 +1,16 @@
+import Button from '../components/Button';
+import styles from "../styles/notfoundpage.module.css";
+
 export default function NotFound(){
 	return(
 	<>
-	<div>
-		<h1>Sorry, we'd create that later.</h1>
+	<div className={styles.content}>
+		<h1>We couldn't find that.</h1>
 		<p>For now let's take you back home.</p>
-		<a className="btn btnDark" href="/">Return Home</a>
+		<div className={styles.button}>
+			<Button clist={["btn", "btn-secondary"]}
+				text={"Return home"} href="/" />
+		</div>
 	</div>
 	</>
 	);

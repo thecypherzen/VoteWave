@@ -75,13 +75,15 @@ class Poll(Activity):
     def __init__(self, *args, **kwargs):
         """Initializes a poll instance """
         if all([kwargs.get("starts_at"), kwargs.get("ends_at"),
-                kwargs.get("security_key"), title := kwargs.get("title")]):
+                kwargs.get("security_key"), title := kwargs.get("title"),
+                kwargs.get("user_id")]):
             to_delete = ["location", "title", "allows_anonymous",
                          "allows_multi_votes"]
             self.title = title
             self.location = "votewave/user_id/polls/poll_id"
             self.allows_anonymous = kwargs.get("allows_anonymous") or True
             self.allows_multi_votes = kwargs.get('allows_multi_votes') or True
+            self.status = "active"
             for item in to_delete:
                 if kwargs.get(item):
                     del kwargs[item]

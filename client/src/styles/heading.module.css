@@ -1,0 +1,34 @@
+.heading {
+	padding-block: var(--sz-lg);
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+
+.main {
+	margin-bottom: var(--sz-md);
+	position: relative;
+	padding-top: 7rem;
+}
+
+
+.main h2 {
+	font-size: var(--sz-xxlg);
+	margin-bottom: var(--sz-md);
+}
+
+.runner {
+	font-weight: normal;
+	width: 60%;
+	line-height: 1.8em;
+}
+
+.colorPrimary {
+	color: var(--color-primary);
+}
+
+.center {
+	text-align: center;
+}

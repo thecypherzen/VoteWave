@@ -57,12 +57,14 @@ print(f"cand1 sent msgs before: {len(cands[0].sent_messages)}\n")
 print(f"voter1 inbox msgs before: {len(voters[0].inbox.messages)}")
 print(f"voter1 sent msgs before: {len(voters[0].sent_messages)}")
 
-mes1 = Message(content="Message from voter 1", sender_id=voters[0].id,
+mes1 = Message(body="Message from voter 1", sender_id=voters[0].id,
                sender_type="voter", receiver_id=polls[0].id,
-               receiver_type="poll")
-mes2 = Message(content="Message from candidate 1", sender_id=cands[0].id,
+               receiver_type="poll",
+               subject=f"Poll-{polls[0].serial} Message")
+mes2 = Message(body="Message from candidate 1", sender_id=cands[0].id,
                sender_type="candidate", receiver_id=elecs[0].id,
-               receiver_type="election")
+               receiver_type="election",
+               subject=f"Election-{elecs[0].serial} Message")
 storage.add(mes1, mes2)
 storage.save()
 mes1.send()

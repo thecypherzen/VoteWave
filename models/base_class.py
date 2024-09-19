@@ -204,7 +204,7 @@ class BaseClass():
     def to_dict(self):
         """Returns a dictionary representation of current object instance"""
         to_remove = ["_sa_instance_state", "salt", "security_key",
-                     "passwd_hash", "serial"]
+                     "passwd_hash", "serial", "deleted_at"]
         dates = ["starts_at", "ends_at", "dob"]
         obj_copy = self.__dict__.copy()
         obj_copy["__class__"] = self.__class__.__name__
@@ -213,9 +213,10 @@ class BaseClass():
         for date in dates:
             if obj_copy.get(date):
                 obj_copy[date] = obj_copy[date].isoformat()
+
         # remove internal values
         for item in to_remove:
-            if obj_copy.get(item):
+            if item in obj_copy:
                 del obj_copy[item]
         return obj_copy
 

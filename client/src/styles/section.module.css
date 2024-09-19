@@ -1,0 +1,170 @@
+/* Geneeral styling  */
+.sectionWrapper {
+	display: flex;
+	flex: 1;
+	gap: 5rem;
+	align-items: center;
+}
+
+.landingSection {
+	display: flex;
+	gap: 2rem;
+	padding-block: var(--sz-xxlg);
+}
+
+.sectionText {
+	flex-basis: 40%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	height: 100%;
+	margin-bottom: var(--sz-xmd);
+}
+
+.sectionHeading {
+	font-size: var(--sz-xlg);
+	margin-bottom: var(--sz-xmd);
+	line-height: 1.1em;
+	position: relative;
+	z-index: 10;
+}
+
+.sectionHeading::before {
+	content: "";
+	position: absolute;
+	bottom: -1rem;
+	left: 0rem;
+	background: url("../assets/swoosh.png") no-repeat center center;
+	height: 2rem;
+	width: 100%;
+	rotate: -2deg;
+	z-index: -1;
+}
+
+.sectionText p {
+	margin-bottom: var(--sz-xmd);
+}
+
+.sectionImage {
+	flex-basis: 60%;
+	height: 40rem;
+	border-radius: var(--sz-md);
+	transition: all 0.3s ease-in-out;
+}
+
+.sectionImage:hover {
+	scale: 1.05;
+	filter: hue-rotate(-90deg) sepia(0.3) saturate(1.2);
+	transform: translateY(-20px);
+}
+
+.sectionBtn {
+	width: clamp(5rem, 16rem, 19.6rem);
+}
+
+.sectionBtn a span {
+	margin-left: 1rem;
+}
+
+.sectionBtn a:hover {
+	background: var(--color-accent);
+	color: var(--color-primary);
+}
+
+.center {
+	text-align: center;
+}
+
+.noHeading .sectionHeading{
+	display: none;
+}
+/* Section-specific styles */
+#hero-section {
+	min-height: calc(100vh - 92px);
+	background: var(--color-primary);
+	color: var(--color-light);
+	position: relative;
+}
+
+#hero-section::before {
+	content: "";
+	position: absolute;
+	top: 0rem;
+	left: 0rem;
+	width: 100%;
+	height:100%;
+	background: url("../assets/herobgvector.png") no-repeat center center/contain;
+}
+
+#hero-section .sectionImage {
+	background: url("../assets/happypople1.png") center center/cover;
+}
+
+#hero-section .sectionHeading::before{
+	width: 0px;
+	height: 0px;
+}
+
+#features-section1 .sectionImage{
+	background: url("../assets/votewaveimg3.png") center center/cover;
+}
+#features-section1 {
+	position: relative;
+}
+
+#features-section1::before {
+	content: "";
+	position: absolute;
+	top: 0rem;
+	left: 0rem;
+	width: 30%;
+	height:90%;
+	background: url("../assets/createbgvector.png") no-repeat center center;
+	opacity: 0.6;
+}
+
+#features-section2 .sectionImage{
+	background: url("../assets/heroimg2.png") center center/cover;
+}
+
+#features-section3 .sectionImage{
+	background: url("../assets/heroimg1.png") center center/cover;
+}
+
+#features-section4 .sectionImage {
+	background: url("../assets/gaming3.png") center center/cover;
+}
+
+#features-section3 {
+	padding-top: var(--sz-big);
+}
+
+#features-section3,
+#features-section4 {
+	background: var(--color-primary);
+	color: var(--color-light);
+}
+
+#features-section3 .sectionHeading::before,
+#features-section4 .sectionHeading::before {
+	filter: hue-rotate(160deg);
+}
+
+#full-no-swoosh .sectionText{
+	flex: 1;
+}
+
+#full-no-swoosh .sectionBody{
+	margin-top: 4rem;
+}
+
+#full-no-swoosh .sectionHeading::before{
+	height: 0px;
+	width: 0px;
+}
+
+#full-no-swoosh .sectionBtn {
+	width: clamp(200px, 20rem, 300px);
+	align-self: center;
+	margin-top: 4rem;
+}

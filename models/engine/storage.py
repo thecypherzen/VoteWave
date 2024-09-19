@@ -32,12 +32,16 @@ class Storage():
     """Defines the apps' storage manager"""
     __session = None
     __mode = getenv("VW_ENV")
-    __models = {"Admin":Admin, "Blacklist":Blacklist, "Candidate":Candidate,
-                "Chatroom":Chatroom, "Election":Election, "Inbox": Inbox,
-                "Invitation":Invitation, "Message": Message, "Metadata":Metadata,
-                "Notice":Notice, "Option":Option, "Poll":Poll,
-                "Question":Question, "Redflag":Redflag, "Review":Review,
-                "User":User, "Voter":Voter, "Waitlist":Waitlist}
+    __models = {
+        "Admin":Admin, "Activity": Activity,
+        "Blacklist":Blacklist, "Candidate":Candidate,
+        "Chatroom":Chatroom, "Election":Election,
+        "Inbox": Inbox, "Invitation":Invitation,
+        "Message": Message, "Metadata":Metadata,
+        "Notice":Notice, "Option":Option, "Poll":Poll,
+        "Question":Question, "Redflag":Redflag,
+        "Review":Review, "User":User, "Voter":Voter,
+        "Waitlist":Waitlist}
 
     if __mode == "test":
         DB_NAME = getenv("VW_TEST_DB")
@@ -54,7 +58,7 @@ class Storage():
     __engine = create_engine(uri, pool_pre_ping=True)
 
     def __init__(self):
-        self.__session = scoped_session(sessionmaker(bind=self.__engine))
+        self.__session = scoped_session(sessionmaker(bind=self.__engine, expire_on_commit=False))
         Base.metadata.create_all(self.__engine)
 
 
@@ -151,6 +155,9 @@ class Storage():
         self.__session.commit()
 
     def session(self):
+        """Returns a session instance from
+        our session factory
+        """
         return self.__session()
 
     def trashed(self, objj=None):

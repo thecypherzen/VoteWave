@@ -54,7 +54,6 @@ class Activity(BaseClass, Base):
                 self.ends_at = datetime.strptime(etime, format)
             elif etime.__class__.__name__ == "datetime":
                 self.ends_at = etime
-            self.status = "pending"
             self.salt = self.generate_salt()
             self.security_key = self.generate_hash(
                 text=kwargs.get("security_key"), salt=self.salt)
@@ -67,3 +66,33 @@ class Activity(BaseClass, Base):
                 if kwargs.get(key):
                     del kwargs[key]
         super().__init__(*args, **kwargs)
+
+    def update_status(self):
+        """Sets the status of an activity model
+        to either live or ended depending on its
+        start_at and ends_at values
+        """
+        starts_diff = self.starts_at - self.created_at
+        ends_diff = self.ends_at - self.created_at
+        now = datetime.now() - self.created_at
+        changed = False
+
+        if self.status == "pending" \
+            and len(self.candidates):
+            self.status = "active"
+            changed = True
+
+        if now >= starts_diff:
+            if now < ends_diff:
+                self.status = "live"
+                changed = True
+            elif now >= ends_diff:
+                self.status = "ended"
+                changed = True
+        elif self.status != "pending":
+            self.status = "active"
+            changed = True
+
+        if changed:
+            self.save()
+

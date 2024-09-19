@@ -1,0 +1,31 @@
+form.search-box{
+	background-color: rgba(33, 37, 41, 0.5);
+	padding-inline: 1.5rem;
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	width: 24rem;
+	border-radius: 2rem;
+}
+
+form input{
+	padding-inline: 2rem;
+	padding-block: 1rem;
+	border-radius: 1.5rem;
+	font-weight: 500;
+	font-size: 1.2rem;
+	width: 80%;
+	height: 100;
+	text-align: left;
+	background: none;
+	color: var(--color-light);
+}
+
+input::placeholder {
+	color: var(--color-grey);
+}
+
+#search-spinner {
+	width: 2.5rem;
+	height: 2.5rem;
+}

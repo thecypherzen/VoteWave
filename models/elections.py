@@ -74,7 +74,16 @@ class Election(Activity):
                 title := kwargs.get("title")]):
             self.title = title
             self.location = ""
+            self.status = "pending"
             super().__init__(*args, **kwargs)
+
+    def add_candidate(self, candidate):
+        """Adds a user to an election's list of candidates"""
+        self.candidates.append(candidate)
+        if self.status == "pending":
+            self.status = "active"
+        self.save()
+
 
     def close(self):
         """Closes down an election from participation
@@ -85,11 +94,6 @@ class Election(Activity):
         # close chatroom
         # close waitlist
 
-    def create_candidate(self, info):
-        """Creates a new candidate from given information
-        Returns: id of creted candidate
-        """
-        pass
 
     def update_candidate(self, candidate, delete=False):
         """Updates an election candidate's information.
