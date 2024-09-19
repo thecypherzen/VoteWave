@@ -75,7 +75,9 @@
 	text-align: center;
 }
 
-
+.noHeading .sectionHeading{
+	display: none;
+}
 /* Section-specific styles */
 #hero-section {
 	min-height: calc(100vh - 92px);
@@ -146,4 +148,23 @@
 #features-section3 .sectionHeading::before,
 #features-section4 .sectionHeading::before {
 	filter: hue-rotate(160deg);
+}
+
+#full-no-swoosh .sectionText{
+	flex: 1;
+}
+
+#full-no-swoosh .sectionBody{
+	margin-top: 4rem;
+}
+
+#full-no-swoosh .sectionHeading::before{
+	height: 0px;
+	width: 0px;
+}
+
+#full-no-swoosh .sectionBtn {
+	width: clamp(200px, 20rem, 300px);
+	align-self: center;
+	margin-top: 4rem;
 }

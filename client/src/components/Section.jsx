@@ -37,7 +37,8 @@ export function SectionText({heading, body, button}){
 				<Button href={button.href} id={button.id}
 						clickHandler={button.clickHandler}
 						text={button.text} clist={button.clist}
-						icon={button.icon}/>
+						icon={button.icon}
+						target={button.target}/>
 			</div>
 		</div>
 	</>
