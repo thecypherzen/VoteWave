@@ -2,7 +2,7 @@
 """The entry point of the votewave application"""
 
 from authlib.integrations.flask_client import OAuth
-from flask import Flask, redirect, request, url_for, session
+from flask import Flask, redirect, request, Response, session, url_for
 from flask_cors import CORS
 from flask_login import LoginManager, login_user, login_required, logout_user
 import json
@@ -59,10 +59,16 @@ def login():
 def callback():
     """handles response after authentication"""
     print("verifying user...\n")
-    token = oauth.auth0.authorize_access_token()
-    user_info = token["userinfo"]
-    session["user"] = token
-    print(user_info)
+    token_info = oauth.auth0.authorize_access_token()
+    user_info = token_info["userinfo"]
+    if not (email_stat := user_info["email_verified"]):
+        res_dict = {
+            "email_verified": email_stat,
+            "access_token": token_info["access_token"]
+        }
+        res = json.dumps(res_dict, indent=2) + '\n'
+        return Response(res, mimetype="application/json", status=511)
+    session["user"] = token_info
     return redirect(url_for("dashboard"))
 
 
