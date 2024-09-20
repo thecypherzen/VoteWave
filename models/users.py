@@ -103,6 +103,22 @@ class User(UserMixin, BaseClass, Base):
                     del kwargs[item]
             super().__init__(*args, **kwargs)
 
+    @classmethod
+    def find(cls, *args, email=None, username=None):
+        if not email and not username:
+            return None
+        session = models.storage.session()
+        if email:
+            user = session.query(cls).filter_by(email=email).first()
+            if user:
+                return user
+        if username:
+            user = session.query(cls).filter_by(username=username).first()
+            if user:
+                return user
+        return None
+
+
     @property
     def admin_of(self):
         """Returns list of activities where user is admin"""
