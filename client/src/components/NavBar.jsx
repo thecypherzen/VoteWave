@@ -43,7 +43,7 @@ export default function NavBar(){
 					<div id="login-btn">
 						<Button
 							clist={["btn", "btn-secondary"]}
-							id="signin-btn" href="#"
+							id="signin-btn" href="/login"
 							text="Login/Sign up"
 						/>
 					</div>

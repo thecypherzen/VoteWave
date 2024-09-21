@@ -15,7 +15,7 @@ export default function Activities(){
 	const navigate = useNavigate();
 
 	if (response.error){
-		return(<ErrorPage error={response.data}
+		return(<ErrorPage context={response.data.message}
 		/>)
 	}
 	const activities = response.data;

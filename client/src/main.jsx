@@ -11,12 +11,20 @@ import './styles/index.css'
 import Activities from './pages/Activities';
 import ActivityDetails from './pages/ActivityDetails';
 import ActivitiesIndex from './pages/ActivitiesIndex';
+import CallBack from './pages/CallBack';
+import ErrorPage from './pages/ErrorPage';
 import Landing from './pages/LandingPage';
+import LoginPage from './pages/LoginPage';
 import NotFound from './pages/NotFoundPage';
+import OnBoardingPage from './pages/OnBoardingPage';
+import UserDashboard from './pages/UserDashboard';
 
 // loaders
 import { loader as activitiesLoader } from './pages/Activities';
 import { loader as detailsLoader } from './pages/ActivityDetails';
+import { loader as callbackLoader } from './pages/CallBack';
+import { loader as onboardingLoader } from './pages/OnBoardingPage';
+
 
 // router
 const router = createBrowserRouter([
@@ -29,7 +37,7 @@ const router = createBrowserRouter([
 		path: "/activities/",
 		element: <Activities />,
 		loader: activitiesLoader,
-		errorElement: <NotFound />,
+		errorElement: <ErrorPage />,
 		children: [
 			{
 				index: true,
@@ -41,6 +49,29 @@ const router = createBrowserRouter([
 				loader: detailsLoader,
 			}
 		]
+	},
+	{
+		path: "/login",
+		element: <LoginPage />,
+		errorElement: <ErrorPage />
+	},
+	{
+		path: "/login/verify",
+		element: <CallBack />,
+		errorElement: <ErrorPage />,
+		loader: callbackLoader
+	},
+	{
+		path: "/users/onboarding",
+		element: <OnBoardingPage />,
+		loader: onboardingLoader,
+		errorElement: <ErrorPage />
+	},
+	{
+		path: "/users/:userId/dashboard",
+		element: <UserDashboard />,
+		errorElement: <ErrorPage />,
+		loader: ""
 	}
 ]);
 

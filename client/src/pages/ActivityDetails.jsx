@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
-import { Form, useLoaderData } from "react-router-dom";
-import { getUserDetails } from "./UserProfilePage";
+import {
+	Form, useLoaderData, useRouteError
+} from "react-router-dom";
+import { getUserDetails } from "./UserDashboard";
 import axios from "axios";
 import ErrorPage from "../pages/ErrorPage";
 import Button from '../components/Button';
@@ -11,6 +13,7 @@ export default function ActivityDetails() {
   const [userDetails, setUserDetails] = useState({});
   const [useError, setUseError] = useState(false);
   const [startsAt, setStartsAt] = useState(null);
+  const error = useRouteError();
 
 
   useEffect(() => {
@@ -31,13 +34,13 @@ export default function ActivityDetails() {
   }, [response]);
 
   if (response.error) {
-	return <ErrorPage error={response.data} />;
+	return <ErrorPage context={request.error.message}/>;
   }
   if (!userDetails) {
 	return <p>Loading...</p>;
   }
   if (userDetails.error){
-	return <ErrorPage error={userDetails.data} />;
+	return <ErrorPage context={request.error.message}/>;
   }
   const activity = response.data
   return (

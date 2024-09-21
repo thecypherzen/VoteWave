@@ -16,9 +16,11 @@ def login():
             format(getenv('VW_SERVER_PORT')))
 
 
-@app_views.route("/login/verify-email", methods=["POST"])
+@app_views.route("/login/verify", methods=["POST"],
+                 strict_slashes=False)
 def verify_user_email():
     """Handle Email verification"""
+    print("HEADERS: \n", request.headers)
     auth_header = request.headers.get("Authorization")
     if not auth_header:
         res_data = {"error": "Missing Authorization headers"}
@@ -30,6 +32,7 @@ def verify_user_email():
     res = requests.get(url, headers=headers)
 
     if res.status_code != 200:
+        print("....ON SECOND CHECK....API RESPONSE...: ", res)
         return Response(json.dumps(
             {"error": "Couldn't get user info"}, indent=2) + '\n',
             mimetype="application/json", status=401)

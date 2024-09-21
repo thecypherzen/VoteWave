@@ -38,3 +38,12 @@
 	color: var(--color-primary);
 }
 
+.btn-light{
+	background: var(--color-light);
+	color: var(--color-primary);
+}
+
+.btn-light:hover {
+	color: var(--color-primary);
+}
+

@@ -104,7 +104,7 @@ class User(UserMixin, BaseClass, Base):
             super().__init__(*args, **kwargs)
 
     @classmethod
-    def find(cls, *args, email=None, username=None):
+    def find_by_info(cls, *args, email=None, username=None):
         if not email and not username:
             return None
         session = models.storage.session()

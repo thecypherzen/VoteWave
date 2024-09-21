@@ -1,0 +1,229 @@
+/* utility classes */
+
+.message {
+	padding: 2rem 3rem;
+	border-radius: 1rem;
+	font-size: 1.5rem;
+	height: 3rem;
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.success {
+	background: rgba(0, 255, 127, 0.6);
+	border: 0.2px solid var(--color-success);
+	color: var(--color-dark);
+}
+
+.error {
+	background: rgba(199, 0, 57, 0.6);
+	border: 0.2px solid var(--color-danger);
+	color: var(--color-light);
+}
+
+.progress {
+	width: 100%;
+	height: 2rem;
+	border-radius: 1rem;
+	overflow: hidden;
+	margin-top: 1rem;
+	color: var(--color-success);
+}
+
+progress::-webkit-progress-bar {
+	background-color: var(--color-purple);
+}
+
+/* the progress bar itself */
+/*progress::-webkit-progress-value {
+	background-color: var(--color-success);
+}*/
+
+/* For Mozilla (Firefox) */
+/*progress::-moz-progress-bar {
+	background-color: var(--color-grey);
+}*/
+
+/* For IE and Edge */
+/*progress {
+	background-color: var(--color-success);
+}*/
+
+.wrapper {
+	display: grid;
+	grid-template-columns: 50% 50%;
+	grid-gap: 3rem;
+	justify-content: space-between;
+	align-items: center;
+	min-height: 100vh;
+	z-index: 10;
+	width: 90vw !important;
+}
+
+.onboardingArea{
+	background: var(--color-light);
+	position: relative;
+}
+
+.onboardingArea::before{
+	content: "";
+	position: absolute;
+	top: 0rem;
+	left: 0rem;
+	width: 50%;
+	height: 100%;
+	background: url("../assets/gaming2.png") no-repeat center center/cover;
+	z-index: 1;
+}
+
+.onboardingArea::after{
+	content: "";
+	position: absolute;
+	top: 0rem;
+	left: 0rem;
+	width: 50%;
+	height: 100%;
+	background: rgba(33, 37, 41, .6);
+	z-index: 2;
+	mix-blend-mode: multiply;
+}
+
+.mainArea {
+	color: var(--color-light);
+	padding-right: 5rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	margin:auto;
+	width: 100%;
+	padding: var(--sz-md);
+}
+
+.mainArea h1 {
+	font-size: var(--sz-xmd);
+	margin-bottom: 2rem;
+}
+
+.formArea {
+	color: var(--color-dark);
+	width: 100%;
+	padding: 2rem 5rem;
+	font-size: 1.5rem;
+	background: var(--color-light);
+	padding: var(--sz-lg) var(--sz-xlg);
+	border-radius: var(--sz-md);
+	margin-block: auto;
+}
+
+
+.formItem {
+	margin-bottom: var(--sz-xsm);
+}
+
+.formItem label {
+	display: block;
+	color: var(--color-dark);
+	font-size: 1.3rem;
+	margin-bottom: .5rem;
+	font-weight: 500;
+}
+
+.formItem input {
+	padding: var(--sz-xsm);
+	border-radius: var(--sz-sm);
+	background: var(--color-light);
+	box-shadow: 0rem 0.5rem 1.5rem var(--color-grey);
+	width: 100%;
+	color: var(--color-dark);
+	font-size: 1.5rem;
+}
+
+.formItem i {
+	display: block;
+	font-size: 1.1rem;
+	font-style: italic;
+	margin-top: 1rem;
+	margin-left: 0.5rem;
+	color: var(--color-dark);
+}
+
+.nameDiv,
+.randDiv {
+	display: flex;
+	gap: 1rem;
+}
+.nameDiv > div,
+.randDiv > div {
+	flex: 1;
+}
+
+.fileArea {
+	display: grid;
+	grid-template-columns: 60% 20% 20%;
+	grid-template-rows: repeat(3, 1fr);
+	grid-gap: 1.2rem;
+	align-items: center;
+	/*justify-content: center;*/
+}
+
+.fileArea .input{
+	grid-area: 1/1 / 3/3;
+}
+
+.fileArea .uploadBtn{
+	grid-area: 1/3 / 3/4;
+	color: var(--color-primary);
+	background: var(--color-light);
+	padding: 1rem;
+	border-radius: var(--sz-sm);
+	box-shadow: 0rem 0.5rem 1rem var(--color-grey);
+	cursor: pointer;
+	position: relative;
+	height: 60%;
+	width: 45%;
+	margin-top: auto;
+	transition: all 0.3s ease-in-out;
+}
+
+.fileArea .uploadBtn svg {
+	height: 100%;
+	width: auto;
+	transition: all 0.3s ease-in-out;
+}
+
+.uploadBtn::after {
+	content: "Upload";
+	position: absolute;
+	top: 1rem;
+	right: -5rem;
+	background: var(--color-dark);
+	opacity: 0.8;
+	width: 4rem;
+	padding: 0.4rem 0rem;
+	color: var(--color-light);
+	font-size: 1rem;
+	font-weight: 600;
+	border: 0.09rem solid var(--color-grey);
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	border-radius: 0.5rem;
+	transition: all 0.5s ease-in-out;
+	visibility: hidden;
+}
+.uploadBtn:hover {
+	background: var(--color-primary);
+	color: var(--color-accent);
+}
+.uploadBtn:hover::after {
+	visibility: visible;
+}
+
+.fileArea .messageArea{
+	grid-area: 3/1 / 4/4;
+}
