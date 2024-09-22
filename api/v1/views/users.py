@@ -2,7 +2,8 @@
 """Defines the users view """
 
 from api.v1.views import app_views
-from flask import json, abort, request, Response
+from flask import json, abort, redirect, request, Response, \
+    url_for
 from models import storage
 from models.users import User
 from models.metadata import Metadata
@@ -53,16 +54,25 @@ def create_new_user():
         res = json.dumps({"error": "Paylong missing some data",
                           "context": str(e)})
         abort(400, description=res)
+    last_name = request.form.get("last_name") or ""
+    username = request.form.get("username") or ""
+    session = storage.session()
+    existing_user = User.find_by_info(email=email, username=username)
+    if existing_user:
+         abort(403, description=json.dumps(
+                 {"error": "Some values already \
+                  used by another user", "context": {
+                       "email": existing_user.email == email,
+                       "username": existing_user.username == username
+                  }}))
 
     base_path = getenv("VW_ROOT_PATH")
-    last_name = request.form.get("last_name") or ""
 
     # initialize user instance
-    session = storage.session()
     new_user = User(
         first_name=first_name, last_name=last_name,
         password=password, security_key=security_key,
-        dob=dob, email=email
+        dob=dob, email=email, username=username
     )
     try:
         session.add(new_user)
@@ -97,9 +107,11 @@ def create_new_user():
     Path(meta_path).mkdir(parents=True, exist_ok=True)
     avatar.save(avatar_path)
 
+    print("NEW USER CREATED SUCCESSFULLY")
+
     res_msg = {
          "user_id": f"{new_user.id}",
          "avatar_id": f"{user_meta.id}"
     }
     res = json.dumps(res_msg, indent=2) + '\n'
-    return Response(res, mimetype="application/json", status=200)
+    return Response(res, mimetype="application/json",  status=200)

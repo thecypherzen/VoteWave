@@ -30,20 +30,16 @@ def not_found(e):
     return Response(res, mimetype="application/json",
                     status=404)
 
+
+@app.errorhandler(500)
 @app.errorhandler(400)
-def bad_request(e):
-    """Handles bad request"""
+@app.errorhandler(403)
+def handle_all__errors(e):
+    """Handles general request errors"""
     res = json.dumps({"error": f"{e.description}"},
                   indent=2) + '\n'
     return Response(res, mimetype="application/json",
-                    status=400)
-
-@app.errorhandler(500)
-def server_error(e):
-    """Handles internal server errors"""
-    res = json.dumps({"error": f"{e.description}"})
-    return Response(res, mimetype="application/json",
-                    status=500)
+                    status=e.code)
 
 
 

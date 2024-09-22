@@ -41,6 +41,7 @@ def verify_user_email():
     res  = json.dumps({"email_verified": email_status}, indent=2) + '\n'
     return Response(res, mimetype="application/json", status=200)
 
+
 @app_views.route("/logout")
 def logout():
     """Logs a user out of the application"""

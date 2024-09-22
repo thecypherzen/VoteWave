@@ -1,6 +1,6 @@
 import {
 	Form, useLoaderData,
-	useRouteError
+	useRouteError, useNavigate
 } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -15,6 +15,7 @@ export default function OnBoardingPage(){
 	const [message, setMessage] = useState(null);
 	const [progress, setProgress] = useState({started: false, percent: 0});
 	const [anyError, setAnyError ] = useState(false);
+	const navigate = useNavigate();
 
 	async function upLoadData(event){
 		event.preventDefault();
@@ -31,13 +32,14 @@ export default function OnBoardingPage(){
 		formData.append("dob", event.target.dob.value);
 		formData.append("password", event.target.password.value);
 		formData.append("security_key", event.target.security_key.value);
-
+		formData.append("username", event.target.username.value);
 		console.log("values entered:");
 		console.log(Object.fromEntries(formData));
+
 		/* Hide submit btn */
 		document.getElementById("submitBtn").style.display = "none";
 		try {
-			setMessage("Hold, we're doing just that...");
+			setMessage("Ok, working on that...");
 			setProgress((prev) => {
 				return {...prev, started: true};
 			});
@@ -56,21 +58,37 @@ export default function OnBoardingPage(){
 			})
 			console.log(response);
 			setMessage("Done.");
-		} catch (err) {
+			hideProgressBar();
+			if (response.status === 200) {
+				setMessage("Logging you in now..");
+				hideMessage(1000);
+				setTimeout(() => {
+					navigate("/login");
+				}, 2000);
+			}
+		} catch (error) {
 			setAnyError(true);
-			setMessage("An error occured.");
+			if (error.response){
+				const data = error.response.data;
+				const email = data?.context?.email;
+				const uname = data?.context?.username;
+				if (email || uname){
+					setMessage(`${email && "email"} \
+						${email && uname && "and"} \
+						${uname && "username"} \
+						already taken`)
+				} else {
+					setMessage(data.error || error.message)
+				}
+			} else {
+				setMessage(error.message);
+			}
 			console.log(err);
+			hideMessage();
+			hideProgressBar();
+			unhideSubmitBtn();
 		}
 	}
-
-	if (message === "Done." || "An error occured.") {
-		setTimeout(() => {
-			document.getElementById("message").style.display = "none";
-			document.getElementById("progress").style.display = "none";
-			document.getElementById("submitBtn").style.display = "inline-block";
-		}, 1000);
-	}
-
 	return (
 		<>
 			<section className={styles.onboardingArea}>
@@ -111,7 +129,7 @@ export default function OnBoardingPage(){
 									<input type="email" name="email" id="email"
 									defaultValue={userData.email}
 									required aria-required
-									autoComplete="on"/>
+									autoComplete="on" disabled/>
 								</div>
 
 								<div className={styles.formItem}>
@@ -123,19 +141,24 @@ export default function OnBoardingPage(){
 								</div>
 							</div>
 							<div className={styles.formItem}>
-								<label htmlFor="username">Date of birth</label>
-								<input type="date" name="username" id="username"
+								<label htmlFor="username">
+									Username
+								</label>
+								<input type="text" name="username" id="username"
 								placeholder="your username"
+								defaultValue={
+									userData.nicknname !== 'None' ? userData.nickname
+									: ""
+								}
 								autoComplete="on"/>
 							</div>
-							<div className={styles.ranDiv}>
+							<div className={styles.randDiv}>
 								<div className={styles.formItem}>
 									<label htmlFor="password">Your password</label>
 									<input type="password" name="password" id="password" placeholder='should match your login password'
 									required aria-required/>
 									<i>this should match your login password if you signed in with one for api login.</i>
 								</div>
-
 								<div className={styles.formItem}>
 									<label htmlFor="security_key">Security Key</label>
 									<input type="password" name="security_key" id="security_key" placeholder="a key you'd remember"
@@ -158,19 +181,22 @@ export default function OnBoardingPage(){
 								</button>
 							</div>
 							<div className={styles.messageArea}>
-									{
-										message && <p className={`${styles.message} ${!anyError ? styles.success
-											: styles.error}`}
-											id="message">{message}</p>
-									}
-									{
-										progress.started &&
-										<progress max="100"
-											value={progress.percent}
-											className={styles.progress}
-											id="progress">
-										</progress>
-									}
+								{
+									message &&
+									<p className={`${styles.message} ${!anyError ? styles.success
+										: styles.error}`}
+										id="message">
+											{message}
+									</p>
+								}
+								{
+									progress.started &&
+									<progress max="100"
+										value={progress.percent}
+										className={styles.progress}
+										id="progress">
+									</progress>
+								}
 								</div>
 						</form>
 					</div>
@@ -191,4 +217,25 @@ export function loader({ request }){
 		result[searchValues[i][0]] = searchValues[i][1];
 	}
 	return result;
+}
+
+function hideProgressBar(){
+	setTimeout(() => {
+		const progress = document.getElementById("progress");
+		if (progress){
+			progress.style.display = "none";
+		}
+	}, 500);
+}
+
+function hideMessage(offset){
+	setTimeout(() => {
+		document.getElementById("message").style.display = "inline-block";
+	}, offset);
+}
+
+function unhideSubmitBtn(){
+	setTimeout(() => {
+		document.getElementById("submitBtn").style.display = "inline-block";
+	}, 1000);
 }

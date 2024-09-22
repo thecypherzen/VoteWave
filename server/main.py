@@ -80,14 +80,19 @@ def callback():
         login_user(user, remember=True,
                    duration=timedelta(weeks=2))
         session["user"]["id"] = user.id
+        print("REDIRECTING TO DASHBOARD")
         return redirect(url_for("dashboard"))
     else:
+        print(f"USER with email {user_info['email']} not found")
+        print(user_info)
+        last_name = None
         # send user to onboarding
         url = f"{base_url}/users/onboarding"
-        if len(user_info.get("name").split()) > 1:
-            last_name = user_info["name"].split[1]
+        if not user_info.get("family_name"):
+            if len(user_info.get("name").split()) > 1:
+                last_name = user_info["name"].split()[1]
         else:
-            last_name = None
+            last_name = user_info["family_name"]
         res_data = {
             "nickname": user_info.get("nickname"),
             "first_name": user_info.get("given_name") or
@@ -95,14 +100,17 @@ def callback():
             "last_name": last_name,
             "email": user_info.get("email"),
         }
+        print(res_data)
         return redirect(url + "?" + urlencode(res_data))
 
 
 @app.route("/dashboard")
 @login_required
 def dashboard():
+    print("dashboard url...")
     base_url = f"http://0:{getenv('VW_CLIENT_PORT')}"
     user_id = session["user"]["id"]
+    print("user_id: ", user_id)
     url = f"{base_url}/users/{user_id}/dashboard"
     return redirect(url)
 
