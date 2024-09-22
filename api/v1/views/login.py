@@ -6,7 +6,6 @@ from os import getenv
 import requests
 
 
-
 @app_views.route("/login", strict_slashes=False)
 def login():
     """login user"""
@@ -41,3 +40,10 @@ def verify_user_email():
     email_status = user_info["email_verified"]
     res  = json.dumps({"email_verified": email_status}, indent=2) + '\n'
     return Response(res, mimetype="application/json", status=200)
+
+@app_views.route("/logout")
+def logout():
+    """Logs a user out of the application"""
+    return redirect(
+        "http://0:{}/logout".\
+            format(getenv('VW_SERVER_PORT')))

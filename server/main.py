@@ -79,8 +79,8 @@ def callback():
         # login user and send them to their dashboard
         login_user(user, remember=True,
                    duration=timedelta(weeks=2))
-        url = f"{base_url}/users/{user.id}/dashboard"
-        return redirect(url)
+        session["user"]["id"] = user.id
+        return redirect(url_for("dashboard"))
     else:
         # send user to onboarding
         url = f"{base_url}/users/onboarding"
@@ -99,11 +99,12 @@ def callback():
 
 
 @app.route("/dashboard")
-#@login_required
+@login_required
 def dashboard():
-    user = session['user']['userinfo']['name']
-
-    return f"<p>User {user if user else 'SOME USER'}'s dashboard </p><br/><a href='{url_for('logout')}'>Logout</a>"
+    base_url = f"http://0:{getenv('VW_CLIENT_PORT')}"
+    user_id = session["user"]["id"]
+    url = f"{base_url}/users/{user_id}/dashboard"
+    return redirect(url)
 
 
 @app.route("/logout")
