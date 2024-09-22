@@ -1,5 +1,7 @@
-import { useLoaderData } from 'react-router-dom';
+import {
+	useLoaderData} from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { getLogoutUrl } from './LoginPage';
 import axios from 'axios';
 import ErrorPage from './ErrorPage';
 import Button from '../components/Button';
@@ -15,7 +17,6 @@ export default function UserDashboard(){
 	useEffect(() => {
 		getUserDetails({owner_id: userId})
 		.then(response => {
-			console.log(response);
 			setUser(response.data);
 		})
 		.catch(error => {
@@ -24,6 +25,13 @@ export default function UserDashboard(){
 		})
 
 	}, [userId]);
+
+	/* click handler */
+	const handleLogout = function (event){
+		event.preventDefault();
+		window.location.href = getLogoutUrl();
+	}
+
 	if (!user){
 		return (<p>Hold on, we're fetching your data...</p>)
 	}
@@ -36,7 +44,8 @@ export default function UserDashboard(){
 			<p>{user.first_name} {user.last_name}'s dashboard</p>
 			<div className={styles.logoutBtn}>
 				<Button clist={["btn", "btn-secondary"]}
-					href="/logout" text="Logout"/>
+					href="/logout" text="Logout"
+					clickHandler={(e) => handleLogout(e)}/>
 			</div>
 		</>
 	);
@@ -53,7 +62,6 @@ export async function  getUserDetails({owner_id}){
 			const res = await axios.get(
 					`http://0:8082/api/v1/users/${owner_id}`
 			);
-			console.log(res);
 			return {error: false, data: res.data}
 	} catch (error) {
 			return {error: true, data: error}

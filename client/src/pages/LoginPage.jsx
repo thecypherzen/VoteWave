@@ -17,3 +17,8 @@ function getLoginUrl(){
 		"http://0:8082");
 	return url;
 }
+
+export function getLogoutUrl(){
+	return new URL("/api/v1/logout",
+		"http://0:8082");
+}
