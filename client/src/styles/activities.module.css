@@ -68,7 +68,7 @@ aside {
 	position: absolute;
 	display: none;
 	padding: 0.3rem 0.7rem;
-	/*transform: translate(10px, 10px);*/
+	transform: translate(10px, 10px);
 	font-size: 0.8rem;
 	font-weight: 500;
 	border-radius: 0.5rem;
