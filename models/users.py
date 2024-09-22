@@ -92,10 +92,10 @@ class User(UserMixin, BaseClass, Base):
             self.salt = User.generate_salt()
             self.username = kwargs.get("username") or \
                 f"User-{self.random_string(24)}"
-            self.passwd_hash = User.generate_hash(text=kwargs["password"],
-                                                  salt=self.salt)
-            self.security_key = User.generate_hash(text=kwargs["security_key"],
-                                                   salt=self.salt)
+            self.passwd_hash = User.generate_hash(
+                text=kwargs["password"], salt=self.salt)
+            self.security_key = User.generate_hash(
+                text=kwargs["security_key"], salt=self.salt)
             self.location = kwargs.get("location") or ""
             self.dob = date.fromisoformat(kwargs.get("dob"))
             for item in to_delete:

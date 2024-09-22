@@ -29,7 +29,7 @@
 	border-radius: 1rem;
 	overflow: hidden;
 	margin-top: 1rem;
-	/*color: var(--color-success);*/
+	color: var(--color-success);
 }
 
 progress::-webkit-progress-bar {
@@ -37,9 +37,9 @@ progress::-webkit-progress-bar {
 }
 
 /* the progress bar itself */
-progress::-webkit-progress-value {
+/*progress::-webkit-progress-value {
 	background-color: var(--color-success);
-}
+}*/
 
 /* For Mozilla (Firefox) */
 /*progress::-moz-progress-bar {
@@ -161,26 +161,69 @@ progress::-webkit-progress-value {
 	flex: 1;
 }
 
-.btnDiv {
+.fileArea {
+	display: grid;
+	grid-template-columns: 60% 20% 20%;
+	grid-template-rows: repeat(3, 1fr);
+	grid-gap: 1.2rem;
+	align-items: center;
+	/*justify-content: center;*/
+}
+
+.fileArea .input{
+	grid-area: 1/1 / 3/3;
+}
+
+.fileArea .uploadBtn{
+	grid-area: 1/3 / 3/4;
+	color: var(--color-primary);
+	background: var(--color-light);
+	padding: 1rem;
+	border-radius: var(--sz-sm);
+	box-shadow: 0rem 0.5rem 1rem var(--color-grey);
+	cursor: pointer;
+	position: relative;
+	height: 60%;
+	width: 45%;
+	margin-top: auto;
+	transition: all 0.3s ease-in-out;
+}
+
+.fileArea .uploadBtn svg {
+	height: 100%;
+	width: auto;
+	transition: all 0.3s ease-in-out;
+}
+
+.uploadBtn::after {
+	content: "Upload";
+	position: absolute;
+	top: 1rem;
+	right: -5rem;
+	background: var(--color-dark);
+	opacity: 0.8;
+	width: 4rem;
+	padding: 0.4rem 0rem;
+	color: var(--color-light);
+	font-size: 1rem;
+	font-weight: 600;
+	border: 0.09rem solid var(--color-grey);
 	display: flex;
 	flex-direction: column;
-	align-items: center;
 	justify-content: center;
-}
-
-.submitBtn{
-	display: inline-block;
-	width: 100%;
-	padding: 1.5rem;
+	align-items: center;
 	border-radius: 0.5rem;
+	transition: all 0.5s ease-in-out;
+	visibility: hidden;
+}
+.uploadBtn:hover {
 	background: var(--color-primary);
-	color: var(--color-light);
-	transition: all .5s ease-in-out;
-	font-size: 1.6rem;
-	cursor: pointer;
+	color: var(--color-accent);
+}
+.uploadBtn:hover::after {
+	visibility: visible;
 }
 
-.submitBtn:hover {
-	background: var(--color-accent);
-	color: var(--color-color-primary);
+.fileArea .messageArea{
+	grid-area: 3/1 / 4/4;
 }

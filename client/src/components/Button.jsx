@@ -17,11 +17,10 @@ export default function Button({
 		onClick={ clickHandler }
 		target={target ? target : "" }>
 			{text}
-			{icon ?
-			<span>
-				<FontAwesomeIcon
-				icon={icon}/>
-			</span> : ""
+			{icon &&
+				<span>
+					<FontAwesomeIcon icon={icon}/>
+				</span>
 			}
 		</Link>;
 	} else {
@@ -30,11 +29,10 @@ export default function Button({
 		className={items ? items : ""}
 		onClick={ clickHandler }>
 			{text}
-			{icon ?
+			{icon &&
 				<span>
-					<FontAwesomeIcon
-				icon={icon}/>
-				</span> : ""
+					<FontAwesomeIcon icon={icon}/>
+				</span>
 			}
 		</button>
 	}

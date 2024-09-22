@@ -6,7 +6,8 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Wrapper from '../components/Wrapper';
 import styles from '../styles/onboarding.module.css';
-
+import { faFileArrowUp } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export default function OnBoardingPage(){
 	const userData = useLoaderData();
@@ -16,37 +17,21 @@ export default function OnBoardingPage(){
 	const [progress, setProgress] = useState({started: false, percent: 0});
 	const [anyError, setAnyError ] = useState(false);
 
-	async function upLoadData(event){
-		event.preventDefault();
+	async function uploadFile(){
 		if (!avatar){
+			console.log("No file selected yet");
 			setMessage("No file selected yet");
 			return;
 		}
-		console.log(event.target);
 		const formData = new FormData();
 		formData.append("avatar", avatar);
-		formData.append("first_name", event.target.first_name.value);
-		formData.append("last_name", event.target.last_name.value);
-		formData.append("email", event.target.email.value);
-		formData.append("dob", event.target.dob.value);
-		formData.append("password", event.target.password.value);
-		formData.append("security_key", event.target.security_key.value);
-
-		console.log("values entered:");
-		console.log(Object.fromEntries(formData));
-		/* Hide submit btn */
-		document.getElementById("submitBtn").style.display = "none";
 		try {
-			setMessage("Hold, we're doing just that...");
+			setMessage("Uploading...");
 			setProgress((prev) => {
 				return {...prev, started: true};
 			});
 			const response = await axios.post("http://0:8082/api/v1/users/new", formData,
-				{
-					headers: {
-						'Content-Type': 'multipart/form-data'
-					},
-					onUploadProgress: (event) => {
+				{onUploadProgress: (event) => {
 					setProgress((prev) => {
 						return {
 							...prev,
@@ -58,19 +43,15 @@ export default function OnBoardingPage(){
 			setMessage("Done.");
 		} catch (err) {
 			setAnyError(true);
-			setMessage("An error occured.");
-			console.log(err);
+			setErrMsg(err.message);
 		}
 	}
-
-	if (message === "Done." || "An error occured.") {
+	if (message === "Done.") {
 		setTimeout(() => {
 			document.getElementById("message").style.display = "none";
 			document.getElementById("progress").style.display = "none";
-			document.getElementById("submitBtn").style.display = "inline-block";
 		}, 1000);
 	}
-
 	return (
 		<>
 			<section className={styles.onboardingArea}>
@@ -83,8 +64,7 @@ export default function OnBoardingPage(){
 						<div id="alert" className={styles.hide}>
 							<p className={styles.alertMessage}></p>
 						</div>
-						<form id="form" method="post" className={styles.form}
-							onSubmit={(e) => upLoadData(e)}>
+						<Form id="form" method="post" className={styles.form}>
 							<div className={styles.nameDiv}>
 								<div className={styles.formItem}>
 									<label htmlFor="first_name">First Name</label>
@@ -96,7 +76,7 @@ export default function OnBoardingPage(){
 
 								<div className={styles.formItem}>
 									<label htmlFor="last_name">Last Name</label>
-									<input type="text" name="last_name" id="last_name" placeholder='Chosen'
+									<input type="text" name="first_name" id="last_name" placeholder='Chosen'
 									defaultValue={
 										userData.last_name !== 'None' ? userData.last_name
 										: ""
@@ -122,26 +102,19 @@ export default function OnBoardingPage(){
 									autoComplete="on"/>
 								</div>
 							</div>
-							<div className={styles.formItem}>
-								<label htmlFor="username">Date of birth</label>
-								<input type="date" name="username" id="username"
-								placeholder="your username"
-								autoComplete="on"/>
-							</div>
-							<div className={styles.ranDiv}>
-								<div className={styles.formItem}>
-									<label htmlFor="password">Your password</label>
-									<input type="password" name="password" id="password" placeholder='should match your login password'
-									required aria-required/>
-									<i>this should match your login password if you signed in with one for api login.</i>
-								</div>
 
-								<div className={styles.formItem}>
-									<label htmlFor="security_key">Security Key</label>
-									<input type="password" name="security_key" id="security_key" placeholder="a key you'd remember"
-									required aria-required />
-									<i>you'd need this to confirm sensitive actions on your account.</i>
-								</div>
+							<div className={styles.formItem}>
+								<label htmlFor="password">Your password</label>
+								<input type="password" name="password" id="password" placeholder='should match your login password'
+								required aria-required/>
+								<i>this should match your login password if you signed in with one for api login.</i>
+							</div>
+
+							<div className={styles.formItem}>
+								<label htmlFor="security_key">Security Key</label>
+								<input type="password" name="security_key" id="security_key" placeholder="a key you'd remember"
+								required aria-required />
+								<i>you'd need this to confirm sensitive actions on your account.</i>
 							</div>
 
 							<div className={`${styles.formItem} ${styles.fileArea}`}>
@@ -151,10 +124,10 @@ export default function OnBoardingPage(){
 									required aria-required
 									onChange={(e) => setAvatar(e.target.files[0])} />
 								</div>
-							</div>
-							<div className={styles.btnDiv}>
-								<button id="submitBtn" className={styles.submitBtn}>
-									Onboard me
+								<button className={styles.uploadBtn}
+									type="button"
+									onClick={ uploadFile }>
+										<FontAwesomeIcon icon={faFileArrowUp} />
 								</button>
 							</div>
 							<div className={styles.messageArea}>
@@ -172,7 +145,7 @@ export default function OnBoardingPage(){
 										</progress>
 									}
 								</div>
-						</form>
+						</Form>
 					</div>
 				</Wrapper>
 			</section>
@@ -191,4 +164,8 @@ export function loader({ request }){
 		result[searchValues[i][0]] = searchValues[i][1];
 	}
 	return result;
+}
+
+export async function action(request){
+
 }

@@ -78,10 +78,9 @@ def callback():
     if user:
         # login user and send them to their dashboard
         login_user(user, remember=True,
-                   duration=datetime.now() + timedelta(weeks=2))
-        res_data = {"user_id": user.id}
+                   duration=timedelta(weeks=2))
         url = f"{base_url}/users/{user.id}/dashboard"
-        return redirect(url + "?" + urlencode(res_data))
+        return redirect(url)
     else:
         # send user to onboarding
         url = f"{base_url}/users/onboarding"

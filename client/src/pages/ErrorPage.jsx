@@ -10,16 +10,19 @@ export default function ErrorPage({context}){
 	return (
 	<div className={styles.errorContent}>
 		<h1> Ouch! We encountered an error.</h1>
-		<h3 className={styles.runner}>
-			These details may help...</h3>
+		<p className={styles.runner}>
+			These details may help...</p>
 		<div className={styles.errorDetails}>
 			<p className={styles.errorMessage}>
 				{error.message}
 			</p>
-			<hr />
-			<p><strong>More context: </strong>
+			<br/>
+			{
+				context &&
+				<p><strong>More context: </strong>
 				{context}
-			</p>
+				</p>
+			}
 		</div>
 
 		<div className={styles.btnBox}>

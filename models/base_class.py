@@ -78,7 +78,6 @@ class BaseClass():
             # create inbox
             if (name := self.__class__.__name__) == "User" or \
                name == "Election" or name == "Poll":
-                print("creating new inbox....")
                 self.create_inbox()
 
             if temp := kwargs.get("__class__"):
@@ -133,6 +132,7 @@ class BaseClass():
         charset = string.ascii_letters + string.digits
         bytes = secrets.token_bytes(chars)
         return "".join(secrets.choice(charset) for _ in range(chars))
+
 
     @property
     def blacklist(self):
@@ -235,3 +235,17 @@ class BaseClass():
         Returns: True on success or False on failure of any or all
             """
         pass
+
+    def verify_pass_token(self, text, password=False):
+        """Verify if token matches previous values"""
+        if not self.salt:
+            return False
+        hash = self.generate_hash(salt=self.salt, text=text)
+        if password:
+            if not hasattr(self, "passwd_hash"):
+                return False
+            return hash == self.passwd_hash
+        if not hasattr(self, "security_key"):
+            return False
+        return hash == self.security_key
+

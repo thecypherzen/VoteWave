@@ -19,11 +19,12 @@ import NotFound from './pages/NotFoundPage';
 import OnBoardingPage from './pages/OnBoardingPage';
 import UserDashboard from './pages/UserDashboard';
 
-// loaders
+// loaders and actions
 import { loader as activitiesLoader } from './pages/Activities';
 import { loader as detailsLoader } from './pages/ActivityDetails';
 import { loader as callbackLoader } from './pages/CallBack';
 import { loader as onboardingLoader } from './pages/OnBoardingPage';
+import { loader as userDashboardLoader } from './pages/UserDashboard';
 
 
 // router
@@ -71,7 +72,7 @@ const router = createBrowserRouter([
 		path: "/users/:userId/dashboard",
 		element: <UserDashboard />,
 		errorElement: <ErrorPage />,
-		loader: ""
+		loader: userDashboardLoader
 	}
 ]);
 
