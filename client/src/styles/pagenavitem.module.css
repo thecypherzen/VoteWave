@@ -1,0 +1,15 @@
+.navItem{
+	display: flex;
+	gap: 0.7rem;
+}
+
+.navItem span {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.active {
+	background: var(--color-accent);
+	color: var(--color-primary);
+}

@@ -1,0 +1,41 @@
+.alert {
+	border: 1px solid orange;
+	display: flex;
+
+}
+
+.alertBox {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	margin: auto;
+	margin-top: 1rem;
+}
+
+.alertMsg {
+	width: 80%;
+	padding: 1.2rem;
+	border-radius: 0.5rem;
+}
+
+.success {
+	background: rgba(0, 255, 127, 0.8);;
+	color: var(--color-primary);
+	border: 1.5px solid var(--color-primary);
+}
+
+.error {
+	background: rgba(230, 0, 0, 0.8);;
+	color: var(--color-light);
+	border: 1.5px solid var(--color-danger);
+}
+
+.neutral {
+	background: var(--color-grey-light);
+	color: var(--color-dark);
+	border: 1.5px solid var(--color-grey);
+}
+.hide {
+	display: none;
+}

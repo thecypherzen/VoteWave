@@ -20,6 +20,7 @@ CORS(app, supports_credentials=True,
 app.secret_key = getenv("VW_APP_SECRET")
 client_base = getenv("VW_CLIENT")
 
+
 # configure oauth and register application
 oauth = OAuth(app)
 oauth.register(
@@ -80,11 +81,8 @@ def callback():
         login_user(user, remember=True,
                    duration=timedelta(weeks=2))
         session["user"]["id"] = user.id
-        print("REDIRECTING TO DASHBOARD")
         return redirect(url_for("dashboard"))
     else:
-        print(f"USER with email {user_info['email']} not found")
-        print(user_info)
         last_name = None
         # send user to onboarding
         url = f"{base_url}/users/onboarding"
@@ -100,28 +98,24 @@ def callback():
             "last_name": last_name,
             "email": user_info.get("email"),
         }
-        print(res_data)
         return redirect(url + "?" + urlencode(res_data))
 
 
 @app.route("/dashboard")
 @login_required
 def dashboard():
-    print("dashboard url...")
     base_url = f"http://0:{getenv('VW_CLIENT_PORT')}"
     user_id = session["user"]["id"]
-    print("user_id: ", user_id)
     url = f"{base_url}/users/{user_id}/dashboard"
     return redirect(url)
 
 
 @app.route("/logout")
+@login_required
 def logout():
     """Logs a user out"""
-    print("logging out .....\n")
+    logout_user()
     session.clear()
-    print("session cleared....\n")
-    print(session.get("user"))
     return redirect(
         "https://" + getenv("AUTH0_DOMAIN")
         + "/v2/logout?"

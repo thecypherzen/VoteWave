@@ -1,0 +1,107 @@
+/* nav styles */
+.pageNav{
+	height: 100%;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	background: var(--color-primary);
+	color: var(--color-light);
+}
+
+/* owner area */
+.owner {
+	display: flex;
+	gap: 1rem;
+	align-items: center;
+	justify-content: center;
+	height: 10rem;
+}
+
+.owner .ownerIcon{
+	height: 4rem;
+	width: 4rem;
+	border-radius: 50%;
+	border: 0.5rem solid var(--color-secondary);
+}
+
+.ownerInfo h3{
+	font-size: 2.4rem;
+}
+
+/* nav buttons */
+.btns {
+	height: 6rem;
+	display: flex;
+	gap: 1.5rem;
+	align-items: center;
+	justify-content: space-around;
+	border-top: 0.5px solid rgba(255, 255, 255, 0.2);
+	border-bottom: 0.5px solid rgba(255, 255, 255, 0.2);
+	margin-bottom: 1.5rem;
+}
+
+.btns .arrows {
+	display: flex;
+	gap: 1rem;
+}
+
+.btns span {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	height: 4rem;
+	width: 4rem;
+	border-radius: 50%;
+	background: var(--color-secondary);
+	color: var(--color-light);
+	cursor: pointer;
+}
+
+
+/* Nav list items */
+.navList {
+	margin-top: 2rem;
+	padding-inline: 2rem;
+}
+
+.listItem {
+	text-decoration: none;
+	padding: 1.5rem 1.5rem;
+	display: inline-flex;
+	border-radius: 1rem;
+	margin-bottom: 1rem;
+	width: 100%;
+	background: var(--color-grey-light);
+	color: rgba(255, 255, 255, 0.8);
+	transition: all 0.2s ease-in-out;
+}
+
+.listItem:hover {
+	background: var(--color-secondary);
+}
+
+/* product styles */
+.product {
+	display: flex;
+	margin-top: auto;
+	justify-content: center;
+	align-items: center;
+	gap: 0.9rem;
+	font-size: var(--sz-sm);
+	padding-bottom: 1.5rem;
+	font-weight: 500;
+	height: 10%;
+	color: var(--color-grey);
+	background: var(--color-grey-light);
+}
+
+.product .logo{
+	height: 2rem;
+	width: 2rem;
+	border-radius: 50%;
+	background: url("../assets/logo_white.png") no-repeat center center/cover;
+}
+
+.logout{
+	background: var(--color-warning);
+}

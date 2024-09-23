@@ -25,6 +25,7 @@ import { loader as detailsLoader } from './pages/ActivityDetails';
 import { loader as callbackLoader } from './pages/CallBack';
 import { loader as onboardingLoader } from './pages/OnBoardingPage';
 import { loader as userDashboardLoader } from './pages/UserDashboard';
+import { loader as navBarUserLoader } from './components/PageNav';
 
 
 // router

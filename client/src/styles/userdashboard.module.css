@@ -1,3 +1,36 @@
+li {
+	list-style: none;
+}
+
 .logoutBtn{
 	width: fit-content;
+}
+
+.bgPrimary{
+	background: var(--color-primary);
+	color: var(--color-light);
+}
+
+.dWrapper {
+	display: grid;
+	grid-template-columns: 20vw 80vw;
+	min-height: 100vh;
+}
+
+
+.tempWrapper {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+}
+
+.navContent {
+	padding: 2rem 1.5rem;
+}
+
+/*  Main Area */
+.hide {
+	display: none;
 }

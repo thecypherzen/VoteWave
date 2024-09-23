@@ -3,7 +3,7 @@
 
 from api.v1.views import app_views
 from flask import json, abort, redirect, request, Response, \
-    url_for
+    send_from_directory, url_for
 from models import storage
 from models.users import User
 from models.metadata import Metadata
@@ -11,6 +11,7 @@ from os import getenv, path
 from pathlib import Path
 
 
+# get a user
 @app_views.route("/users/<string:user_id>", strict_slashes=False)
 def user_details(user_id):
     """Returns details of a user by Id if
@@ -41,6 +42,7 @@ def user_details(user_id):
     return Response(res, mimetype="application/json")
 
 
+# create a new user
 @app_views.route("users/new", methods=["POST"],
                  strict_slashes=False)
 def create_new_user():
@@ -102,9 +104,9 @@ def create_new_user():
                onboardig user", "context": str(e)}))
 
     # save avatar
-    meta_path = path.join(user_path, "metadata", user_meta.id)
-    avatar_path = path.join(meta_path, avatar.filename)
+    meta_path = path.join(user_path, "metadata")
     Path(meta_path).mkdir(parents=True, exist_ok=True)
+    avatar_path = path.join(meta_path, user_meta.id)
     avatar.save(avatar_path)
 
     print("NEW USER CREATED SUCCESSFULLY")
@@ -114,4 +116,27 @@ def create_new_user():
          "avatar_id": f"{user_meta.id}"
     }
     res = json.dumps(res_msg, indent=2) + '\n'
+    session.close()
     return Response(res, mimetype="application/json",  status=200)
+
+# get user's avatar
+@app_views.route("/users/<string:user_id>/avatar")
+def user_avatar(user_id):
+     user = storage.get("User", user_id)
+     if not user:
+          abort(404)
+     user_meta = user._metadata
+     if not user_meta:
+          abort(404)
+     filtered = list(filter(lambda item: item.use_as == "avatar", user_meta))
+     if not filtered:
+          abort(404)
+     meta_id = filtered[0].id
+     folder = path.join(getenv('VW_ROOT_PATH'), "users",
+                        f"{user_id}", "metadata")
+     filepath = path.join(folder, f"{meta_id}")
+     if not path.exists(filepath):
+          abort(404)
+
+     return send_from_directory(folder, meta_id,
+                                mimetype=filtered[0].mime_type)
