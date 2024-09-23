@@ -1,0 +1,78 @@
+.wrapper {
+	display: flex;
+	min-height: 99%;
+	min-width: 100%;
+	padding: 4rem 5rem;
+	align-items: center;
+	gap: 2rem;
+}
+
+span {
+	display: inline-flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.profile {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 100vh;
+}
+
+.flex {
+	display: flex;
+	gap: 1rem;
+}
+
+.userImg {
+	height: 70%;
+	flex-basis: 40%;
+	border-radius: 1rem;
+	background: url("../assets/default_user_icon.png") no-repeat center center/contain;
+	box-shadow: 0rem 0rem 1rem var(--color-grey-light);
+}
+
+.info {
+	flex-basis: 60%;
+}
+
+.infoItems {
+	display: flex;
+	gap: 1rem;
+	align-items: flex-start;
+	flex-wrap: wrap !important;
+	gap: 1.2rem;
+}
+
+.item{
+	padding: 2rem;
+	border-radius: 1rem;
+	color: var(--color-dark);
+	font-size: 1.5rem;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	background: var(--color-light);
+	box-shadow: 0rem 0rem 1rem var(--color-grey-light);
+}
+
+.item i {
+	color: var(--color-grey);
+	font-size: 1.5rem;
+	display: inline-flex;
+	margin-right: 1.5rem;
+}
+
+.btns {
+	margin-top: 2rem;
+	width: 20%;
+}
+
+.btns button:hover {
+	background: var(--color-secondary);
+	color: var(--color-primary);
+}
