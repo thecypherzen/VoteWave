@@ -11,12 +11,16 @@ export default function PageNavItem({to, type, text,
 	return (
 		<li>
 			<NavLink to={to}
-				className={({isActive}) => {
+				className={({isActive, isPending}) => {
 					return isActive ?
-					`${className} ${styles.navItem} ${styles.active}` :
+					`${className} ${styles.navItem} ${styles.isactive}` :
 					`${className} ${styles.navItem}`
 				}}
-				onClick={(e) => {clickHandler(e)}}
+				onClick={(e) => {
+					if (clickHandler){
+						clickHandler(e);
+					}
+				}}
 				>
 				<span>
 					<FontAwesomeIcon icon={

@@ -15,6 +15,7 @@ export default function UserDashboard(){
 	const [user, setUser] = useState(null);
 	const [message, setMessage] = useState(null);
 	const [errorOccured, setErrorOccured] = useState(false);
+	const [userImgUrl, setuserImgUrl] = useState(null);
 
 	if (!userId) {
 		return (<ErrorPage context="User unknown. Are you logged in?"/>)
@@ -28,10 +29,13 @@ export default function UserDashboard(){
 			)
 			.then(response => {
 				const imgURL = URL.createObjectURL(response.data);
-				setUserIcon(imgURL);
+				setuserImgUrl(imgURL);
+				setItemBg("nav-owner-icon", imgURL);
 			}).catch(error => {
 				if(error.status === 404) {
-					setUserIcon(new URL("../assets/default_user_icon.png"));
+					const imgURL = new URL("../assets/default_user_icon.png");
+					setuserImgUrl(imgURL);
+					setItemBg("nav-owner-icon", imgURL);
 				}
 				if (error?.response?.data){
 					setMessage(error.response.data?.error || error.message);
@@ -60,17 +64,16 @@ export default function UserDashboard(){
 		)
 	}
 	if (user?.message) {
-		console.log("an error occured");
 		return (<ErrorPage context={user.message}/>)
 	}
 	return (
 		<main className={styles.dWrapper}>
 			<section className={styles.navArea}>
-				<PageNav owner={""}/>
+				<PageNav owner={user}/>
 			</section>
 			<section className={styles.mainArea}>
 				<Alert message={message} error={errorOccured}/>
-				<Outlet />
+				<Outlet context={{user, userImgUrl}}/>
 			</section>
 		</main>
 	);
@@ -95,12 +98,16 @@ export async function  getUserDetails({owner_id}){
 }
 
 
-function setUserIcon(url){
-	const userIcon = document.getElementById("nav-owner-icon");
+export function setItemBg(itemId, url){
+	const userIcon = document.getElementById(itemId);
 	if (userIcon){
 		userIcon.style.backgroundImage = `url(${url})`;
 		userIcon.style.backgroundPosition = "center center";
 		userIcon.style.backgroundRepeat = "no-repeat";
 		userIcon.style.backgroundSize = "cover";
 	}
+}
+
+function getUser(){
+	return
 }

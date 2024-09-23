@@ -18,6 +18,7 @@ import LoginPage from './pages/LoginPage';
 import NotFound from './pages/NotFoundPage';
 import OnBoardingPage from './pages/OnBoardingPage';
 import UserDashboard from './pages/UserDashboard';
+import UserProfilePage from './pages/UserProfilePage';
 
 // loaders and actions
 import { loader as activitiesLoader } from './pages/Activities';
@@ -73,7 +74,31 @@ const router = createBrowserRouter([
 		path: "/users/:userId/dashboard",
 		element: <UserDashboard />,
 		errorElement: <ErrorPage />,
-		loader: userDashboardLoader
+		loader: userDashboardLoader,
+		children: [
+			{
+				index: true,
+				element: <UserProfilePage />,
+				loader: userDashboardLoader
+			},
+			{
+				path: "profile",
+				element: <UserProfilePage />,
+				loader: userDashboardLoader
+			},
+			{
+				path: "activities"
+			},
+			{
+				path: "activities/me"
+			},
+			{
+				path: "activities/create"
+			},
+			{
+				path: ""
+			}
+		]
 	}
 ]);
 

@@ -9,7 +9,7 @@
 	justify-content: center;
 }
 
-.active {
-	background: var(--color-accent);
-	color: var(--color-primary);
+.isactive {
+	background: var(--color-accent) !important;
+	color: var(--color-primary) !important;
 }

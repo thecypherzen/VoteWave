@@ -10,10 +10,6 @@ import { getLogoutUrl } from '../pages/LoginPage';
 import styles from '../styles/pagenav.module.css';
 
 export default function PageNav({owner}){
-	//const userId = useLoaderData();
-	//const [anyError, setAnyError] = useState(false);
-	//const [errMsg, setErrMsg] = useState(null);
-
 	return (
 		<section className={styles.pageNav}>
 			<div className={styles.owner}>
@@ -21,7 +17,7 @@ export default function PageNav({owner}){
 
 				</div>
 				<div className={styles.ownerInfo}>
-					<h3>{owner.first_name}William</h3>
+					<h3>{owner.first_name}{owner.first_name}</h3>
 				</div>
 			</div>
 			<div className={styles.btns}>
@@ -39,25 +35,25 @@ export default function PageNav({owner}){
 			</div>
 			<ul className={styles.navList}>
 				<PageNavItem
-					to=""
+					to="profile"
 					type="profile"
 					text="Profile"
 					clist={[styles.listItem]}
 				/>
 				<PageNavItem
-					to=""
+					to="activities"
 					type="action"
 					text="My Activities"
 					clist={[styles.listItem]}
 				/>
 				<PageNavItem
-					to=""
+					to="activities/create"
 					text="Create"
 					type="create"
 					clist={[styles.listItem]}
 				/>
 				<PageNavItem
-					to=""
+					to="inbox"
 					text="Inbox"
 					type="inbox"
 					clist={[styles.listItem]}
@@ -65,6 +61,7 @@ export default function PageNav({owner}){
 				<PageNavItem
 					clist={[styles.listItem, styles.logout]}
 					text="Logout"
+					to="/logout"
 					clickHandler={handleLogout}
 				/>
 
